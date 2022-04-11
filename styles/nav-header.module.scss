@@ -1,0 +1,41 @@
+@import "../styles/global.scss";
+
+@font-face {
+  font-family: "Instagram";
+  src: url("../assets/instagram-font.otf") format("woff2");
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  width: 100%;
+  padding: 0.8rem;
+  background-color: $color-black;
+  z-index: 1;
+
+  h1 {
+    font-family: "Instagram", sans-serif;
+    color: $color-white;
+    font-size: 2rem;
+  }
+
+  ul {
+    display: flex;
+    margin-right: 1.5rem;
+
+    li {
+      color: $color-white;
+      font-size: $icon-size;
+      margin: 0 0.5rem;
+      transform: translateY(2px);
+      cursor: pointer;
+    }
+  }
+}
+
+.navIsScrolling {
+  border-bottom: $nav-border;
+  transition: all 300ms ease;
+}

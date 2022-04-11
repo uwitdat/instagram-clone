@@ -1,0 +1,14 @@
+@import "../styles/global.scss";
+
+.showComments {
+  animation: show-comments 250ms forwards;
+}
+
+@keyframes show-comments {
+  from {
+    transform: translateX(100vw);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
