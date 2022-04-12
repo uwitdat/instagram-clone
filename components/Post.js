@@ -7,7 +7,8 @@ import postStyles from '../styles/home.module.scss';
 
 const Post = ({ post, handleViewcomments }) => {
   return (
-    <div key={post.id} className={postStyles.postContainer}>
+    <div className={postStyles.postContainer}>
+
       <div>
         <img src={post.postedBy.userAvatar} alt={post.postedBy.userAvatar} />
         <h4>{post.postedBy.userName}</h4>
@@ -21,19 +22,21 @@ const Post = ({ post, handleViewcomments }) => {
         <FaRegComment />
         <FiSend />
       </div>
+
       <div className={postStyles.details}>
         <p>Liked by <strong>{post.likedBy[0].userName}</strong> and <strong style={{ cursor: 'pointer' }}>others</strong></p>
         <p><strong>{post.postedBy.userName}</strong> {post.postDescription}</p>
 
         {post.comments.length === 0 ? <p style={{ marginTop: '-.1rem' }}></p> : (
           post.comments.length > 1 ? (
-            <p onClick={handleViewcomments}>View all {post.comments.length} comments</p>
+            <p onClick={() => handleViewcomments(post.comments)}>View all {post.comments.length} comments</p>
           ) : (
-            <p onClick={handleViewcomments}>View {post.comments.length} comment</p>
+            <p onClick={() => handleViewcomments(post.comments)}>View {post.comments.length} comment</p>
           )
         )}
         <p>{moment(post.postedOn).fromNow()}</p>
       </div>
+
     </div>
   )
 }

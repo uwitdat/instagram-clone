@@ -1,16 +1,16 @@
 import React from 'react'
 import commentStyles from '../styles/comments.module.scss';
 
-const Comments = ({ showComments, setShowComments, currentTopPosition }) => {
+const Comments = ({ showComments, setShowComments, currentTopPosition, comments }) => {
 
   const handleCloseComments = () => setShowComments(false)
 
+  console.log('comments', comments)
+
   return (
-    <div
-      className={showComments ? commentStyles.showComments : ''}
-      style={{ height: '100vh', width: '100vw', backgroundColor: 'black', position: 'absolute', zIndex: '1', transform: 'translateX(100vw)', top: `${currentTopPosition}px` }}>
+    <div className={showComments ? commentStyles.showComments : commentStyles.comments} style={{ top: `${currentTopPosition}px` }}>
       <button onClick={handleCloseComments} style={{ color: 'white' }}>back</button>
-      <div style={{ color: 'white' }}>
+      <div className={commentStyles.commentContent}>
         <p>some CoMEnT</p>
         <p>some CoMEnT</p>
         <p>some CoMEnT</p>
