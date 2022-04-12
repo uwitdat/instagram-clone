@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import commentStyles from '../styles/comments.module.scss';
 import { FiSend } from 'react-icons/fi';
 import { MdOutlineArrowBackIosNew } from 'react-icons/md';
@@ -8,8 +8,11 @@ import moment from 'moment';
 const Comments = ({ showComments, setShowComments, currentTopPosition, post }) => {
 
   const handleCloseComments = () => setShowComments(false)
+  const [newComment, setNewComment] = useState('')
 
-  console.log('post', post)
+  const [inputFocused, setInputFocused] = useState(null)
+  const onFocus = () => setInputFocused(true)
+  const onBlur = () => setInputFocused(false)
 
   return (
     <div className={showComments ? commentStyles.showComments : commentStyles.comments} style={{ top: `${currentTopPosition}px` }}>
@@ -29,8 +32,8 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, post }) =
       </section>
 
       <div className={commentStyles.commentContent}>
-        {post.comments.map((comment) => (
-          <section key={comment.id} className={commentStyles.postDetails}>
+        {post.comments.map((comment, idx) => (
+          <section key={idx} className={commentStyles.postDetails}>
             <div>
               <img src={comment.userAvatar} alt={comment.userAvatar} />
             </div>
@@ -44,6 +47,13 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, post }) =
           </section>
         ))}
       </div>
+      <nav className={commentStyles.footerNav}>
+        <img src={'https://media.wired.com/photos/5926dc8ecfe0d93c474319dd/master/pass/PikachuTA-EWEATA.jpg'} alt={'https://media.wired.com/photos/5926dc8ecfe0d93c474319dd/master/pass/PikachuTA-EWEATA.jpg'} />
+        <input onChange={(e) => setNewComment(e.target.value)} value={newComment} onFocus={onFocus} onBlur={onBlur} placeholder='Add a comment as ben_sven_ten' />
+        {inputFocused ? (
+          <button type='submit'>Post</button>
+        ) : null}
+      </nav>
 
     </div>
   )

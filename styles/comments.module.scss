@@ -12,10 +12,6 @@
   z-index: 1;
   position: absolute;
   overflow-y: scroll;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
 }
 
 @keyframes show-comments {
@@ -35,6 +31,11 @@
   padding: 1rem;
   color: $color-white;
 
+  position: sticky;
+  background-color: $color-black;
+  top: 0;
+  z-index: 3;
+
   h3 {
     font-family: $font-primary;
     font-weight: 600;
@@ -50,12 +51,12 @@
 .commentContent {
   border-top: $nav-border;
   margin-top: 0.3rem;
-  color: white;
-  height: auto;
+  color: $color-white;
+  min-height: 71%; // may need to change hard coded height
 }
 
 .postDetails {
-  color: white;
+  color: $color-white;
   display: flex;
   padding: 0.2rem 0.6rem;
   position: relative;
@@ -118,7 +119,56 @@
   }
 }
 
-.postDetails:last-child {
-  border: 1px solid green;
-  margin-bottom: 8rem;
+.footerNav {
+  border-top: $nav-border;
+  background-color: black;
+  padding: 0.8rem;
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+
+  img {
+    aspect-ratio: 1;
+    height: 2.5rem;
+    margin-right: 0.5rem;
+    border: $nav-border;
+    border-radius: 50%;
+  }
+
+  input {
+    padding: 0.7rem;
+    padding-right: 3.5rem;
+    width: 100%;
+    border-radius: 100vh;
+    border: $nav-border;
+    background-color: transparent;
+    color: $color-white;
+    font-size: 0.9rem;
+    outline: none;
+    word-break: break-all;
+
+    &::placeholder {
+      font-family: $font-primary;
+      font-weight: 400;
+      color: $color-grey-dark;
+      padding-left: 0.3rem;
+    }
+
+    &:focus {
+      outline: $color-white;
+    }
+  }
+
+  button {
+    border-color: transparent;
+    background-color: transparent;
+    color: $color-blue;
+    font-family: $font-primary;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    position: absolute;
+    right: 1.5rem;
+  }
 }
