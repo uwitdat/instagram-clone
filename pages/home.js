@@ -11,31 +11,33 @@ const Home = () => {
   const { data, error } = useSWR('/api/posts', fetcher);
 
   const [showComments, setShowComments] = useState(false)
-  const [scrollPosition, setScrollPosition] = useState(0);
+  const [scrollPosition, setScrollPosition] = useState(null);
+  const [comments, setComments] = useState(null)
 
-  const handleViewcomments = () => setShowComments(true)
-
-  const handleGetCurrentTopOfPage = () => {
+  const handleViewcomments = (comments) => {
     const currentTopDimensions = window.pageYOffset;
     setScrollPosition(currentTopDimensions);
-  };
+    setComments(comments)
+    setShowComments(true)
+  }
 
   useEffect(() => {
-    window.addEventListener('scroll', handleGetCurrentTopOfPage, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleGetCurrentTopOfPage);
+    if (showComments) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "visible";
     }
-  }, []);
+  }, [showComments])
 
   if (error) return <div>Failed to load</div>
   if (!data) return <div>Loading...</div>
 
   return (
-    <div className={postStyles.homeContaineer}>
-      <Comments showComments={showComments} setShowComments={setShowComments} currentTopPosition={scrollPosition} />
-      <section className={postStyles.posts}>
+    <div className={postStyles.homeContainer}>
+      <Comments showComments={showComments} setShowComments={setShowComments} currentTopPosition={scrollPosition} comments={comments} />
+      <section className={showComments ? `${postStyles.posts}  ${postStyles.shiftPosts}` : `${postStyles.posts}`}>
         {data.map((post) => (
-          <Post post={post} handleViewcomments={handleViewcomments} />
+          <Post key={post.id} post={post} handleViewcomments={handleViewcomments} />
         ))}
       </section>
     </div>

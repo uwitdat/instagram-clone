@@ -3,8 +3,7 @@
 .homeContainer {
   height: auto;
   display: flex;
-  position: relative;
-  overflow-x: hidden;
+  flex-direction: row-reverse;
 }
 
 .posts {
@@ -104,4 +103,17 @@
 
 .postContainer:last-child {
   padding-bottom: 1rem;
+}
+
+.shiftPosts {
+  animation: shift-posts 500ms forwards;
+}
+
+@keyframes shift-posts {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100vw);
+  }
 }
