@@ -14,6 +14,10 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, post }) =
   const onFocus = () => setInputFocused(true)
   const onBlur = () => setInputFocused(false)
 
+  const handleSubmitComment = () => {
+    console.log('submitted')
+  }
+
   return (
     <div className={showComments ? commentStyles.showComments : commentStyles.comments} style={{ top: `${currentTopPosition}px` }}>
       <nav className={commentStyles.nav}>
@@ -51,7 +55,7 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, post }) =
         <img src={'https://media.wired.com/photos/5926dc8ecfe0d93c474319dd/master/pass/PikachuTA-EWEATA.jpg'} alt={'https://media.wired.com/photos/5926dc8ecfe0d93c474319dd/master/pass/PikachuTA-EWEATA.jpg'} />
         <input onChange={(e) => setNewComment(e.target.value)} value={newComment} onFocus={onFocus} onBlur={onBlur} placeholder='Add a comment as ben_sven_ten' />
         {inputFocused ? (
-          <button type='submit'>Post</button>
+          <button onClick={handleSubmitComment} type='submit'>Post</button>
         ) : null}
       </nav>
 
