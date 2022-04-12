@@ -34,7 +34,10 @@ const Home = () => {
 
   return (
     <div className={postStyles.homeContainer}>
-      <Comments showComments={showComments} setShowComments={setShowComments} currentTopPosition={scrollPosition} post={activePost} />
+      {activePost ? (
+        <Comments showComments={showComments} setShowComments={setShowComments} currentTopPosition={scrollPosition} post={activePost} />
+      ) : null}
+
       <section className={showComments ? `${postStyles.posts}  ${postStyles.shiftPosts}` : `${postStyles.posts}`}>
         {data.map((post) => (
           <Post key={post.id} post={post} handleViewcomments={handleViewcomments} />

@@ -30,7 +30,7 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, post }) =
 
       <div className={commentStyles.commentContent}>
         {post.comments.map((comment) => (
-          <section className={commentStyles.postDetails}>
+          <section key={comment.id} className={commentStyles.postDetails}>
             <div>
               <img src={comment.userAvatar} alt={comment.userAvatar} />
             </div>
