@@ -69,27 +69,6 @@
     animation: scale-in 250ms forwards;
   }
 
-  @keyframes scale-in {
-    0% {
-      transform: scale(0);
-    }
-    80% {
-      transform: scale(1.2);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
-
-  @keyframes scale-out {
-    from {
-      transform: scale(1);
-    }
-    100% {
-      transform: scale(0);
-    }
-  }
-
   .actionItems {
     padding: 0.2rem;
     padding-top: 0.5rem;
@@ -150,11 +129,34 @@
   animation: shift-posts 500ms forwards;
 }
 
+// animations
+
 @keyframes shift-posts {
   from {
     transform: translateX(0);
   }
   to {
     transform: translateX(-100vw);
+  }
+}
+
+@keyframes scale-in {
+  0% {
+    transform: scale(0);
+  }
+  80% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes scale-out {
+  from {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
   }
 }

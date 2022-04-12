@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import commentStyles from '../styles/comments.module.scss';
 import { FiSend } from 'react-icons/fi';
 import { MdOutlineArrowBackIosNew } from 'react-icons/md';
@@ -58,7 +58,6 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, post }) =
           <button onClick={handleSubmitComment} type='submit'>Post</button>
         ) : null}
       </nav>
-
     </div>
   )
 }
