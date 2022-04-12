@@ -11,7 +11,7 @@ const NavFooter = () => {
         <li><AiOutlineSearch /></li>
         <li><BiMoviePlay /></li>
         <li><AiOutlineShopping /></li>
-        <li><img src={'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlciUyMHByb2ZpbGV8ZW58MHx8MHx8&w=1000&q=80'} alt='user profile img' /></li>
+        <li><img src={'https://media.wired.com/photos/5926dc8ecfe0d93c474319dd/master/pass/PikachuTA-EWEATA.jpg'} alt='user profile img' /></li>
       </ul>
     </nav>
   )
