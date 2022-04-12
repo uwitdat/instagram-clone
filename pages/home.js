@@ -12,12 +12,12 @@ const Home = () => {
 
   const [showComments, setShowComments] = useState(false)
   const [scrollPosition, setScrollPosition] = useState(null);
-  const [comments, setComments] = useState(null)
+  const [activePost, setActivePost] = useState(null)
 
-  const handleViewcomments = (comments) => {
+  const handleViewcomments = (post) => {
     const currentTopDimensions = window.pageYOffset;
     setScrollPosition(currentTopDimensions);
-    setComments(comments)
+    setActivePost(post)
     setShowComments(true)
   }
 
@@ -34,7 +34,7 @@ const Home = () => {
 
   return (
     <div className={postStyles.homeContainer}>
-      <Comments showComments={showComments} setShowComments={setShowComments} currentTopPosition={scrollPosition} comments={comments} />
+      <Comments showComments={showComments} setShowComments={setShowComments} currentTopPosition={scrollPosition} post={activePost} />
       <section className={showComments ? `${postStyles.posts}  ${postStyles.shiftPosts}` : `${postStyles.posts}`}>
         {data.map((post) => (
           <Post key={post.id} post={post} handleViewcomments={handleViewcomments} />

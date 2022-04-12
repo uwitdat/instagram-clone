@@ -8,7 +8,7 @@
 
 .posts {
   width: 100vw;
-  background-color: black;
+  background-color: $color-black;
   padding-top: 3.6rem;
   display: flex;
   flex-direction: column;
@@ -31,7 +31,7 @@
     }
 
     h4 {
-      color: white;
+      color: $color-white;
       margin-left: 0.5rem;
       font-family: $font-primary;
       font-weight: 600;
@@ -52,7 +52,7 @@
   .actionItems {
     padding: 0.2rem;
     padding-top: 0.5rem;
-    color: white;
+    color: $color-white;
     font-size: $icon-size;
 
     & > svg {
@@ -63,7 +63,7 @@
   }
 
   .details {
-    color: white;
+    color: $color-white;
     margin-top: 0.3rem;
     padding-right: 1.5rem;
 
@@ -84,7 +84,7 @@
 
     p:nth-child(3),
     p:nth-child(4) {
-      color: rgb(168, 168, 168);
+      color: $color-grey;
     }
 
     p:nth-child(3) {

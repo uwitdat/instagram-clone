@@ -19,7 +19,7 @@ const Post = ({ post, handleViewcomments }) => {
 
       <div className={postStyles.actionItems}>
         <RiHeartLine />
-        <FaRegComment />
+        <FaRegComment onClick={() => handleViewcomments(post)} />
         <FiSend />
       </div>
 
@@ -29,9 +29,9 @@ const Post = ({ post, handleViewcomments }) => {
 
         {post.comments.length === 0 ? <p style={{ marginTop: '-.1rem' }}></p> : (
           post.comments.length > 1 ? (
-            <p onClick={() => handleViewcomments(post.comments)}>View all {post.comments.length} comments</p>
+            <p onClick={() => handleViewcomments(post)}>View all {post.comments.length} comments</p>
           ) : (
-            <p onClick={() => handleViewcomments(post.comments)}>View {post.comments.length} comment</p>
+            <p onClick={() => handleViewcomments(post)}>View {post.comments.length} comment</p>
           )
         )}
         <p>{moment(post.postedOn).fromNow()}</p>
