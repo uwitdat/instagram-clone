@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import commentStyles from '../styles/comments.module.scss';
 import { FiSend } from 'react-icons/fi';
 import { MdOutlineArrowBackIosNew } from 'react-icons/md';
@@ -7,19 +7,32 @@ import moment from 'moment';
 
 const Comments = ({ showComments, setShowComments, currentTopPosition, post }) => {
 
-  const handleCloseComments = () => setShowComments(false)
-  const [newComment, setNewComment] = useState('')
+  const handleCloseComments = () => setShowComments(false);
+  const [newComment, setNewComment] = useState('');
 
-  const [inputFocused, setInputFocused] = useState(null)
-  const onFocus = () => setInputFocused(true)
-  const onBlur = () => setInputFocused(false)
+  const [inputFocused, setInputFocused] = useState(null);
+  const focusInput = () => setInputFocused(true);
+  const blurInput = () => setInputFocused(false);
+
 
   const handleSubmitComment = () => {
-    console.log('submitted')
+    if (newComment === '') return;
+
+    console.log('submitted =>', newComment);
+    setNewComment('');
+  }
+
+  const inputRef = useRef(null);
+  const btnRef = useRef(null);
+
+  const handleWasInputClicked = (event) => {
+    if (btnRef.current && btnRef.current.contains(event.target)) handleSubmitComment();
+    if (inputRef.current && !inputRef.current.contains(event.target)) blurInput();
+    if (inputRef.current && inputRef.current.contains(event.target)) focusInput();
   }
 
   return (
-    <div className={showComments ? commentStyles.showComments : commentStyles.comments} style={{ top: `${currentTopPosition}px` }}>
+    <div onClick={handleWasInputClicked} className={showComments ? commentStyles.showComments : commentStyles.comments} style={{ top: `${currentTopPosition}px` }}>
       <nav className={commentStyles.nav}>
         <MdOutlineArrowBackIosNew onClick={handleCloseComments} />
         <h3>Comments</h3>
@@ -53,9 +66,9 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, post }) =
       </div>
       <nav className={commentStyles.footerNav}>
         <img src={'https://media.wired.com/photos/5926dc8ecfe0d93c474319dd/master/pass/PikachuTA-EWEATA.jpg'} alt={'https://media.wired.com/photos/5926dc8ecfe0d93c474319dd/master/pass/PikachuTA-EWEATA.jpg'} />
-        <input onChange={(e) => setNewComment(e.target.value)} value={newComment} onFocus={onFocus} onBlur={onBlur} placeholder='Add a comment as ben_sven_ten' />
+        <input ref={inputRef} onChange={(e) => setNewComment(e.target.value)} value={newComment} placeholder='Add a comment as ben_sven_ten' />
         {inputFocused ? (
-          <button onClick={handleSubmitComment} type='submit'>Post</button>
+          <button ref={btnRef} onClick={handleSubmitComment} type='submit'>Post</button>
         ) : null}
       </nav>
     </div>
