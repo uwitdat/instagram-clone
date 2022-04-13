@@ -49,7 +49,7 @@ const profile = ({ router }) => {
         )
       ) : null}
 
-      <div style={{ minHeight: '100vh', backgroundColor: 'black', position: 'relative' }}>
+      <div className={profilePageStyles.profileContainer}>
         <section className={profilePageStyles.profileDetails}>
           <img src={data.userAvatar} alt={data.userAvatar} />
           <div>
@@ -67,6 +67,7 @@ const profile = ({ router }) => {
             </div>
           </div>
         </section>
+
         <div className={profilePageStyles.profileAdditionalDetails}>
           <p>{data.bio}</p>
           {currentUser.id === id ? (
@@ -77,8 +78,8 @@ const profile = ({ router }) => {
               <button>Follow</button>
             </div>
           )}
-
         </div>
+
         <div className={profilePageStyles.imageGrid}>
           {data.posts.map((post) => (
             <div key={post.id}>
@@ -88,7 +89,8 @@ const profile = ({ router }) => {
           <div /> {/* used as placeholder to stabilize grid due to dynamic content, may not be needed later on */}
         </div>
       </div>
-      <div style={{ position: 'absolute', top: '0' }}>
+
+      <div className={profilePageStyles.postsContainer}>
         {showPosts ? <Posts data={data.posts} header={<PostsNav />} /> : null}
       </div>
       {!showPosts ? <NavFooter /> : null}
