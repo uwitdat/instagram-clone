@@ -3,6 +3,7 @@ import { RiHeartLine, RiHeartFill } from 'react-icons/ri';
 import { FiSend } from 'react-icons/fi';
 import { FaRegComment } from 'react-icons/fa';
 import moment from 'moment';
+import { useRouter } from 'next/router'
 import postStyles from '../styles/home.module.scss';
 
 const redColor = 'rgb(255, 93, 93)';
@@ -12,11 +13,21 @@ const Post = ({ post, handleViewComments, handleViewLikes }) => {
   const [liked, setLiked] = useState(likedOptions[Math.floor(Math.random() * likedOptions.length)]); // temp for now to randomize liked/ not liked
   const handleAddLike = () => setLiked(!liked);
 
+
+  const router = useRouter()
+
+  const handleViewProfile = () => {
+    router.push({
+      pathname: '/profile',
+      query: { user: post.postedBy.userId }
+    })
+  }
+
   return (
     <div className={postStyles.postContainer}>
       <div>
         <img src={post.postedBy.userAvatar} alt={post.postedBy.userAvatar} />
-        <h4>{post.postedBy.userName}</h4>
+        <h4 onClick={handleViewProfile}>{post.postedBy.userName}</h4>
       </div>
       <div className={postStyles.postContent}>
         <img onDoubleClick={handleAddLike} src={post.postContent} alt={post.postContent} />
@@ -35,7 +46,10 @@ const Post = ({ post, handleViewComments, handleViewLikes }) => {
       </div>
 
       <div className={postStyles.details}>
-        <p>Liked by <strong>{post.likedBy[0].userName}</strong> and <strong onClick={() => handleViewLikes(post.likedBy)} style={{ cursor: 'pointer' }}>others</strong></p>
+        {post.likedBy.length > 0 ? (
+          <p>Liked by <strong>{post.likedBy[0].userName}</strong> and <strong onClick={() => handleViewLikes(post.likedBy)} style={{ cursor: 'pointer' }}>others</strong></p>
+        ) : null}
+
         <p><strong>{post.postedBy.userName}</strong> {post.postDescription}</p>
 
         {post.comments.length === 0 ? <p style={{ marginTop: '-.1rem' }}></p> : (
