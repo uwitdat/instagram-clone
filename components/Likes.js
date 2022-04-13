@@ -1,12 +1,13 @@
 import React from 'react';
 import likeStyles from '../styles/likes.module.scss';
 import { MdOutlineArrowBackIosNew } from 'react-icons/md';
+import Overlay from './Overlay';
 
 const Likes = ({ showLikes, setShowLikes, currentTopPosition, likes }) => {
   const handleCloseLikes = () => setShowLikes(false)
 
   return (
-    <div className={showLikes ? likeStyles.showLikes : likeStyles.likes} style={{ top: `${currentTopPosition}px` }}>
+    <Overlay isShowing={showLikes} currentTopPosition={currentTopPosition}>
       <nav className={likeStyles.nav}>
         <MdOutlineArrowBackIosNew onClick={handleCloseLikes} />
         <h3>Likes</h3>
@@ -28,7 +29,7 @@ const Likes = ({ showLikes, setShowLikes, currentTopPosition, likes }) => {
           </div>
         ))}
       </div>
-    </div>
+    </Overlay>
   )
 }
 
