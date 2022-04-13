@@ -127,7 +127,7 @@ export const posts = [
         postContent: 'https://blog.theclymb.com/wp-content/uploads/2015/03/Selfie.jpg',
         postDescription: 'My first post! ya ya ya ya ya ya ya ya ya ya ya',
         postedBy: {
-            userId: 1,
+            userId: 5,
             userName: 'John-Wils',
             userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
         },

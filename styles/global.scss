@@ -10,6 +10,7 @@ $color-white: #fff;
 $color-black: rgb(0, 0, 0);
 $color-grey: rgb(168, 168, 168);
 $color-grey-dark: rgb(100, 100, 100);
+$color-btn-outline: rgba(128, 128, 128, 0.479);
 $color-blue: rgb(158, 209, 252);
 $color-blue-dark: rgb(0, 149, 246);
 
@@ -18,3 +19,16 @@ $icon-size: 1.5rem;
 
 //borders
 $nav-border: 1px solid rgba(128, 128, 128, 0.281);
+
+// mixins
+@mixin nav-styles() {
+  // apply to all header navs for consistency
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  width: 100%;
+  padding: 0.8rem;
+  background-color: $color-black;
+  z-index: 1;
+}

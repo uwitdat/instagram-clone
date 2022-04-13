@@ -38,6 +38,7 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, post }) =
         <h3>Comments</h3>
         <FiSend />
       </nav>
+
       <section className={commentStyles.postDetails}>
         <div>
           <img src={post.postedBy.userAvatar} alt={post.postedBy.userAvatar} />
