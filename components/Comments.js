@@ -4,6 +4,7 @@ import { FiSend } from 'react-icons/fi';
 import { MdOutlineArrowBackIosNew } from 'react-icons/md';
 import { RiHeartLine } from 'react-icons/ri';
 import moment from 'moment';
+import Overlay from './Overlay';
 
 const Comments = ({ showComments, setShowComments, currentTopPosition, post }) => {
 
@@ -11,7 +12,7 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, post }) =
   const [newComment, setNewComment] = useState('');
 
   const [inputFocused, setInputFocused] = useState(null);
-  const focusInput = () => setInputFocused(true);
+  const focusInput = () => setInputFocused(true); // TODO: create focus/ blur on input
   const blurInput = () => setInputFocused(false);
 
 
@@ -25,14 +26,9 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, post }) =
   const inputRef = useRef(null);
   const btnRef = useRef(null);
 
-  const handleWasInputClicked = (event) => {
-    if (btnRef.current && btnRef.current.contains(event.target)) handleSubmitComment();
-    if (inputRef.current && !inputRef.current.contains(event.target)) blurInput();
-    if (inputRef.current && inputRef.current.contains(event.target)) focusInput();
-  }
 
   return (
-    <div onClick={handleWasInputClicked} className={showComments ? commentStyles.showComments : commentStyles.comments} style={{ top: `${currentTopPosition}px` }}>
+    <Overlay isShowing={showComments} currentTopPosition={currentTopPosition}>
       <nav className={commentStyles.nav}>
         <MdOutlineArrowBackIosNew onClick={handleCloseComments} />
         <h3>Comments</h3>
@@ -72,7 +68,7 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, post }) =
           <button ref={btnRef} onClick={handleSubmitComment} type='submit'>Post</button>
         ) : null}
       </nav>
-    </div>
+    </Overlay>
   )
 }
 

@@ -1,28 +1,5 @@
 @import "../styles/global.scss";
 
-.likes {
-  display: none;
-}
-
-.showLikes {
-  animation: show-likes 250ms forwards;
-  height: 94.5vh; // may need to change at some point from hard coded value
-  width: 100vw;
-  background-color: black;
-  z-index: 1;
-  position: absolute;
-  overflow-y: scroll;
-}
-
-@keyframes show-likes {
-  from {
-    transform: translateX(100vw);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
 .nav {
   border-bottom: $nav-border;
   display: flex;
