@@ -7,7 +7,7 @@ const Likes = ({ showLikes, setShowLikes, currentTopPosition, likes }) => {
   const handleCloseLikes = () => setShowLikes(false)
 
   return (
-    <Overlay isShowing={showLikes} currentTopPosition={currentTopPosition}>
+    <Overlay isShowing={showLikes} currentTopPosition={currentTopPosition} height={'93.5vh'}> {/*TODO: change height value to something more dynamic */}
       <nav className={likeStyles.nav}>
         <MdOutlineArrowBackIosNew onClick={handleCloseLikes} />
         <h3>Likes</h3>

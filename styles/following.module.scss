@@ -1,0 +1,65 @@
+@import "../styles/global.scss";
+
+.container {
+  color: $color-white;
+  background-color: $color-black;
+  width: 100vw;
+  font-family: $font-primary;
+  flex-shrink: 0;
+
+  h2 {
+    margin-top: 1.5rem;
+    margin-left: 1rem;
+    font-weight: 700;
+  }
+
+  section {
+    padding: 1rem;
+  }
+}
+
+.following {
+  margin: 1rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @include follower-following;
+
+  & > div:nth-child(2) {
+    display: flex;
+    align-items: center;
+
+    svg {
+      font-size: 1.1rem;
+      margin-left: 0.5rem;
+      cursor: pointer;
+    }
+  }
+
+  button {
+    cursor: pointer;
+    font-family: $font-primary;
+    font-weight: 700;
+    font-size: 0.8rem;
+    background-color: $color-black;
+    color: $color-white;
+    border: 1px solid $color-white;
+    border-radius: 3px;
+    padding: 0.3rem 1.5rem;
+    margin-left: 1rem;
+  }
+}
+
+.enterFollowing {
+  animation: slide-in 350ms forwards;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100vw);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
