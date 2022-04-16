@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import postStyles from '../styles/home.module.scss';
 
 import Comments from '../components/Comments';
@@ -7,7 +7,7 @@ import Post from '../components/Post';
 
 import NavFooter from '../components/NavFooter';
 
-const Posts = ({ data, header }) => {
+const Posts = ({ data, header, indexOfClickedPost }) => {
   const [showComments, setShowComments] = useState(false)
   const [showLikes, setShowLikes] = useState(false)
 
@@ -29,16 +29,22 @@ const Posts = ({ data, header }) => {
     setShowLikes(true)
   }
 
+  const postsRef = useRef(null)
+
+  const scrollToTopOfPost = (postsRef) => {
+    const yOffset = -60;
+    const coordinatesOfSpecificPost = postsRef.current.children[indexOfClickedPost].getBoundingClientRect().top + window.pageYOffset + yOffset
+    window.scrollTo({ top: coordinatesOfSpecificPost });
+  }
+
   useEffect(() => {
-    if (showComments || showLikes) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "visible";
+    if (postsRef.current && indexOfClickedPost !== undefined) {
+      scrollToTopOfPost(postsRef)
     }
-  }, [showComments, showLikes])
+  }, [postsRef])
 
   return (
-    <React.Fragment>
+    <div>
       {header}
       <div className={postStyles.homeContainer}>
         {activePost ? (
@@ -49,14 +55,14 @@ const Posts = ({ data, header }) => {
           <Likes showLikes={showLikes} setShowLikes={setShowLikes} currentTopPosition={scrollPosition} likes={likesForPost} />
         ) : null}
 
-        <section className={showComments ? `${postStyles.posts}  ${postStyles.shiftPosts}` : `${postStyles.posts}`}>
-          {data.map((post) => (
-            <Post key={post.id} post={post} handleViewComments={handleViewComments} handleViewLikes={handleViewLikes} />
+        <section ref={postsRef} className={postStyles.posts}>
+          {data.map((post, idx) => (
+            <Post key={idx} post={post} handleViewComments={handleViewComments} handleViewLikes={handleViewLikes} />
           ))}
         </section>
       </div>
       <NavFooter />
-    </React.Fragment>
+    </div>
   )
 }
 

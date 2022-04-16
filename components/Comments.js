@@ -28,7 +28,7 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, post }) =
 
 
   return (
-    <Overlay isShowing={showComments} currentTopPosition={currentTopPosition}>
+    <Overlay isShowing={showComments} currentTopPosition={currentTopPosition} height={'100vh'}> {/*TODO: change height value to something more dynamic */}
       <nav className={commentStyles.nav}>
         <MdOutlineArrowBackIosNew onClick={handleCloseComments} />
         <h3>Comments</h3>

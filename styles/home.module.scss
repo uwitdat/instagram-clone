@@ -132,15 +132,6 @@
 
 // animations
 
-@keyframes shift-posts {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-100vw);
-  }
-}
-
 @keyframes scale-in {
   0% {
     transform: scale(0);

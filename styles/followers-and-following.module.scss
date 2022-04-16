@@ -1,0 +1,64 @@
+@import "../styles/global.scss";
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  background-color: $color-black;
+
+  & > * {
+    color: $color-white;
+    font-family: $font-primary;
+  }
+
+  div {
+    display: flex;
+    padding: 0.8rem 0.5rem;
+  }
+
+  div:first-child {
+    svg {
+      font-size: $icon-size;
+      cursor: pointer;
+    }
+
+    h2 {
+      align-self: center;
+      margin: auto;
+      transform: translateX(-1rem);
+      font-weight: 700;
+    }
+  }
+
+  nav {
+    border-bottom: $nav-border;
+    display: flex;
+    color: $color-grey;
+    position: relative;
+
+    div {
+      width: 50%;
+      cursor: pointer;
+      border-bottom: 1px solid transparent;
+      transition: 250ms ease;
+
+      h3 {
+        font-weight: 600;
+        font-size: 0.8rem;
+        margin: auto;
+      }
+    }
+  }
+}
+
+#navItemActive {
+  color: $color-white;
+  border-bottom: 1px solid $color-white;
+}
+
+.panelContainer {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+}
