@@ -41,7 +41,7 @@ const FollowersAndFollowing = ({ showFollowers, handleHideFollowers, entryPoint,
   }
 
   return (
-    <Overlay isShowing={showFollowers} currentTopPosition={0} height={'93.5vh'}> {/*TODO: change height value to something more dynamic */}
+    <Overlay isShowing={showFollowers} currentTopPosition={0} height={'94.3vh'}> {/*TODO: change height value to something more dynamic */}
       <nav className={followerStyles.nav}>
         <div>
           <MdOutlineArrowBackIosNew onClick={handleClosePanel} />

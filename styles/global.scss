@@ -13,6 +13,8 @@ $color-grey-dark: rgb(100, 100, 100);
 $color-btn-outline: rgba(128, 128, 128, 0.479);
 $color-blue: rgb(158, 209, 252);
 $color-blue-dark: rgb(0, 149, 246);
+$color-blue-mid: rgb(46, 169, 250);
+$color-black-offset: rgb(26, 26, 26);
 
 //sizes
 $icon-size: 1.5rem;
@@ -73,5 +75,26 @@ $nav-border: 1px solid rgba(128, 128, 128, 0.281);
         max-width: 40vw;
       }
     }
+  }
+}
+
+@mixin input() {
+  // use for inputs
+  width: 100%;
+  margin: 0.3rem 0;
+  padding: 0.9rem;
+  border-radius: 5px;
+  border: 0.5px solid $color-grey;
+  background-color: $color-black-offset;
+  color: $color-white;
+  outline: none;
+
+  &::placeholder {
+    color: $color-grey;
+  }
+
+  &:focus,
+  &:active {
+    border: 1px solid $color-white;
   }
 }

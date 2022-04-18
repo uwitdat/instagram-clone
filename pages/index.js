@@ -1,11 +1,17 @@
-import React from 'react';
-import Home from "./home";
+import React, { useEffect } from 'react';
+import Router from 'next/router';
 
 
 export default function App() {
+
+  useEffect(() => {
+    const { pathname } = Router
+    if (pathname == '/') {
+      Router.push('/login')
+    }
+  });
+
   return (
-    <React.Fragment>
-      <Home />
-    </React.Fragment>
+    <div></div>
   )
 }

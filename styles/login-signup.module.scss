@@ -1,0 +1,96 @@
+@import "../styles/global.scss";
+
+@font-face {
+  font-family: "Instagram";
+  src: url("../assets/instagram-font.otf") format("woff2");
+}
+
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: $font-primary;
+  color: $color-white;
+  background-color: $color-black;
+
+  section {
+    margin: auto;
+    width: 100%;
+    text-align: center;
+
+    h1 {
+      font-family: "Instagram", sans-serif;
+      font-size: 3.3rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .inputContainer {
+      position: relative;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      padding: 0 1.5rem;
+      border-color: transparent;
+
+      input {
+        @include input;
+      }
+
+      svg {
+        position: absolute;
+        right: 2.5rem;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+    }
+
+    p {
+      margin: 1.5rem;
+      color: $color-blue-mid;
+      font-size: 0.8rem;
+      font-weight: 600;
+      float: right;
+
+      &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
+    }
+
+    button {
+      width: 88%;
+      padding: 0.7rem;
+      cursor: pointer;
+      background-color: $color-blue-dark;
+      color: $color-white;
+      font-weight: 700;
+      border-radius: 5px;
+      border-color: transparent;
+    }
+  }
+
+  .signUpPanel {
+    width: 100%;
+    margin-top: auto;
+    padding: 0.8rem 0;
+    text-align: center;
+    border-top: $nav-border;
+
+    p {
+      color: $color-grey;
+      font-size: 0.8rem;
+
+      span {
+        color: $color-blue-mid;
+        font-weight: 700;
+
+        &:hover {
+          cursor: pointer;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
