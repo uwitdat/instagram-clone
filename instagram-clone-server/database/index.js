@@ -7,13 +7,15 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const DB = new Sequelize(`postgres://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`);
+const DB = new Sequelize(
+    `postgres://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}
+        @${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`);
 
 
-user(DB)
-post(DB)
+user(DB);
+post(DB);
 
-setModelRelationships(DB)
+setModelRelationships(DB);
 
 await DB.sync({ logging: false });
 
