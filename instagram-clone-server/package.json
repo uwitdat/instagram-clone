@@ -1,0 +1,21 @@
+{
+  "name": "instagram-clone-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "express-graphql": "^0.12.0",
+    "pg": "^8.7.3",
+    "pg-hstore": "^2.3.4",
+    "pg-promise": "^10.11.1",
+    "sequelize": "^6.19.0"
+  }
+}

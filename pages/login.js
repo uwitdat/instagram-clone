@@ -2,17 +2,29 @@ import React, { useState } from 'react';
 import loginStyles from '../styles/login-signup.module.scss';
 import { BiHide, BiShowAlt } from 'react-icons/bi';
 import Link from 'next/link'
-import Router from 'next/router'
+import Router from 'next/router';
+import { useAppContext } from '../context';
 
 const Login = () => {
-  const router = Router
+  const router = Router;
+  const [testUser] = useState({
+    userName: 'my tet user',
+    token: 'sdfsdfsfsdfsd'
+  })
+
+  const [state, setState] = useAppContext();
 
   const [showPassword, setShowPassword] = useState(false);
 
   const handleRevealPasssword = () => setShowPassword(!showPassword);
 
   const handleLogIn = () => {
-    router.push('/home')
+    setState(testUser)
+    if (testUser.token !== '') {
+      router.push('/home');
+    } else {
+      console.log('autj failed')
+    }
   }
 
   return (

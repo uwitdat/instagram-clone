@@ -11,7 +11,6 @@ const Home = () => {
   if (error) return <div>Failed to load</div>
   if (!data) return <div>Loading...</div>
 
-
   return (
     <Posts data={data} header={<NavHeader />} />
   )
