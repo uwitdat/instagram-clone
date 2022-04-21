@@ -3,27 +3,47 @@ import loginStyles from '../styles/login-signup.module.scss';
 import { BiHide, BiShowAlt } from 'react-icons/bi';
 import Link from 'next/link'
 import Router from 'next/router';
-import { useAppContext } from '../context';
+import { useMutation } from '@apollo/client';
+import { LOGIN_USER_MUTATION } from '../utils/mutations';
+import { setCookie } from '../utils/functions';
 
 const Login = () => {
   const router = Router;
-  const [testUser] = useState({
-    userName: 'my tet user',
-    token: 'sdfsdfsfsdfsd'
-  })
 
-  const [state, setState] = useAppContext();
+  const [loginValues, setLoginValues] = useState({
+    userName: '',
+    password: ''
+  });
 
+  const [loginError, setLoginError] = useState('')
+
+  const handleSetLoginValues = (e) => {
+    const { name, value } = e.target;
+    setLoginValues({
+      ...loginValues,
+      [name]: value
+    });
+  }
+
+  const [loginUser] = useMutation(LOGIN_USER_MUTATION);
   const [showPassword, setShowPassword] = useState(false);
-
   const handleRevealPasssword = () => setShowPassword(!showPassword);
 
-  const handleLogIn = () => {
-    setState(testUser)
-    if (testUser.token !== '') {
-      router.push('/home');
-    } else {
-      console.log('autj failed')
+  const handleLogIn = async () => {
+    const { userName, password } = loginValues;
+    try {
+      const { data } = await loginUser({
+        variables: {
+          userName,
+          password
+        }
+      });
+      if (data.loginUser) {
+        setCookie('JWT', data.loginUser, 1)
+        router.push('/home')
+      }
+    } catch (err) {
+      setLoginError(err.message)
     }
   }
 
@@ -33,10 +53,10 @@ const Login = () => {
         <h1>Instagram</h1>
 
         <div className={loginStyles.inputContainer}>
-          <input placeholder='Username' type='text' />
+          <input onChange={(e) => handleSetLoginValues(e)} name='userName' value={loginValues.userName} placeholder='Username' type='text' />
         </div>
         <div className={loginStyles.inputContainer}>
-          <input placeholder='Password' type={showPassword ? 'text' : 'password'} />
+          <input onChange={(e) => handleSetLoginValues(e)} name='password' value={loginValues.password} placeholder='Password' type={showPassword ? 'text' : 'password'} />
           {showPassword ? (
             <BiShowAlt onClick={handleRevealPasssword} />
           ) : (
@@ -47,6 +67,7 @@ const Login = () => {
         <p>Forgot Password?</p>
         <button onClick={handleLogIn}>Log In</button>
       </section>
+      <p className={loginStyles.loginError}>{loginError}</p>
 
       <div className={loginStyles.signUpPanel}>
         <p>Don't have an account?

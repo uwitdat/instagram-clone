@@ -19,19 +19,38 @@ export const typeDefs = gql`
       postDescription: String
       createdAt: Date!
       userId: Int!
+      comments: [Comment]
+  }
+
+  type Comment {
+    id: ID!
+    commentContent: String!
+    createdAt: Date!
+    userId: Int!
+    commentedBy: [User]
   }
 
   type Query {
       users: [User!]!
       user(id: ID!): User!
+      getAuthedUser: User!
   }
 
-  input CreateUserInput {
-      name: String!
-      userName: String!
-      avatar: String = ""
-      bio: String = ""
-  }
+input RegisterUserInput {
+    userName: String!
+    name: String = ""
+    password: String!
+    bio: String = ""
+    avatar: String = ""
+}
+
+input UpdateUserInput{
+    id: Int
+    userName: String
+    name: String
+    bio: String
+    avatar: String
+}
 
   input CreatePostInput {
       postContent: String!
@@ -40,7 +59,11 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    createUser(input: CreateUserInput!): User!
+    createAndRegisterUser(input:RegisterUserInput!): User!
+    loginUser(userName: String!, password: String!): String!
+    updateUser(input: UpdateUserInput!): User!
     createPost(input: CreatePostInput!): Post!
+    deleteUser(id:ID!): String!
+    deletePost(id:ID!): String!
   }
 `;

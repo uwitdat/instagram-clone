@@ -6,11 +6,17 @@ import { ApolloServer } from 'apollo-server-express';
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import { resolvers } from './schema/resolvers.js';
 import { typeDefs } from './schema/type-defs.js';
+import dotenv from "dotenv";
+import jwt from 'jsonwebtoken';
+
+
+dotenv.config();
 
 
 const app = express();
 // app.use(express.json());
 const PORT = 5000;
+const SECRET = process.env.AUTH_SECRET;
 
 async function assertDatabaseConnectionOk() {
   console.log(`Checking database connection...`);
@@ -24,15 +30,37 @@ async function assertDatabaseConnectionOk() {
   }
 }
 
+const addUser = async (req) => {
+
+  const token = req.headers.authorization;
+  if (token) {
+    try {
+      const { user } = await jwt.verify(token, SECRET);
+      req.user = user;
+    } catch (err) {
+      console.log(err)
+    }
+  } else {
+    req.user = null
+  }
+  req.next()
+}
+app.use(addUser)
+
 async function init(typeDefs, resolvers) {
   await assertDatabaseConnectionOk();
 
-  app.use(cors());
+  app.use(cors('*'));
+
 
   const httpServer = http.createServer(app);
   const server = new ApolloServer({
     typeDefs,
     resolvers,
+    context: ({ req }) => {
+
+      return { SECRET, user: req.user }
+    },
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
   await server.start();

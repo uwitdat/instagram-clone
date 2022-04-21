@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import navStyles from '../styles/nav-header.module.scss';
 import { MdOutlineAddBox } from 'react-icons/md';
 import { RiHeartLine } from 'react-icons/ri';
-import { FiSend } from 'react-icons/fi';
+import { FiLogOut } from 'react-icons/fi';
+import Router from 'next/router';
+import { eraseCookie } from '../utils/functions';
 
 const NavHeader = () => {
-  const [isScrolling, setIsScrolling] = useState(false);
+  const router = Router;
+  const COOKIE_NAME = 'JWT';
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.addEventListener("scroll", () =>
-        setIsScrolling(window.pageYOffset > 70)
-      );
-    }
-  }, []);
+  const handleUserLogOut = () => {
+    router.push('/login');
+    eraseCookie(COOKIE_NAME);
+  }
 
   return (
-    <nav className={isScrolling ? `${navStyles.nav} ${navStyles.navIsScrolling}` : `${navStyles.nav}`}>
+    <nav className={navStyles.nav}>
       <h1>Instagram</h1>
       <ul>
         <li><MdOutlineAddBox /></li>
         <li><RiHeartLine /></li>
-        <li><FiSend /></li>
+        <li><FiLogOut onClick={handleUserLogOut} /></li>
       </ul>
     </nav>
   )

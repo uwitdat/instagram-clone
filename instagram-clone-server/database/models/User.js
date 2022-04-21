@@ -13,6 +13,9 @@ export const user = (db) => {
       unique: true,
       min: 6
     },
+    password: {
+      type: DataTypes.TEXT
+    },
     bio: {
       type: DataTypes.TEXT,
       allowNull: true,
