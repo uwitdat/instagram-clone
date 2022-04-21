@@ -15,3 +15,15 @@ export const CREATE_USER_MUTATION = gql`
             bio
             }
         }`
+
+export const CREATE_POST_MUTATION = gql`
+    mutation CreatePost($createPostInput: CreatePostInput!){
+        createPost(input: $createPostInput){
+            id
+            postContent
+            postDescription
+            createdAt
+            userId
+        }
+    }
+`

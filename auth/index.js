@@ -1,3 +1,4 @@
+
 export function requireAuthentication(gssp) {
   return async (context) => {
     const { req, res } = context;
