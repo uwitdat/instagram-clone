@@ -31,13 +31,17 @@ query GetAuthedUser{
     userName
     bio
     avatar
-    posts {
-      comments {
-        commentedBy {
-          avatar
-        }
-      }
-    }
+  }
+}
+`
+export const GET_POSTS_FROM_USER = gql`
+query PostsByUser($userId: ID!){
+  postsByUser(id: $userId){
+      id
+      postContent
+      postDescription
+      createdAt
+      userId
   }
 }
 `

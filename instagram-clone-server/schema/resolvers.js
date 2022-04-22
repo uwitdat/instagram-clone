@@ -33,6 +33,13 @@ export const resolvers = {
       } else {
         throw new Error('You are not authorized')
       }
+    },
+    postsByUser: (_, args) => {
+      return DB.models.post.findAll({
+        where: {
+          userId: args.id
+        }
+      })
     }
   },
   User: {
@@ -70,7 +77,7 @@ export const resolvers = {
       await DB.models.post.destroy({
         where: { id }
       })
-      return `with id of ${id} successfully deleted.`
+      return `Post with id of ${id} successfully deleted.`
     },
     createPost: (_, args) => {
       const newPost = args.input;

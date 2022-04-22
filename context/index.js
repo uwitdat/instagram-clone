@@ -11,7 +11,7 @@ export function AppWrapper({ children }) {
 
   const [state, setState] = useState({
     currentUser: null,
-    isAuthed: false
+    isAuthed: false,
   });
 
   const httpLink = createHttpLink({

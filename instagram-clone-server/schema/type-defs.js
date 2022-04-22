@@ -34,6 +34,7 @@ export const typeDefs = gql`
       users: [User!]!
       user(id: ID!): User!
       getAuthedUser: User!
+      postsByUser(id: ID!): [Post!]!
   }
 
 input RegisterUserInput {

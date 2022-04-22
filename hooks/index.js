@@ -15,7 +15,7 @@ export function getCurrentUser() {
     if (isCompleted) {
       setState({
         ...state,
-        currentUser: authedUserData.getAuthedUser,
+        currentUser: authedUserData?.getAuthedUser,
         isAuthed: true
       });
     }
