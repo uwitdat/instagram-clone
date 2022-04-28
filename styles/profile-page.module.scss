@@ -20,6 +20,7 @@
     height: 5rem;
     border-radius: 50%;
     margin-left: 1rem;
+    object-fit: cover;
   }
 
   div {
@@ -75,10 +76,15 @@
 }
 
 .profileBtnContainer {
-  display: flex;
-  button {
-    margin: 0.5rem 0.2rem;
-  }
+   display: flex;
+
+    button {
+      margin: 0.5rem 0.2rem;
+    }
+    
+    .followingBtn {
+      border: 1px solid $color-white;
+    }
 }
 
 .imageGrid {
@@ -93,7 +99,7 @@
     height: inherit;
     width: inherit;
 
-    img {
+    img { 
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -142,3 +148,4 @@
   position: absolute;
   top: 0;
 }
+

@@ -40,9 +40,10 @@ const Login = () => {
       });
       if (data.loginUser) {
         setCookie('JWT', data.loginUser, 1)
-        router.push('/home')
+        router.push('/')
       }
     } catch (err) {
+      console.log(err)
       setLoginError(err.message)
     }
   }

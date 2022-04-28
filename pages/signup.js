@@ -45,6 +45,7 @@ const Signup = () => {
           router.push('/login');
         }
       } catch (err) {
+        console.log(err)
         setSignupError(err.message);
       }
     }

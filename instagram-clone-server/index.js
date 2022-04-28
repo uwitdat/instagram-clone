@@ -8,13 +8,14 @@ import { resolvers } from './schema/resolvers.js';
 import { typeDefs } from './schema/type-defs.js';
 import dotenv from "dotenv";
 import jwt from 'jsonwebtoken';
-
+import { graphqlUploadExpress } from 'graphql-upload';
 
 dotenv.config();
 
 
 const app = express();
 // app.use(express.json());
+
 const PORT = 5000;
 const SECRET = process.env.AUTH_SECRET;
 
@@ -52,7 +53,6 @@ async function init(typeDefs, resolvers) {
 
   app.use(cors('*'));
 
-
   const httpServer = http.createServer(app);
   const server = new ApolloServer({
     typeDefs,
@@ -64,7 +64,11 @@ async function init(typeDefs, resolvers) {
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
   await server.start();
+
+  app.use(graphqlUploadExpress());
   server.applyMiddleware({ app });
+  app.use(express.static('../public'));
+
   await new Promise(resolve => httpServer.listen({ port: PORT }, resolve));
   console.log(`🚀 Server ready at http://localhost:5000${server.graphqlPath}`);
 }

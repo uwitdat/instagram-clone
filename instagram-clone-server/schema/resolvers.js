@@ -3,6 +3,10 @@ import pkg from 'graphql-iso-date';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import _ from 'lodash';
+import { GraphQLUpload } from 'graphql-upload';
+import path, { dirname } from 'path';
+import fs from 'fs';
+import { v4 } from "uuid";
 
 const { GraphQLDateTime } = pkg;
 
@@ -15,6 +19,9 @@ const checkForUser = (context) => {
 }
 
 export const resolvers = {
+  Date: GraphQLDateTime,
+  Upload: GraphQLUpload,
+
   Query: {
     users: (parent, args, context) => {
       if (checkForUser(context)) {
@@ -38,25 +45,181 @@ export const resolvers = {
       return DB.models.post.findAll({
         where: {
           userId: args.id
-        }
+        },
+        order: [
+          ['createdAt', 'DESC'],
+        ],
       })
+    },
+    getAllPosts: (_, args) => {
+      const { count, first } = args;
+
+      return DB.models.post.findAll({
+
+        offset: count, limit: first,
+        order: [
+          ['createdAt', 'DESC'],
+        ],
+      })
+    },
+    getCommentsForPost: (_, args) => {
+      return DB.models.commentOnPost.findAll({
+        where: {
+          commentOnPostId: args.id
+        },
+        order: [
+          ['createdAt', 'DESC'],
+        ],
+      })
+    },
+    getLikesForPost: (_, args) => {
+      return DB.models.likeOnPost.findAll({
+        where: {
+          likeOnPostId: args.id
+        },
+      })
+    },
+    getAllUserFollowers: async (_, args) => {
+      const userFollowers = await DB.models.follower.findAll({
+        where: {
+          followingUserId: args.id
+        },
+        include: [{
+          model: DB.models.user,
+          as: 'FollowedByUser'
+        }],
+        order: [
+          ['FollowedByUser', 'createdAt', 'DESC']
+        ]
+      })
+      return userFollowers.map((follower) => follower.FollowedByUser)
+    },
+    getAllUserFollowing: async (_, args) => {
+      const userFollowing = await DB.models.follower.findAll({
+        where: {
+          followedByUserId: args.id,
+        },
+        include: [{
+          model: DB.models.user,
+          as: 'FollowingUser',
+        }],
+        order: [
+          ['FollowingUser', 'createdAt', 'DESC'],
+        ],
+      })
+      return userFollowing.map((following) => following.FollowingUser)
     }
   },
+
   User: {
     posts: (parent, _) => {
       return DB.models.post.findAll({
         where: {
           userId: parent.id
-        }
+        },
+        order: [
+          ['createdAt', 'DESC'],
+        ],
       })
     },
+    followers: async (parent, _) => {
+      const userFollowers = await DB.models.follower.findAll({
+        where: {
+          followingUserId: parent.id
+        },
+        include: [{
+          model: DB.models.user,
+          as: 'FollowedByUser'
+        }],
+        order: [
+          ['FollowedByUser', 'createdAt', 'DESC']
+        ]
+      })
+      return userFollowers.map((follower) => follower.FollowedByUser)
+    },
+    following: async (parent, _) => {
+      const userFollowing = await DB.models.follower.findAll({
+        where: {
+          followedByUserId: parent.id,
+        },
+        include: [{
+          model: DB.models.user,
+          as: 'FollowingUser',
+        }],
+        order: [
+          ['FollowingUser', 'createdAt', 'DESC'],
+        ],
+      })
+      return userFollowing.map((following) => following.FollowingUser)
+    }
+  },
+  Comment: {
+    commentedBy: async (parent, _) => {
+      return DB.models.user.findByPk(parent.dataValues.commentedByUserId)
+    },
+    replies: async (parent, _) => {
+      return DB.models.replyToComment.findAll({
+        where: {
+          replyToCommentId: parent.id
+        },
+        order: [
+          ['createdAt', 'DESC'],
+        ],
+      })
+    }
+  },
+  ReplyToComment: {
+    repliedBy: (parent, _) => {
+      return DB.models.user.findByPk(parent.dataValues.replyFromUserId)
+    }
+  },
+  Like: {
+    likedBy: async (parent, _) => {
+      return DB.models.user.findByPk(parent.dataValues.likedByUserId)
+    }
   },
   Post: {
-    comments: (parent, _) => {
-      return []
+    postedBy: (parent, _) => {
+      return DB.models.user.findByPk(parent.dataValues.userId)
     },
+    comments: (parent, _) => {
+      return DB.models.commentOnPost.findAll({
+        where: {
+          commentOnPostId: parent.id
+        },
+        order: [
+          ['createdAt', 'DESC'],
+        ],
+      })
+    },
+    likes: (parent, _) => {
+      return DB.models.likeOnPost.findAll({
+        where: {
+          likeOnPostId: parent.id
+        },
+        order: [
+          ['createdAt', 'DESC'],
+        ],
+      })
+    }
   },
   Mutation: {
+    uploadFile: async (_, { file }) => {
+      const { createReadStream, filename } = await file;
+      const stream = createReadStream();
+
+
+      const name = v4() + filename
+
+      console.log(name)
+
+      const pathName = path.join(`../public/images/${name}`)
+      await stream.pipe(fs.createWriteStream(pathName))
+
+      return {
+        url: `http://localhost:5000/images/${name}`
+      };
+    },
     updateUser: async (_, args) => {
       const { id } = args.input;
       const user = await DB.models.user.update(
@@ -64,6 +227,25 @@ export const resolvers = {
         { where: { id }, returning: true, plain: true }
       );
       return user[1].dataValues;
+    },
+    followUser: async (_, args) => {
+      const { followedByUserId, followingUserId } = args;
+
+      return DB.models.follower.create({
+        followedByUserId,
+        followingUserId
+      })
+    },
+    unfollowUser: async (_, args) => {
+      const { userId, userIdToUnfollow } = args;
+
+      await DB.models.follower.destroy({
+        where: {
+          followedByUserId: userId,
+          followingUserId: userIdToUnfollow
+        }
+      })
+      return `user with id ${userId} successfully unfollowed user with id ${userIdToUnfollow}.`
     },
     deleteUser: async (_, args) => {
       const id = args.id;
@@ -79,6 +261,13 @@ export const resolvers = {
       })
       return `Post with id of ${id} successfully deleted.`
     },
+    removeLike: async (_, args) => {
+      const { likeOnPostId, likedByUserId } = args;
+      await DB.models.likeOnPost.destroy({
+        where: { likeOnPostId, likedByUserId }
+      })
+      return `Like with id of ${likeOnPostId} by user ${likedByUserId} successfully removed.`
+    },
     createPost: (_, args) => {
       const newPost = args.input;
       return DB.models.post.create({
@@ -86,6 +275,33 @@ export const resolvers = {
         postDescription: newPost.postDescription,
         userId: newPost.userId
       })
+    },
+    createCommentForPost: (_, args) => {
+      const newComment = args.input;
+
+      return DB.models.commentOnPost.create({
+        commentContent: newComment.commentContent,
+        commentOnPostId: newComment.commentOnPostId,
+        commentedByUserId: newComment.commentedByUserId
+      })
+    },
+    createLikeForPost: (_, args) => {
+      const { likeOnPostId, likedByUserId } = args;
+
+      return DB.models.likeOnPost.create({
+        likeOnPostId,
+        likedByUserId
+      })
+    },
+    replyToComment: (_, args) => {
+      const newReply = args.input
+
+      return DB.models.replyToComment.create({
+        replyContent: newReply.replyContent,
+        replyToCommentId: newReply.replyToCommentId,
+        replyFromUserId: newReply.replyFromUserId
+      })
+
     },
     createAndRegisterUser: async (_, args) => {
       const newUser = args.input;
@@ -121,6 +337,5 @@ export const resolvers = {
       return token;
     }
   },
-  Date: GraphQLDateTime
 };
 

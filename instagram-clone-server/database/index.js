@@ -1,6 +1,10 @@
 import Sequelize from 'sequelize';
 import { user } from './models/User.js';
 import { post } from './models/Post.js';
+import { commentOnPost } from './models/Comment.js';
+import { likeOnPost } from './models/Like.js';
+import { replyToComment } from './models/ReplyToComment.js';
+import { follower } from './models/Follower.js';
 import { setModelRelationships } from './setup.js';
 import dotenv from "dotenv";
 
@@ -14,6 +18,10 @@ const DB = new Sequelize(
 
 user(DB);
 post(DB);
+commentOnPost(DB);
+likeOnPost(DB);
+follower(DB);
+replyToComment(DB);
 
 setModelRelationships(DB);
 

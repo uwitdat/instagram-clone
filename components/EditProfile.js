@@ -1,10 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Overlay from './Overlay';
 import editProfileStyles from '../styles/edit-profile.module.scss';
+import { storage } from '../firebase'
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { v4 } from 'uuid';
+import { useMutation } from '@apollo/client';
+import { EDIT_USER_MUTATION } from '../utils/mutations';
 
-const EditProfile = ({ showEditProfile, handleCloseEditProfile, currentUser }) => {
+
+const EditProfile = ({ showEditProfile, handleCloseEditProfile, currentUser, setCurrentUser }) => {
   const [newUserAvatar, setNewUserAvatar] = useState(null);
-  const [preview, setPreview] = useState()
+  const [preview, setPreview] = useState();
+  const [uploadProgress, setUploadProgress] = useState(0);
   const inputRef = useRef(null)
 
   const [editValues, setEditValues] = useState({
@@ -13,8 +20,6 @@ const EditProfile = ({ showEditProfile, handleCloseEditProfile, currentUser }) =
     bio: '',
     avatar: ''
   })
-
-  console.log('hi', currentUser)
 
   const handleEditValues = (e) => {
     const { name, value } = e.target;
@@ -35,13 +40,65 @@ const EditProfile = ({ showEditProfile, handleCloseEditProfile, currentUser }) =
     }
   }
 
+  const handleSubmitChanges = () => {
+    if (newUserAvatar) {
+      handleUpload()
+    } else {
+      handleSubmitEditUserInfo()
+    }
+
+  }
+
+  const handleUpload = () => {
+    const imageRef = ref(storage, `posts/${newUserAvatar.name + v4()}`)
+    const uploadTask = uploadBytesResumable(imageRef, newUserAvatar);
+
+    uploadTask.on('state_changed',
+      (snapshot) => {
+
+      },
+      (error) => {
+        console.log(error.message)
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          handleSubmitEditUserInfo(downloadURL)
+        });
+      }
+    );
+  }
+
+  const [updateUser] = useMutation(EDIT_USER_MUTATION);
+
+  const handleSubmitEditUserInfo = async (downloadURL) => {
+    const { name, userName, avatar, bio } = editValues;
+
+    try {
+      const { data } = await updateUser({
+        variables: { updateUserInput: { id: Number(currentUser.id), name, userName, avatar: downloadURL ? downloadURL : avatar, bio } }
+      })
+      if (data.updateUser) {
+        setCurrentUser({
+          ...currentUser,
+          currentUser: data.updateUser
+        })
+        setNewUserAvatar(null)
+        setPreview(null)
+        handleCloseEditProfile()
+      }
+    } catch (err) {
+      console.log('me')
+      console.log(err.message)
+    }
+  }
+
   useEffect(() => {
     if (currentUser) {
       setEditValues({
-        name: currentUser?.name,
-        userName: currentUser?.userName,
-        bio: currentUser?.bio,
-        avatar: currentUser?.avatar
+        name: currentUser.name,
+        userName: currentUser.userName,
+        bio: currentUser.bio,
+        avatar: currentUser.avatar
       })
     }
   }, [currentUser])
@@ -57,6 +114,13 @@ const EditProfile = ({ showEditProfile, handleCloseEditProfile, currentUser }) =
     return () => URL.revokeObjectURL(objectUrl)
   }, [newUserAvatar])
 
+  useEffect(() => {
+    if (handleCloseEditProfile) {
+      setNewUserAvatar(null)
+      setPreview(null)
+    }
+  }, [handleCloseEditProfile])
+
 
   return (
     <Overlay height='100vh' top={0} isShowing={showEditProfile}>
@@ -64,7 +128,7 @@ const EditProfile = ({ showEditProfile, handleCloseEditProfile, currentUser }) =
       <nav className={editProfileStyles.nav}>
         <button onClick={handleCloseEditProfile}>Cancel</button>
         <h3>Edit profile</h3>
-        <button>Done</button>
+        <button onClick={handleSubmitChanges}>Done</button>
       </nav>
 
       <div className={editProfileStyles.profilePicture}>

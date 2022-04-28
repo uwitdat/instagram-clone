@@ -48,6 +48,11 @@ $drag-transition: all 230ms ease-in;
         border-color: transparent;
         border-radius: 5px;
         padding: 0.2rem 0.6rem;
+
+        &:disabled {
+          opacity: 0.2;
+          cursor: default;
+        }
       }
     }
 
@@ -146,6 +151,7 @@ $drag-transition: all 230ms ease-in;
   display: flex;
   color: $color-white;
   height: 20rem;
+  overflow: hidden;
 
   .imagePreview,
   .postDescription {
@@ -190,7 +196,7 @@ $drag-transition: all 230ms ease-in;
 
     textarea {
       resize: none;
-      height: 100%;
+      height: 70%;
       padding: 0.5rem 1.5rem;
       background-color: transparent;
       color: $color-white;
@@ -206,5 +212,43 @@ $drag-transition: all 230ms ease-in;
         font-weight: 400;
       }
     }
+  }
+}
+
+.spinner {
+  display: inline-block;
+  position: relative;
+  background-color: transparent;
+}
+.spinner div {
+  box-sizing: border-box;
+  // display: block;
+  position: absolute;
+  top: -1.5rem;
+  right: -0.5rem;
+  width: 2rem;
+  height: 2rem;
+  margin: 8px;
+  border: 4px solid #fff;
+  border-radius: 50%;
+  background-color: black;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #fff gray gray gray;
+}
+.spinner div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.spinner div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.spinner div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }

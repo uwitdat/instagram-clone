@@ -8,7 +8,7 @@ import { eraseCookie } from '../utils/functions';
 import FileUpload from './file-upload/FileUpload';
 
 
-const NavHeader = () => {
+const NavHeader = ({ refetchAllPosts }) => {
   const router = Router;
   const COOKIE_NAME = 'JWT';
 
@@ -33,11 +33,12 @@ const NavHeader = () => {
         </ul>
       </nav>
       {newPostModal ? (
-        <FileUpload open={newPostModal} handleClose={handleCloseNewPostModal} />
+        <FileUpload refetchAllPosts={refetchAllPosts} open={newPostModal} handleClose={handleCloseNewPostModal} />
       ) : null}
 
     </React.Fragment>
   )
+
 }
 
 export default NavHeader;

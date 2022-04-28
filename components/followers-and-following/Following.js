@@ -1,55 +1,54 @@
 import React from 'react';
 import followingStyles from '../../styles/following.module.scss';
 import { AiOutlineEllipsis } from 'react-icons/ai';
+import { useMutation } from '@apollo/client';
+import { UNFOLLOW_USER } from '../../utils/mutations';
+import { useAppContext } from '../../context';
 
-const followingDummy = [
-  {
-    userId: 1,
-    userAvatar: 'https://chicagophotovideo.com/wp-content/uploads/2018/01/chicago-headshot-and-portrait-photographer.jpg',
-    userName: 'Handsen_09',
-    name: 'kyle hansen'
-  },
-  {
-    userId: 2,
-    userAvatar: 'https://media.wired.com/photos/5926dc8ecfe0d93c474319dd/master/pass/PikachuTA-EWEATA.jpg',
-    userName: 'Ron Jon',
-    name: 'alvin wilson'
-  },
-  {
-    userId: 3,
-    userAvatar: 'https://images.squarespace-cdn.com/content/v1/5de44773e21f980cc58b7c04/1642552115327-DJ09OLU46KXX5W1CE09U/BusinesHeadshot',
-    userName: 'Ron Jon the tst king',
-    name: 'alvin wilson morrizon the iv'
-  },
-  {
-    userId: 4,
-    userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-    userName: 'Marly williams',
-    name: 'mar_bar_'
-  },
+const Following = ({ following, switchFollowing, handleViewProfile, refetchFollowing }) => {
+  const [state] = useAppContext();
 
-]
+  const [unfollowUser] = useMutation(UNFOLLOW_USER);
 
-const Following = ({ switchFollowing, handleViewProfile }) => {
+  const handleUnfollowUser = async (followingId) => {
+    try {
+      const { data } = await unfollowUser({
+        variables: {
+          userId: state.currentUser.id,
+          userIdToUnfollow: followingId
+        }
+      })
+      if (data) {
+        refetchFollowing()
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
 
   return (
     <div className={switchFollowing ? `${followingStyles.container} ${followingStyles.enterFollowing}` : followingStyles.container}>
       <h2>Sort By Default</h2>
       <section>
-        {followingDummy.map((follower) => (
-          <div className={followingStyles.following} key={follower.userId}>
+        {following.map((following) => (
+          <div className={followingStyles.following} key={following.id}>
             <div>
-              <img onClick={() => handleViewProfile(follower.userId)} src={follower.userAvatar} alt={follower.userAvatar} />
-              <div onClick={() => handleViewProfile(follower.userId)}>
-                <h3>{follower.userName}</h3>
-                <p>{follower.name}</p>
+              <img
+                src={following.avatar ? following.avatar : 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/271deea8-e28c-41a3-aaf5-2913f5f48be6/de7834s-6515bd40-8b2c-4dc6-a843-5ac1a95a8b55.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI3MWRlZWE4LWUyOGMtNDFhMy1hYWY1LTI5MTNmNWY0OGJlNlwvZGU3ODM0cy02NTE1YmQ0MC04YjJjLTRkYzYtYTg0My01YWMxYTk1YThiNTUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.BopkDn1ptIwbmcKHdAOlYHyAOOACXW0Zfgbs0-6BY-E'} alt={following.userAvatar}
+                onClick={() => handleViewProfile(following.id, following)} />
+              <div onClick={() => handleViewProfile(following.id, following)}>
+                <h3>{following.userName}</h3>
+                <p>{following.name}</p>
               </div>
             </div>
-            <div>
-              <button>Following</button>
-              <AiOutlineEllipsis />
-            </div>
+            {following.id === state.currentUser.id || following.id !== state.currentUser.id ? null : (
+              <div>
+                <button onClick={() => handleUnfollowUser(following.id)}>Following</button>
+                <AiOutlineEllipsis />
+              </div>
+            )}
+
           </div>
         ))}
       </section>

@@ -1,33 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useRef, useEffect } from 'react'
 import postStyles from '../styles/home.module.scss';
-
-import Comments from '../components/Comments';
-import Likes from '../components/Likes';
 import Post from '../components/Post';
-
 import NavFooter from '../components/NavFooter';
 
-const Posts = ({ data, header, indexOfClickedPost }) => {
-  const [showComments, setShowComments] = useState(false)
-  const [showLikes, setShowLikes] = useState(false)
-
-  const [scrollPosition, setScrollPosition] = useState(null);
-  const [activePost, setActivePost] = useState(null)
-  const [likesForPost, setActiveLikesForPost] = useState(null)
-
-  const handleViewComments = (post) => {
-    const currentTopDimensions = window.pageYOffset;
-    setScrollPosition(currentTopDimensions);
-    setActivePost(post)
-    setShowComments(true)
-  }
-
-  const handleViewLikes = (likes) => {
-    const currentTopDimensions = window.pageYOffset;
-    setScrollPosition(currentTopDimensions);
-    setActiveLikesForPost(likes)
-    setShowLikes(true)
-  }
+const Posts = ({ user, header, indexOfClickedPost, noLoop, handleClosePosts }) => {
 
   const postsRef = useRef(null)
 
@@ -47,21 +23,14 @@ const Posts = ({ data, header, indexOfClickedPost }) => {
     <div>
       {header}
       <div className={postStyles.homeContainer}>
-        {activePost ? (
-          <Comments showComments={showComments} setShowComments={setShowComments} currentTopPosition={scrollPosition} post={activePost} />
-        ) : null}
-
-        {likesForPost ? (
-          <Likes showLikes={showLikes} setShowLikes={setShowLikes} currentTopPosition={scrollPosition} likes={likesForPost} />
-        ) : null}
-
         <section ref={postsRef} className={postStyles.posts}>
-          {data.map((post, idx) => (
-            <Post key={idx} post={post} handleViewComments={handleViewComments} handleViewLikes={handleViewLikes} />
+          {user && user.posts.map((post, idx) => (
+            <Post handleClosePosts={handleClosePosts} postFromUser={user} key={idx} post={post} />
           ))}
         </section>
       </div>
-      <NavFooter />
+      {noLoop ? null : <NavFooter />}
+
     </div>
   )
 }

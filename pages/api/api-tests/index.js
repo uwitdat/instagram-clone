@@ -2,937 +2,331 @@
 
 export const posts = [
     {
-        id: 1,
-        postContent: 'https://blog.theclymb.com/wp-content/uploads/2015/03/Selfie.jpg',
-        postDescription: 'My first post! ya ya ya ya ya ya ya ya ya ya ya',
-        postedBy: {
-            userId: 1,
-            userName: 'John-Wils',
-            userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
-        },
-        postedOn: '2022-04-10T02:09:00',
-        likedBy: [
+        "id": "2",
+        "name": "ben_s",
+        "userName": "ben_sven_ten",
+        "bio": "currently away from keyboard",
+        "avatar": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-hosting-two.appspot.com/o/posts%2FPhoto%20on%202021-09-07%20at%201.37%20PM%20%232.jpg5b3e451d-cbbc-4219-964b-6b7157f8fd16?alt=media&token=339eb8d2-0fe0-4b42-8274-a33c4914a104",
+        "posts": [
             {
-                id: 1,
-                likedPostId: 1,
-                userId: 3,
-                userName: 'nance-202',
-                name: 'nancy jones',
-                userAvatar: 'https://images.squarespace-cdn.com/content/v1/5de44773e21f980cc58b7c04/1642552115327-DJ09OLU46KXX5W1CE09U/BusinesHeadshot'
+                "id": "10",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FScreen%20Shot%202022-04-07%20at%2010.10.15%20AM.pngd8c55a3e-0773-40b3-ba1f-9b24f47b86d2?alt=media&token=9d993ab5-58a4-477e-a7d6-a3a05c6aec47",
+                "postDescription": "Still have to do this lol.",
+                "createdAt": "2022-04-22T03:49:54.201Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
             {
-                id: 2,
-                likedPostId: 1,
-                userId: 6,
-                userName: 'ben_sven_ten',
-                name: 'Ben Shektman',
-                userAvatar: 'https://media.istockphoto.com/photos/portrait-young-confident-smart-asian-businessman-look-at-camera-and-picture-id1288538088?b=1&k=20&m=1288538088&s=170667a&w=0&h=3efMku7kSXUhpVrErAVVgxp6G91tRZ_5seygOn68RnE='
+                "id": "11",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FScreen%20Shot%202022-04-17%20at%207.48.30%20PM.png428f9359-3024-4827-a3e8-045a830d91d8?alt=media&token=2cea8ac2-2d5c-4238-9b4a-b2591da6095b",
+                "postDescription": "thi sis i",
+                "createdAt": "2022-04-22T04:26:50.097Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
             {
-                id: 3,
-                likedPostId: 1,
-                userId: 10,
-                userName: 'dvox',
-                name: 'dd lopz',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309'
+                "id": "12",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FONE%20MORE%20NIGHT%20ART.jpg0569de4f-8ff9-4344-9196-1fd6cb743b84?alt=media&token=5da51806-c767-4c7d-b890-a20ade4a4a46",
+                "postDescription": "one more",
+                "createdAt": "2022-04-22T04:29:29.578Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
             {
-                id: 4,
-                likedPostId: 1,
-                userId: 1,
-                userName: 'John-Wils',
-                name: 'JJ Willis',
-                userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
+                "id": "13",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FONE%20MORE%20NIGHT%20ART.jpgc3425795-e8a7-402f-bea5-32bb56db2b5c?alt=media&token=7b82df41-c2a6-46cd-8016-747496c47fb2",
+                "postDescription": "some one agin ahahah",
+                "createdAt": "2022-04-22T04:40:16.791Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
             {
-                id: 1,
-                likedPostId: 1,
-                userId: 3,
-                userName: 'nance-202',
-                name: 'nancy jones',
-                userAvatar: 'https://images.squarespace-cdn.com/content/v1/5de44773e21f980cc58b7c04/1642552115327-DJ09OLU46KXX5W1CE09U/BusinesHeadshot'
+                "id": "14",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FIMG_0059.JPGe4549592-a606-46c8-aea0-79a775de024f?alt=media&token=a4f7b5a0-9129-446f-9907-26d3360919a9",
+                "postDescription": "my boy!!!!!",
+                "createdAt": "2022-04-22T04:52:26.178Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
             {
-                id: 2,
-                likedPostId: 1,
-                userId: 6,
-                userName: 'ben_sven_ten',
-                name: 'Ben Shektman',
-                userAvatar: 'https://media.istockphoto.com/photos/portrait-young-confident-smart-asian-businessman-look-at-camera-and-picture-id1288538088?b=1&k=20&m=1288538088&s=170667a&w=0&h=3efMku7kSXUhpVrErAVVgxp6G91tRZ_5seygOn68RnE='
+                "id": "15",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FPhoto%20on%202021-10-09%20at%203.10%20PM.jpgc8d13fba-2f17-4e14-9426-00a9e1f263e6?alt=media&token=d0e41dce-0c7a-4d54-a256-b7b0cbf9c98a",
+                "postDescription": "me in it",
+                "createdAt": "2022-04-22T04:53:25.382Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
             {
-                id: 3,
-                likedPostId: 1,
-                userId: 10,
-                userName: 'dvox',
-                name: 'dd lopz',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309'
+                "id": "16",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FPhoto%20on%202021-09-07%20at%201.37%20PM%20%232.jpgdb5a3f7d-0451-449f-8a6b-af7b21f00845?alt=media&token=edc61b43-e1ae-495a-a4a8-177f74db674a",
+                "postDescription": "yayayayayayaya",
+                "createdAt": "2022-04-22T04:54:25.732Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
             {
-                id: 4,
-                likedPostId: 1,
-                userId: 1,
-                userName: 'John-Wils',
-                name: 'JJ Willis',
-                userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
-            },
-            {
-                id: 1,
-                likedPostId: 1,
-                userId: 3,
-                userName: 'nance-202',
-                name: 'nancy jones',
-                userAvatar: 'https://images.squarespace-cdn.com/content/v1/5de44773e21f980cc58b7c04/1642552115327-DJ09OLU46KXX5W1CE09U/BusinesHeadshot'
-            },
-            {
-                id: 2,
-                likedPostId: 1,
-                userId: 6,
-                userName: 'ben_sven_ten',
-                name: 'Ben Shektman',
-                userAvatar: 'https://media.istockphoto.com/photos/portrait-young-confident-smart-asian-businessman-look-at-camera-and-picture-id1288538088?b=1&k=20&m=1288538088&s=170667a&w=0&h=3efMku7kSXUhpVrErAVVgxp6G91tRZ_5seygOn68RnE='
-            },
-            {
-                id: 3,
-                likedPostId: 1,
-                userId: 10,
-                userName: 'dvox',
-                name: 'dd lopz',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309'
-            },
-            {
-                id: 4,
-                likedPostId: 1,
-                userId: 1,
-                userName: 'John-Wils',
-                name: 'JJ Willis',
-                userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
-            },
-        ],
-        comments: [
-            {
-                id: 1,
-                commentForPostId: 1,
-                commentId: 1,
-                userId: 10,
-                userName: 'dvox',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-                comment: 'SICK!',
-                commentedOn: '2022-04-10T02:09:00',
+                "id": "17",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-hosting-two.appspot.com/o/posts%2FScreen%20Shot%202022-04-21%20at%209.51.15%20PM.pngb9a101cf-4265-4958-8bf8-7e49e0f0cea6?alt=media&token=59e0ec5f-bb2a-4d73-be9e-3cca2a7e755d",
+                "postDescription": "dd info lol",
+                "createdAt": "2022-04-22T18:46:00.706Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             }
         ]
     },
     {
-        id: 2,
-        postContent: 'https://blog.theclymb.com/wp-content/uploads/2015/03/Selfie.jpg',
-        postDescription: 'My first post! ya ya ya ya ya ya ya ya ya ya ya',
-        postedBy: {
-            userId: 5,
-            userName: 'John-Wils',
-            userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
-        },
-        postedOn: '2022-04-10T02:09:00',
-        likedBy: [
+        "id": "2",
+        "name": "ben_s",
+        "userName": "ben_sven_ten",
+        "bio": "currently away from keyboard",
+        "avatar": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-hosting-two.appspot.com/o/posts%2FPhoto%20on%202021-09-07%20at%201.37%20PM%20%232.jpg5b3e451d-cbbc-4219-964b-6b7157f8fd16?alt=media&token=339eb8d2-0fe0-4b42-8274-a33c4914a104",
+        "posts": [
             {
-                id: 1,
-                likedPostId: 1,
-                userId: 3,
-                userName: 'nance-202',
-                name: 'nancy jones',
-                userAvatar: 'https://images.squarespace-cdn.com/content/v1/5de44773e21f980cc58b7c04/1642552115327-DJ09OLU46KXX5W1CE09U/BusinesHeadshot'
+                "id": "10",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FScreen%20Shot%202022-04-07%20at%2010.10.15%20AM.pngd8c55a3e-0773-40b3-ba1f-9b24f47b86d2?alt=media&token=9d993ab5-58a4-477e-a7d6-a3a05c6aec47",
+                "postDescription": "Still have to do this lol.",
+                "createdAt": "2022-04-22T03:49:54.201Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
             {
-                id: 2,
-                likedPostId: 1,
-                userId: 6,
-                userName: 'ben_sven_ten',
-                name: 'Ben Shektman',
-                userAvatar: 'https://media.istockphoto.com/photos/portrait-young-confident-smart-asian-businessman-look-at-camera-and-picture-id1288538088?b=1&k=20&m=1288538088&s=170667a&w=0&h=3efMku7kSXUhpVrErAVVgxp6G91tRZ_5seygOn68RnE='
+                "id": "11",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FScreen%20Shot%202022-04-17%20at%207.48.30%20PM.png428f9359-3024-4827-a3e8-045a830d91d8?alt=media&token=2cea8ac2-2d5c-4238-9b4a-b2591da6095b",
+                "postDescription": "thi sis i",
+                "createdAt": "2022-04-22T04:26:50.097Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
             {
-                id: 3,
-                likedPostId: 1,
-                userId: 10,
-                userName: 'dvox',
-                name: 'dd lopz',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309'
+                "id": "12",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FONE%20MORE%20NIGHT%20ART.jpg0569de4f-8ff9-4344-9196-1fd6cb743b84?alt=media&token=5da51806-c767-4c7d-b890-a20ade4a4a46",
+                "postDescription": "one more",
+                "createdAt": "2022-04-22T04:29:29.578Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
             {
-                id: 4,
-                likedPostId: 1,
-                userId: 1,
-                userName: 'John-Wils',
-                name: 'JJ Willis',
-                userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
-            },
-        ],
-        comments: [
-            {
-                id: 1,
-                commentForPostId: 1,
-                commentId: 1,
-                userId: 10,
-                userName: 'dvox',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-                comment: 'SICK!',
-                commentedOn: '2022-04-10T02:09:00',
+                "id": "13",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FONE%20MORE%20NIGHT%20ART.jpgc3425795-e8a7-402f-bea5-32bb56db2b5c?alt=media&token=7b82df41-c2a6-46cd-8016-747496c47fb2",
+                "postDescription": "some one agin ahahah",
+                "createdAt": "2022-04-22T04:40:16.791Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
             {
-                id: 2,
-                commentForPostId: 1,
-                commentId: 2,
-                userId: 4,
-                userName: 'johnson-n-monson',
-                userAvatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGVhZHNob3R8ZW58MHx8MHx8&w=1000&q=80',
-                comment: 'i lovve this!!!',
-                commentedOn: '2022-04-10T02:09:00',
+                "id": "14",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FIMG_0059.JPGe4549592-a606-46c8-aea0-79a775de024f?alt=media&token=a4f7b5a0-9129-446f-9907-26d3360919a9",
+                "postDescription": "my boy!!!!!",
+                "createdAt": "2022-04-22T04:52:26.178Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
+            {
+                "id": "15",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FPhoto%20on%202021-10-09%20at%203.10%20PM.jpgc8d13fba-2f17-4e14-9426-00a9e1f263e6?alt=media&token=d0e41dce-0c7a-4d54-a256-b7b0cbf9c98a",
+                "postDescription": "me in it",
+                "createdAt": "2022-04-22T04:53:25.382Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
+            },
+            {
+                "id": "16",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FPhoto%20on%202021-09-07%20at%201.37%20PM%20%232.jpgdb5a3f7d-0451-449f-8a6b-af7b21f00845?alt=media&token=edc61b43-e1ae-495a-a4a8-177f74db674a",
+                "postDescription": "yayayayayayaya",
+                "createdAt": "2022-04-22T04:54:25.732Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
+            },
+            {
+                "id": "17",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-hosting-two.appspot.com/o/posts%2FScreen%20Shot%202022-04-21%20at%209.51.15%20PM.pngb9a101cf-4265-4958-8bf8-7e49e0f0cea6?alt=media&token=59e0ec5f-bb2a-4d73-be9e-3cca2a7e755d",
+                "postDescription": "dd info lol",
+                "createdAt": "2022-04-22T18:46:00.706Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
+            }
         ]
     },
     {
-        id: 3,
-        postContent: 'https://blog.theclymb.com/wp-content/uploads/2015/03/Selfie.jpg',
-        postDescription: 'My first post! ya ya ya ya ya ya ya ya ya ya ya',
-        postedBy: {
-            userId: 1,
-            userName: 'John-Wils',
-            userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
-        },
-        postedOn: '2022-04-10T02:09:00',
-        likedBy: [
+        "id": "2",
+        "name": "ben_s",
+        "userName": "ben_sven_ten",
+        "bio": "currently away from keyboard",
+        "avatar": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-hosting-two.appspot.com/o/posts%2FPhoto%20on%202021-09-07%20at%201.37%20PM%20%232.jpg5b3e451d-cbbc-4219-964b-6b7157f8fd16?alt=media&token=339eb8d2-0fe0-4b42-8274-a33c4914a104",
+        "posts": [
             {
-                id: 1,
-                likedPostId: 1,
-                userId: 3,
-                userName: 'nance-202',
-                name: 'nancy jones',
-                userAvatar: 'https://images.squarespace-cdn.com/content/v1/5de44773e21f980cc58b7c04/1642552115327-DJ09OLU46KXX5W1CE09U/BusinesHeadshot'
+                "id": "10",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FScreen%20Shot%202022-04-07%20at%2010.10.15%20AM.pngd8c55a3e-0773-40b3-ba1f-9b24f47b86d2?alt=media&token=9d993ab5-58a4-477e-a7d6-a3a05c6aec47",
+                "postDescription": "Still have to do this lol.",
+                "createdAt": "2022-04-22T03:49:54.201Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
             {
-                id: 2,
-                likedPostId: 1,
-                userId: 6,
-                userName: 'ben_sven_ten',
-                name: 'Ben Shektman',
-                userAvatar: 'https://media.istockphoto.com/photos/portrait-young-confident-smart-asian-businessman-look-at-camera-and-picture-id1288538088?b=1&k=20&m=1288538088&s=170667a&w=0&h=3efMku7kSXUhpVrErAVVgxp6G91tRZ_5seygOn68RnE='
+                "id": "11",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FScreen%20Shot%202022-04-17%20at%207.48.30%20PM.png428f9359-3024-4827-a3e8-045a830d91d8?alt=media&token=2cea8ac2-2d5c-4238-9b4a-b2591da6095b",
+                "postDescription": "thi sis i",
+                "createdAt": "2022-04-22T04:26:50.097Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
             {
-                id: 3,
-                likedPostId: 1,
-                userId: 10,
-                userName: 'dvox',
-                name: 'dd lopz',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309'
+                "id": "12",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FONE%20MORE%20NIGHT%20ART.jpg0569de4f-8ff9-4344-9196-1fd6cb743b84?alt=media&token=5da51806-c767-4c7d-b890-a20ade4a4a46",
+                "postDescription": "one more",
+                "createdAt": "2022-04-22T04:29:29.578Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
             {
-                id: 4,
-                likedPostId: 1,
-                userId: 1,
-                userName: 'John-Wils',
-                name: 'JJ Willis',
-                userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
+                "id": "13",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FONE%20MORE%20NIGHT%20ART.jpgc3425795-e8a7-402f-bea5-32bb56db2b5c?alt=media&token=7b82df41-c2a6-46cd-8016-747496c47fb2",
+                "postDescription": "some one agin ahahah",
+                "createdAt": "2022-04-22T04:40:16.791Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
-        ],
-        comments: []
+            {
+                "id": "14",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FIMG_0059.JPGe4549592-a606-46c8-aea0-79a775de024f?alt=media&token=a4f7b5a0-9129-446f-9907-26d3360919a9",
+                "postDescription": "my boy!!!!!",
+                "createdAt": "2022-04-22T04:52:26.178Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
+            },
+            {
+                "id": "15",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FPhoto%20on%202021-10-09%20at%203.10%20PM.jpgc8d13fba-2f17-4e14-9426-00a9e1f263e6?alt=media&token=d0e41dce-0c7a-4d54-a256-b7b0cbf9c98a",
+                "postDescription": "me in it",
+                "createdAt": "2022-04-22T04:53:25.382Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
+            },
+            {
+                "id": "16",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FPhoto%20on%202021-09-07%20at%201.37%20PM%20%232.jpgdb5a3f7d-0451-449f-8a6b-af7b21f00845?alt=media&token=edc61b43-e1ae-495a-a4a8-177f74db674a",
+                "postDescription": "yayayayayayaya",
+                "createdAt": "2022-04-22T04:54:25.732Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
+            },
+            {
+                "id": "17",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-hosting-two.appspot.com/o/posts%2FScreen%20Shot%202022-04-21%20at%209.51.15%20PM.pngb9a101cf-4265-4958-8bf8-7e49e0f0cea6?alt=media&token=59e0ec5f-bb2a-4d73-be9e-3cca2a7e755d",
+                "postDescription": "dd info lol",
+                "createdAt": "2022-04-22T18:46:00.706Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
+            }
+        ]
     },
     {
-        id: 4,
-        postContent: 'https://blog.theclymb.com/wp-content/uploads/2015/03/Selfie.jpg',
-        postDescription: 'My first post! ya ya ya ya ya ya ya ya ya ya ya',
-        postedBy: {
-            userId: 1,
-            userName: 'John-Wils',
-            userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
-        },
-        postedOn: '2022-04-10T02:09:00',
-        likedBy: [
+        "id": "2",
+        "name": "ben_s",
+        "userName": "ben_sven_ten",
+        "bio": "currently away from keyboard",
+        "avatar": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-hosting-two.appspot.com/o/posts%2FPhoto%20on%202021-09-07%20at%201.37%20PM%20%232.jpg5b3e451d-cbbc-4219-964b-6b7157f8fd16?alt=media&token=339eb8d2-0fe0-4b42-8274-a33c4914a104",
+        "posts": [
             {
-                id: 1,
-                likedPostId: 1,
-                userId: 3,
-                userName: 'nance-202',
-                name: 'nancy jones',
-                userAvatar: 'https://images.squarespace-cdn.com/content/v1/5de44773e21f980cc58b7c04/1642552115327-DJ09OLU46KXX5W1CE09U/BusinesHeadshot'
+                "id": "10",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FScreen%20Shot%202022-04-07%20at%2010.10.15%20AM.pngd8c55a3e-0773-40b3-ba1f-9b24f47b86d2?alt=media&token=9d993ab5-58a4-477e-a7d6-a3a05c6aec47",
+                "postDescription": "Still have to do this lol.",
+                "createdAt": "2022-04-22T03:49:54.201Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
             {
-                id: 2,
-                likedPostId: 1,
-                userId: 6,
-                userName: 'ben_sven_ten',
-                name: 'Ben Shektman',
-                userAvatar: 'https://media.istockphoto.com/photos/portrait-young-confident-smart-asian-businessman-look-at-camera-and-picture-id1288538088?b=1&k=20&m=1288538088&s=170667a&w=0&h=3efMku7kSXUhpVrErAVVgxp6G91tRZ_5seygOn68RnE='
+                "id": "11",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FScreen%20Shot%202022-04-17%20at%207.48.30%20PM.png428f9359-3024-4827-a3e8-045a830d91d8?alt=media&token=2cea8ac2-2d5c-4238-9b4a-b2591da6095b",
+                "postDescription": "thi sis i",
+                "createdAt": "2022-04-22T04:26:50.097Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
             {
-                id: 3,
-                likedPostId: 1,
-                userId: 10,
-                userName: 'dvox',
-                name: 'dd lopz',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309'
+                "id": "12",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FONE%20MORE%20NIGHT%20ART.jpg0569de4f-8ff9-4344-9196-1fd6cb743b84?alt=media&token=5da51806-c767-4c7d-b890-a20ade4a4a46",
+                "postDescription": "one more",
+                "createdAt": "2022-04-22T04:29:29.578Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
             {
-                id: 4,
-                likedPostId: 1,
-                userId: 1,
-                userName: 'John-Wils',
-                name: 'JJ Willis',
-                userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
-            },
-        ],
-        comments: [
-            {
-                id: 1,
-                commentForPostId: 1,
-                commentId: 1,
-                userId: 10,
-                userName: 'dvox',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-                comment: 'SICK!',
-                commentedOn: '2022-04-10T02:09:00',
+                "id": "13",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FONE%20MORE%20NIGHT%20ART.jpgc3425795-e8a7-402f-bea5-32bb56db2b5c?alt=media&token=7b82df41-c2a6-46cd-8016-747496c47fb2",
+                "postDescription": "some one agin ahahah",
+                "createdAt": "2022-04-22T04:40:16.791Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
             {
-                id: 2,
-                commentForPostId: 1,
-                commentId: 2,
-                userId: 4,
-                userName: 'johnson-n-monson',
-                userAvatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGVhZHNob3R8ZW58MHx8MHx8&w=1000&q=80',
-                comment: 'i lovve this!!! yYYYAYAYA YAYAY ayayyayyyayaayyayaayayyayyyAYAYAYAY',
-                commentedOn: '2022-04-10T02:09:00',
+                "id": "14",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FIMG_0059.JPGe4549592-a606-46c8-aea0-79a775de024f?alt=media&token=a4f7b5a0-9129-446f-9907-26d3360919a9",
+                "postDescription": "my boy!!!!!",
+                "createdAt": "2022-04-22T04:52:26.178Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
             {
-                id: 1,
-                commentForPostId: 1,
-                commentId: 1,
-                userId: 10,
-                userName: 'dvox',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-                comment: 'SICK!',
-                commentedOn: '2022-04-10T02:09:00',
+                "id": "15",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FPhoto%20on%202021-10-09%20at%203.10%20PM.jpgc8d13fba-2f17-4e14-9426-00a9e1f263e6?alt=media&token=d0e41dce-0c7a-4d54-a256-b7b0cbf9c98a",
+                "postDescription": "me in it",
+                "createdAt": "2022-04-22T04:53:25.382Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
             {
-                id: 2,
-                commentForPostId: 1,
-                commentId: 2,
-                userId: 4,
-                userName: 'johnson-n-monson',
-                userAvatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGVhZHNob3R8ZW58MHx8MHx8&w=1000&q=80',
-                comment: 'i lovve this!!! yYYYAYAYA YAYAY ayayyayyyayaayyayaayayyayyyAYAYAYAY',
-                commentedOn: '2022-04-10T02:09:00',
+                "id": "16",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-file-hosting.appspot.com/o/posts%2FPhoto%20on%202021-09-07%20at%201.37%20PM%20%232.jpgdb5a3f7d-0451-449f-8a6b-af7b21f00845?alt=media&token=edc61b43-e1ae-495a-a4a8-177f74db674a",
+                "postDescription": "yayayayayayaya",
+                "createdAt": "2022-04-22T04:54:25.732Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             },
             {
-                id: 1,
-                commentForPostId: 1,
-                commentId: 1,
-                userId: 10,
-                userName: 'dvox',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-                comment: 'SICK!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 2,
-                commentForPostId: 1,
-                commentId: 2,
-                userId: 4,
-                userName: 'johnson-n-monson',
-                userAvatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGVhZHNob3R8ZW58MHx8MHx8&w=1000&q=80',
-                comment: 'i lovve this!!! yYYYAYAYA YAYAY ayayyayyyayaayyayaayayyayyyAYAYAYAY',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 1,
-                commentForPostId: 1,
-                commentId: 1,
-                userId: 10,
-                userName: 'dvox',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-                comment: 'SICK!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 2,
-                commentForPostId: 1,
-                commentId: 2,
-                userId: 4,
-                userName: 'johnson-n-monson',
-                userAvatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGVhZHNob3R8ZW58MHx8MHx8&w=1000&q=80',
-                comment: 'i lovve this!!! yYYYAYAYA YAYAY ayayyayyyayaayyayaayayyayyyAYAYAYAY',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 1,
-                commentForPostId: 1,
-                commentId: 1,
-                userId: 10,
-                userName: 'dvox',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-                comment: 'SICK!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 2,
-                commentForPostId: 1,
-                commentId: 2,
-                userId: 4,
-                userName: 'johnson-n-monson',
-                userAvatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGVhZHNob3R8ZW58MHx8MHx8&w=1000&q=80',
-                comment: 'i lovve this!!! yYYYAYAYA YAYAY ayayyayyyayaayyayaayayyayyyAYAYAYAY',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 1,
-                commentForPostId: 1,
-                commentId: 1,
-                userId: 10,
-                userName: 'dvox',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-                comment: 'SICK!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 2,
-                commentForPostId: 1,
-                commentId: 2,
-                userId: 4,
-                userName: 'johnson-n-monson',
-                userAvatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGVhZHNob3R8ZW58MHx8MHx8&w=1000&q=80',
-                comment: 'i lovve this!!! yYYYAYAYA YAYAY ayayyayyyayaayyayaayayyayyyAYAYAYAY',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 1,
-                commentForPostId: 1,
-                commentId: 1,
-                userId: 10,
-                userName: 'dvox',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-                comment: 'SICK!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 2,
-                commentForPostId: 1,
-                commentId: 2,
-                userId: 4,
-                userName: 'johnson-n-monson',
-                userAvatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGVhZHNob3R8ZW58MHx8MHx8&w=1000&q=80',
-                comment: 'i lovve this!!! yYYYAYAYA YAYAY ayayyayyyayaayyayaayayyayyyAYAYAYAY',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 1,
-                commentForPostId: 1,
-                commentId: 1,
-                userId: 10,
-                userName: 'dvox',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-                comment: 'SICK!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 2,
-                commentForPostId: 1,
-                commentId: 2,
-                userId: 4,
-                userName: 'johnson-n-monson',
-                userAvatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGVhZHNob3R8ZW58MHx8MHx8&w=1000&q=80',
-                comment: 'i lovve this!!! yYYYAYAYA YAYAY ayayyayyyayaayyayaayayyayyyAYAYAYAY',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 1,
-                commentForPostId: 1,
-                commentId: 1,
-                userId: 10,
-                userName: 'dvox',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-                comment: 'SICK!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 2,
-                commentForPostId: 1,
-                commentId: 2,
-                userId: 4,
-                userName: 'johnson-n-monson',
-                userAvatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGVhZHNob3R8ZW58MHx8MHx8&w=1000&q=80',
-                comment: 'i lovve this!!! yYYYAYAYA YAYAY ayayyayyyayaayyayaayayyayyyAYAYAYAY',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 1,
-                commentForPostId: 1,
-                commentId: 1,
-                userId: 10,
-                userName: 'dvox',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-                comment: 'SICK!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 2,
-                commentForPostId: 1,
-                commentId: 2,
-                userId: 4,
-                userName: 'johnson-n-monson',
-                userAvatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGVhZHNob3R8ZW58MHx8MHx8&w=1000&q=80',
-                comment: 'i lovve this!!! yYYYAYAYA YAYAY ayayyayyyayaayyayaayayyayyyAYAYAYAY',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 1,
-                commentForPostId: 1,
-                commentId: 1,
-                userId: 10,
-                userName: 'dvox',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-                comment: 'SICK!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 2,
-                commentForPostId: 1,
-                commentId: 2,
-                userId: 4,
-                userName: 'johnson-n-monson',
-                userAvatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGVhZHNob3R8ZW58MHx8MHx8&w=1000&q=80',
-                comment: 'i lovve this!!! yYYYAYAYA YAYAY ayayyayyyayaayyayaayayyayyyAYAYAYAY',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 1,
-                commentForPostId: 1,
-                commentId: 1,
-                userId: 10,
-                userName: 'dvox',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-                comment: 'SICK!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 2,
-                commentForPostId: 1,
-                commentId: 2,
-                userId: 4,
-                userName: 'johnson-n-monson',
-                userAvatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGVhZHNob3R8ZW58MHx8MHx8&w=1000&q=80',
-                comment: 'i lovve this!!! yYYYAYAYA YAYAY ayayyayyyayaayyayaayayyayyyAYAYAYAY',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 1,
-                commentForPostId: 1,
-                commentId: 1,
-                userId: 10,
-                userName: 'dvox',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-                comment: 'SICK!',
-                commentedOn: '2022-04-10T02:09:00',
+                "id": "17",
+                "postContent": "https://firebasestorage.googleapis.com/v0/b/instagram-clone-hosting-two.appspot.com/o/posts%2FScreen%20Shot%202022-04-21%20at%209.51.15%20PM.pngb9a101cf-4265-4958-8bf8-7e49e0f0cea6?alt=media&token=59e0ec5f-bb2a-4d73-be9e-3cca2a7e755d",
+                "postDescription": "dd info lol",
+                "createdAt": "2022-04-22T18:46:00.706Z",
+                "userId": 2,
+                "comments": [],
+                "likes": []
             }
+        ]
+    }
 
-        ]
-    },
-    {
-        id: 5,
-        postContent: 'https://blog.theclymb.com/wp-content/uploads/2015/03/Selfie.jpg',
-        postDescription: 'My first post! ya ya ya ya ya ya ya ya ya ya ya',
-        postedBy: {
-            userId: 1,
-            userName: 'John-Wils',
-            userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
-        },
-        postedOn: '2022-04-10T02:09:00',
-        likedBy: [
-            {
-                id: 1,
-                likedPostId: 1,
-                userId: 3,
-                userName: 'nance-202',
-                name: 'nancy jones',
-                userAvatar: 'https://images.squarespace-cdn.com/content/v1/5de44773e21f980cc58b7c04/1642552115327-DJ09OLU46KXX5W1CE09U/BusinesHeadshot'
-            },
-            {
-                id: 2,
-                likedPostId: 1,
-                userId: 6,
-                userName: 'ben_sven_ten',
-                name: 'Ben Shektman',
-                userAvatar: 'https://media.istockphoto.com/photos/portrait-young-confident-smart-asian-businessman-look-at-camera-and-picture-id1288538088?b=1&k=20&m=1288538088&s=170667a&w=0&h=3efMku7kSXUhpVrErAVVgxp6G91tRZ_5seygOn68RnE='
-            },
-            {
-                id: 3,
-                likedPostId: 1,
-                userId: 10,
-                userName: 'dvox',
-                name: 'dd lopz',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309'
-            },
-            {
-                id: 4,
-                likedPostId: 1,
-                userId: 1,
-                userName: 'John-Wils',
-                name: 'JJ Willis',
-                userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
-            },
-        ],
-        comments: [
-            {
-                id: 1,
-                commentForPostId: 1,
-                commentId: 1,
-                userId: 10,
-                userName: 'dvox',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-                comment: 'SICK!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 2,
-                commentForPostId: 1,
-                commentId: 2,
-                userId: 4,
-                userName: 'johnson-n-monson',
-                userAvatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGVhZHNob3R8ZW58MHx8MHx8&w=1000&q=80',
-                comment: 'i lovve this!!!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-        ]
-    },
-    {
-        id: 6,
-        postContent: 'https://blog.theclymb.com/wp-content/uploads/2015/03/Selfie.jpg',
-        postDescription: 'My first post! ya ya ya ya ya ya ya ya ya ya ya',
-        postedBy: {
-            userId: 1,
-            userName: 'John-Wils',
-            userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
-        },
-        postedOn: '2022-04-10T02:09:00',
-        likedBy: [
-            {
-                id: 1,
-                likedPostId: 1,
-                userId: 3,
-                userName: 'nance-202',
-                name: 'nancy jones',
-                userAvatar: 'https://images.squarespace-cdn.com/content/v1/5de44773e21f980cc58b7c04/1642552115327-DJ09OLU46KXX5W1CE09U/BusinesHeadshot'
-            },
-            {
-                id: 2,
-                likedPostId: 1,
-                userId: 6,
-                userName: 'ben_sven_ten',
-                name: 'Ben Shektman',
-                userAvatar: 'https://media.istockphoto.com/photos/portrait-young-confident-smart-asian-businessman-look-at-camera-and-picture-id1288538088?b=1&k=20&m=1288538088&s=170667a&w=0&h=3efMku7kSXUhpVrErAVVgxp6G91tRZ_5seygOn68RnE='
-            },
-            {
-                id: 3,
-                likedPostId: 1,
-                userId: 10,
-                userName: 'dvox',
-                name: 'dd lopz',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309'
-            },
-            {
-                id: 4,
-                likedPostId: 1,
-                userId: 1,
-                userName: 'John-Wils',
-                name: 'JJ Willis',
-                userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
-            },
-        ],
-        comments: [
-            {
-                id: 1,
-                commentForPostId: 1,
-                commentId: 1,
-                userId: 10,
-                userName: 'dvox',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-                comment: 'SICK!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 2,
-                commentForPostId: 1,
-                commentId: 2,
-                userId: 4,
-                userName: 'johnson-n-monson',
-                userAvatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGVhZHNob3R8ZW58MHx8MHx8&w=1000&q=80',
-                comment: 'i lovve this!!!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-        ]
-    },
-    {
-        id: 7,
-        postContent: 'https://blog.theclymb.com/wp-content/uploads/2015/03/Selfie.jpg',
-        postDescription: 'My first post! ya ya ya ya ya ya ya ya ya ya ya',
-        postedBy: {
-            userId: 1,
-            userName: 'John-Wils',
-            userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
-        },
-        postedOn: '2022-04-10T02:09:00',
-        likedBy: [
-            {
-                id: 1,
-                likedPostId: 1,
-                userId: 3,
-                userName: 'nance-202',
-                name: 'nancy jones',
-                userAvatar: 'https://images.squarespace-cdn.com/content/v1/5de44773e21f980cc58b7c04/1642552115327-DJ09OLU46KXX5W1CE09U/BusinesHeadshot'
-            },
-            {
-                id: 2,
-                likedPostId: 1,
-                userId: 6,
-                userName: 'ben_sven_ten',
-                name: 'Ben Shektman',
-                userAvatar: 'https://media.istockphoto.com/photos/portrait-young-confident-smart-asian-businessman-look-at-camera-and-picture-id1288538088?b=1&k=20&m=1288538088&s=170667a&w=0&h=3efMku7kSXUhpVrErAVVgxp6G91tRZ_5seygOn68RnE='
-            },
-            {
-                id: 3,
-                likedPostId: 1,
-                userId: 10,
-                userName: 'dvox',
-                name: 'dd lopz',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309'
-            },
-            {
-                id: 4,
-                likedPostId: 1,
-                userId: 1,
-                userName: 'John-Wils',
-                name: 'JJ Willis',
-                userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
-            },
-        ],
-        comments: [
-            {
-                id: 1,
-                commentForPostId: 1,
-                commentId: 1,
-                userId: 10,
-                userName: 'dvox',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-                comment: 'SICK!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 2,
-                commentForPostId: 1,
-                commentId: 2,
-                userId: 4,
-                userName: 'johnson-n-monson',
-                userAvatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGVhZHNob3R8ZW58MHx8MHx8&w=1000&q=80',
-                comment: 'i lovve this!!!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-        ]
-    },
-    {
-        id: 8,
-        postContent: 'https://blog.theclymb.com/wp-content/uploads/2015/03/Selfie.jpg',
-        postDescription: 'My first post! ya ya ya ya ya ya ya ya ya ya ya',
-        postedBy: {
-            userId: 1,
-            userName: 'John-Wils',
-            userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
-        },
-        postedOn: '2022-04-10T02:09:00',
-        likedBy: [
-            {
-                id: 1,
-                likedPostId: 1,
-                userId: 3,
-                userName: 'nance-202',
-                name: 'nancy jones',
-                userAvatar: 'https://images.squarespace-cdn.com/content/v1/5de44773e21f980cc58b7c04/1642552115327-DJ09OLU46KXX5W1CE09U/BusinesHeadshot'
-            },
-            {
-                id: 2,
-                likedPostId: 1,
-                userId: 6,
-                userName: 'ben_sven_ten',
-                name: 'Ben Shektman',
-                userAvatar: 'https://media.istockphoto.com/photos/portrait-young-confident-smart-asian-businessman-look-at-camera-and-picture-id1288538088?b=1&k=20&m=1288538088&s=170667a&w=0&h=3efMku7kSXUhpVrErAVVgxp6G91tRZ_5seygOn68RnE='
-            },
-            {
-                id: 3,
-                likedPostId: 1,
-                userId: 10,
-                userName: 'dvox',
-                name: 'dd lopz',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309'
-            },
-            {
-                id: 4,
-                likedPostId: 1,
-                userId: 1,
-                userName: 'John-Wils',
-                name: 'JJ Willis',
-                userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
-            },
-        ],
-        comments: [
-            {
-                id: 1,
-                commentForPostId: 1,
-                commentId: 1,
-                userId: 10,
-                userName: 'dvox',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-                comment: 'SICK!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 2,
-                commentForPostId: 1,
-                commentId: 2,
-                userId: 4,
-                userName: 'johnson-n-monson',
-                userAvatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGVhZHNob3R8ZW58MHx8MHx8&w=1000&q=80',
-                comment: 'i lovve this!!!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-        ]
-    },
-    {
-        id: 9,
-        postContent: 'https://blog.theclymb.com/wp-content/uploads/2015/03/Selfie.jpg',
-        postDescription: 'My first post! ya ya ya ya ya ya ya ya ya ya ya',
-        postedBy: {
-            userId: 1,
-            userName: 'John-Wils',
-            userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
-        },
-        postedOn: '2022-04-10T02:09:00',
-        likedBy: [
-            {
-                id: 1,
-                likedPostId: 1,
-                userId: 3,
-                userName: 'nance-202',
-                name: 'nancy jones',
-                userAvatar: 'https://images.squarespace-cdn.com/content/v1/5de44773e21f980cc58b7c04/1642552115327-DJ09OLU46KXX5W1CE09U/BusinesHeadshot'
-            },
-            {
-                id: 2,
-                likedPostId: 1,
-                userId: 6,
-                userName: 'ben_sven_ten',
-                name: 'Ben Shektman',
-                userAvatar: 'https://media.istockphoto.com/photos/portrait-young-confident-smart-asian-businessman-look-at-camera-and-picture-id1288538088?b=1&k=20&m=1288538088&s=170667a&w=0&h=3efMku7kSXUhpVrErAVVgxp6G91tRZ_5seygOn68RnE='
-            },
-            {
-                id: 3,
-                likedPostId: 1,
-                userId: 10,
-                userName: 'dvox',
-                name: 'dd lopz',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309'
-            },
-            {
-                id: 4,
-                likedPostId: 1,
-                userId: 1,
-                userName: 'John-Wils',
-                name: 'JJ Willis',
-                userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
-            },
-        ],
-        comments: [
-            {
-                id: 1,
-                commentForPostId: 1,
-                commentId: 1,
-                userId: 10,
-                userName: 'dvox',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-                comment: 'SICK!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 2,
-                commentForPostId: 1,
-                commentId: 2,
-                userId: 4,
-                userName: 'johnson-n-monson',
-                userAvatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGVhZHNob3R8ZW58MHx8MHx8&w=1000&q=80',
-                comment: 'i lovve this!!!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-        ]
-    },
-    {
-        id: 10,
-        postContent: 'https://blog.theclymb.com/wp-content/uploads/2015/03/Selfie.jpg',
-        postDescription: 'My first post! ya ya ya ya ya ya ya ya ya ya ya',
-        postedBy: {
-            userId: 1,
-            userName: 'John-Wils',
-            userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
-        },
-        postedOn: '2022-04-10T02:09:00',
-        likedBy: [
-            {
-                id: 1,
-                likedPostId: 1,
-                userId: 3,
-                userName: 'nance-202',
-                name: 'nancy jones',
-                userAvatar: 'https://images.squarespace-cdn.com/content/v1/5de44773e21f980cc58b7c04/1642552115327-DJ09OLU46KXX5W1CE09U/BusinesHeadshot'
-            },
-            {
-                id: 2,
-                likedPostId: 1,
-                userId: 6,
-                userName: 'ben_sven_ten',
-                name: 'Ben Shektman',
-                userAvatar: 'https://media.istockphoto.com/photos/portrait-young-confident-smart-asian-businessman-look-at-camera-and-picture-id1288538088?b=1&k=20&m=1288538088&s=170667a&w=0&h=3efMku7kSXUhpVrErAVVgxp6G91tRZ_5seygOn68RnE='
-            },
-            {
-                id: 3,
-                likedPostId: 1,
-                userId: 10,
-                userName: 'dvox',
-                name: 'dd lopz',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309'
-            },
-            {
-                id: 4,
-                likedPostId: 1,
-                userId: 1,
-                userName: 'John-Wils',
-                name: 'JJ Willis',
-                userAvatar: 'https://ih0.redbubble.net/image.149118848.9552/flat,800x800,075,f.jpg'
-            },
-        ],
-        comments: [
-            {
-                id: 1,
-                commentForPostId: 1,
-                commentId: 1,
-                userId: 10,
-                userName: 'dvox',
-                userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-                comment: 'SICK!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-            {
-                id: 2,
-                commentForPostId: 1,
-                commentId: 2,
-                userId: 4,
-                userName: 'johnson-n-monson',
-                userAvatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGVhZHNob3R8ZW58MHx8MHx8&w=1000&q=80',
-                comment: 'i lovve this!!!',
-                commentedOn: '2022-04-10T02:09:00',
-            },
-        ]
-    },
 ]
+
+
+

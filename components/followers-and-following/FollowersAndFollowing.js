@@ -5,9 +5,19 @@ import Following from './Following';
 import { MdOutlineArrowBackIosNew } from 'react-icons/md';
 import { useRouter } from 'next/router'
 import followerStyles from '../../styles/followers-and-following.module.scss';
+import { useAppContext } from '../../context';
 
 
-const FollowersAndFollowing = ({ showFollowers, handleHideFollowers, entryPoint, setFollowersEntryPoint }) => {
+const FollowersAndFollowing = ({
+  userName,
+  followers,
+  following,
+  showFollowers,
+  handleHideFollowers,
+  entryPoint,
+  setFollowersEntryPoint,
+  refetchFollowing
+}) => {
 
 
   const [switchFollowing, setSwitchFollowing] = useState(false)
@@ -31,13 +41,18 @@ const FollowersAndFollowing = ({ showFollowers, handleHideFollowers, entryPoint,
   }
 
   const router = useRouter()
+  const [state] = useAppContext()
 
-  const handleViewProfile = (id) => {
+  const handleViewProfile = (id, user) => {
     handleClosePanel()
-    router.push({
-      pathname: '/profile',
-      query: { user: id }
-    })
+    if (id === state.currentUser.id) {
+      router.push('/profile')
+    } else {
+      router.push({
+        pathname: `/profile/${id}`,
+        query: { postFromUser: JSON.stringify(user) }
+      })
+    }
   }
 
   return (
@@ -45,14 +60,21 @@ const FollowersAndFollowing = ({ showFollowers, handleHideFollowers, entryPoint,
       <nav className={followerStyles.nav}>
         <div>
           <MdOutlineArrowBackIosNew onClick={handleClosePanel} />
-          <h2>some_user</h2>
+          <h2>{userName}</h2>
         </div>
         <nav>
           <div onClick={handleSwitchToFollowers} id={entryPoint === 0 ? followerStyles.navItemActive : null}>
-            <h3>1,000 Followers</h3>
+            {followers && followers.length === 1 ? (
+              <h3>{followers.length} Follower</h3>
+            ) : (
+              <h3>{followers.length} Followers</h3>
+            )}
+
           </div>
           <div onClick={handleSwitchToFollowing} id={entryPoint === 1 ? followerStyles.navItemActive : null}>
-            <h3>450 Following</h3>
+
+            <h3>{following.length} Following</h3>
+
           </div>
         </nav>
       </nav>
@@ -60,13 +82,13 @@ const FollowersAndFollowing = ({ showFollowers, handleHideFollowers, entryPoint,
       <div className={followerStyles.panelContainer}>
         {entryPoint === 0 ? (
           <React.Fragment>
-            <Followers switchFollowers={switchFollowers} handleViewProfile={handleViewProfile} />
-            <Following switchFollowing={switchFollowing} handleViewProfile={handleViewProfile} />
+            <Followers followers={followers} switchFollowers={switchFollowers} handleViewProfile={handleViewProfile} />
+            <Following refetchFollowing={refetchFollowing} following={following} switchFollowing={switchFollowing} handleViewProfile={handleViewProfile} />
           </React.Fragment>
         ) : (
           <React.Fragment>
-            <Following switchFollowing={switchFollowing} handleViewProfile={handleViewProfile} />
-            <Followers switchFollowers={switchFollowers} handleViewProfile={handleViewProfile} />
+            <Following refetchFollowing={refetchFollowing} following={following} switchFollowing={switchFollowing} handleViewProfile={handleViewProfile} />
+            <Followers followers={followers} switchFollowers={switchFollowers} handleViewProfile={handleViewProfile} />
           </React.Fragment>
         )}
 

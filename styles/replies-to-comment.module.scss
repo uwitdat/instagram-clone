@@ -1,0 +1,55 @@
+@import '../styles/global.scss';
+
+.container {
+  margin-top: .5rem;
+
+  .reply {
+    display: flex;
+    padding: .3rem 0;
+    padding-left: 3rem;
+    padding-right: 1rem;
+    font-family: $font-primary;
+
+    & > div:first-child {
+      width: 2rem;
+      margin-right: .5rem;
+      height: 100%;
+
+      img {
+        height: 1.5rem;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        border: 1px solid $nav-border;
+      }
+    }
+
+    & > div:nth-child(2) {
+      font-size: .85rem;
+
+      h4 {
+        strong {
+          font-weight: 700;
+        }
+        span{
+          color: rgb(193, 219, 245);
+          font-size: .8rem;
+        }
+      }
+
+      p{
+        margin-top: .5rem;
+        font-size: .75rem;
+        color: $color-grey;
+      }
+    }
+  }
+}
+
+.showReplies {
+  color: $color-grey-dark;
+  font-family: $font-primary;
+  font-size: .75rem;
+  margin-left: 4rem;
+  margin-top: -.5rem;
+  cursor: pointer;
+}

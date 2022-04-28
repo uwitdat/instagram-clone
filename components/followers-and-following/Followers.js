@@ -1,55 +1,27 @@
 import React from 'react'
 import followersStyles from '../../styles/followers.module.scss';
 
-const followersDummy = [
-  {
-    userId: 1,
-    userAvatar: 'https://chicagophotovideo.com/wp-content/uploads/2018/01/chicago-headshot-and-portrait-photographer.jpg',
-    userName: 'Handsen_09',
-    name: 'kyle hansen'
-  },
-  {
-    userId: 2,
-    userAvatar: 'https://media.wired.com/photos/5926dc8ecfe0d93c474319dd/master/pass/PikachuTA-EWEATA.jpg',
-    userName: 'Ron Jon',
-    name: 'alvin wilson'
-  },
-  {
-    userId: 3,
-    userAvatar: 'https://images.squarespace-cdn.com/content/v1/5de44773e21f980cc58b7c04/1642552115327-DJ09OLU46KXX5W1CE09U/BusinesHeadshot',
-    userName: 'Ron Jon the tst king',
-    name: 'alvin wilson morrizon the iv'
-  },
-  {
-    userId: 4,
-    userAvatar: 'https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=309',
-    userName: 'Marly williams',
-    name: 'mar_bar_'
-  },
-  {
-    userId: 5,
-    userAvatar: 'https://4.bp.blogspot.com/-gntUZhd7hvY/XJZrPKxkdcI/AAAAAAAAbJo/Z2GXj1h81YUDdhIYuTr6nzJ4drxD5QjUwCLcBGAs/s1600/IMG_2717.jpg',
-    userName: 'Ron Jon',
-    name: 'alvin wilson'
-  },
-]
 
-const Followers = ({ switchFollowers, handleViewProfile }) => {
+const Followers = ({ followers, switchFollowers, handleViewProfile }) => {
+
+
   return (
     <div className={switchFollowers ? `${followersStyles.container} ${followersStyles.enterFollowers}` : followersStyles.container}>
       <h2>All Followers</h2>
       <section>
-        {followersDummy.map((follower) => (
-          <div className={followersStyles.follower} key={follower.userId}>
+        {followers.map((follower) => (
+          <div className={followersStyles.follower} key={follower.id}>
             <div>
-              <img onClick={() => handleViewProfile(follower.userId)} src={follower.userAvatar} alt={follower.userAvatar} />
-              <div onClick={() => handleViewProfile(follower.userId)}>
+              <img
+                onClick={() => handleViewProfile(follower.id, follower)}
+                src={follower.avatar ? follower.avatar : 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/271deea8-e28c-41a3-aaf5-2913f5f48be6/de7834s-6515bd40-8b2c-4dc6-a843-5ac1a95a8b55.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI3MWRlZWE4LWUyOGMtNDFhMy1hYWY1LTI5MTNmNWY0OGJlNlwvZGU3ODM0cy02NTE1YmQ0MC04YjJjLTRkYzYtYTg0My01YWMxYTk1YThiNTUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.BopkDn1ptIwbmcKHdAOlYHyAOOACXW0Zfgbs0-6BY-E'} alt={follower.userAvatar} />
+              <div onClick={() => handleViewProfile(follower.id, follower)}>
                 <h3>{follower.userName}</h3>
                 <p>{follower.name}</p>
               </div>
             </div>
             <div>
-              <button>Remove</button>
+              {/* <button>Remove</button> */}
             </div>
           </div>
         ))}

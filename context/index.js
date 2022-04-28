@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from 'react';
 import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { getCookie } from '../utils/functions';
+import { createUploadLink } from 'apollo-upload-client';
 
 const AppContext = createContext();
 
@@ -14,7 +15,7 @@ export function AppWrapper({ children }) {
     isAuthed: false,
   });
 
-  const httpLink = createHttpLink({
+  const httpLink = createUploadLink({
     uri: URI,
   });
 

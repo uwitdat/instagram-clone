@@ -4,26 +4,30 @@ import Modal from '@mui/material/Modal';
 import fileUploadStyles from '../../styles/file-upload.module.scss';
 import { useDropzone } from 'react-dropzone';
 import { MdOutlineArrowBackIosNew } from 'react-icons/md'
-import { getCurrentUser } from '../../hooks';
 import { useMutation } from '@apollo/client';
-import { storage } from '../../firebase';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { v4 } from 'uuid';
-import { CREATE_POST_MUTATION } from '../../utils/mutations';
-import Router from 'next/router';
-import { LinearProgress } from '@mui/material';
+// import { storage } from '../../firebase';
+// import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+// import { v4 } from 'uuid';
+import { CREATE_POST_MUTATION, UPLOAD_FILE } from '../../utils/mutations';
+import { useRouter } from 'next/router';
+import { useAppContext } from '../../context';
+import { EmojiPicker } from '../EmojiPicker';
 
 const FileUpload = ({ open, handleClose }) => {
-  const [currentUser] = getCurrentUser();
-
+  const [state, setState] = useAppContext()
 
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [postDescription, setPostDesctiption] = useState('')
-  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSetFile = (file) => setImage(file);
   const [createPost] = useMutation(CREATE_POST_MUTATION);
+  const [uploadFile] = useMutation(UPLOAD_FILE);
+
+  const router = useRouter()
+
+  const [pathToRedirect] = useState(router.pathname)
 
   const { acceptedFiles, getRootProps, getInputProps, isDragActive, open: openFileUpload } = useDropzone({ accept: 'image/*', noClick: true })
 
@@ -32,44 +36,58 @@ const FileUpload = ({ open, handleClose }) => {
   const handleCreateNewPost = async (url) => {
     try {
       const { data } = await createPost({
-        variables: { createPostInput: { postContent: url, userId: Number(currentUser.currentUser.id), postDescription } }
+        variables: { createPostInput: { postContent: url, userId: Number(state.currentUser.id), postDescription } }
       })
       if (data.createPost) {
+        setState({
+          ...state,
+          currentUser: {
+            ...state.currentUser,
+            posts: [data.createPost, ...state.currentUser.posts]
+          }
+        })
         handleClose()
         router.push({
-          pathname: '/profile',
-          query: { user: currentUser?.currentUser?.id }
+          pathname: pathToRedirect,
         })
-
+        setIsSubmitting(false);
       }
     } catch (err) {
       console.log(err.message)
     }
   }
 
-  const router = Router;
-
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (!image) return;
-    const imageRef = ref(storage, `posts/${image.name + v4()}`)
-    const uploadTask = uploadBytesResumable(imageRef, image);
 
-    uploadTask.on('state_changed',
-      (snapshot) => {
-
-        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-        setUploadProgress(progress);
-
-      },
-      (error) => {
-        console.log(error.message)
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          handleCreateNewPost(downloadURL)
-        });
+    try {
+      const { data } = await uploadFile({
+        variables: { file: image }
+      })
+      if (data) {
+        handleCreateNewPost(data.uploadFile.url)
       }
-    );
+    }
+    catch (err) {
+      console.log(err)
+    }
+    // setIsSubmitting(true)
+    // const imageRef = ref(storage, `posts/${image.name + v4()}`)
+    // const uploadTask = uploadBytesResumable(imageRef, image);
+
+    // uploadTask.on('state_changed',
+    //   (snapshot) => {
+    //   },
+    //   (error) => {
+    //     console.log(error.message)
+    //   },
+    //   () => {
+    //     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+    //       handleCreateNewPost(downloadURL);
+    //     });
+    //   }
+    // );
+
   }
 
   useEffect(() => {
@@ -85,6 +103,31 @@ const FileUpload = ({ open, handleClose }) => {
     return () => URL.revokeObjectURL(objectUrl)
   }, [fileToUpload])
 
+
+
+  const Mini = () => {
+    return (
+      <div className={fileUploadStyles.spinner}><div></div><div></div><div></div><div></div></div>
+    )
+  }
+
+  const [cursorIndex, setCursorIndex] = useState('');
+
+  const setInputIndex = (e) => {
+    setCursorIndex(e.target.selectionStart);
+  }
+
+
+  const handleAddEmoji = (value) => {
+    setPostDesctiption(postDescription.slice(0, cursorIndex) + value + postDescription.slice(cursorIndex));
+  };
+
+  const handleSetPostDescription = (e) => {
+    setCursorIndex(e.target.selectionStart);
+    setPostDesctiption(e.target.value)
+    setCursorIndex(e.target.selectionStart);
+  }
+
   return (
     <Modal
       open={open}
@@ -96,20 +139,23 @@ const FileUpload = ({ open, handleClose }) => {
       <Box sx={modalStyle}>
         <div className={fileUploadStyles.container}>
           <div className={fileUploadStyles.border}>
-
             {image ? (
               <div className={fileUploadStyles.nav}>
                 <MdOutlineArrowBackIosNew onClick={() => setImage(null)} />
                 <h2>Create New Post</h2>
-                <button onClick={handleUpload}>Share</button>
+                {isSubmitting ? (
+                  <Mini />
+                ) : (
+                  <button onClick={handleUpload}>
+                    Share
+                  </button>
+                )}
               </div>
-
             ) : (
               <div className={fileUploadStyles.navOneItem}>
                 <h2>Create New Post</h2>
               </div>
             )}
-
 
             {image ? (
               <div className={fileUploadStyles.confirmationContainer}>
@@ -118,11 +164,14 @@ const FileUpload = ({ open, handleClose }) => {
                 </div>
                 <div className={fileUploadStyles.postDescription}>
                   <div>
-                    <img src='https://cdn.vox-cdn.com/thumbor/eFEHo8eygHajtwShwT9e_jf7c-c=/0x0:1920x1080/1200x800/filters:focal(722x227:1028x533)/cdn.vox-cdn.com/uploads/chorus_image/image/69323002/Screen_Shot_2021_05_21_at_9.54.00_AM.0.jpeg' alt='profile' />
-                    <h2>{currentUser.currentUser.userName}</h2>
+                    <img src={state.currentUser && state.currentUser.avatar ? state.currentUser.avatar : 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/271deea8-e28c-41a3-aaf5-2913f5f48be6/de7834s-6515bd40-8b2c-4dc6-a843-5ac1a95a8b55.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI3MWRlZWE4LWUyOGMtNDFhMy1hYWY1LTI5MTNmNWY0OGJlNlwvZGU3ODM0cy02NTE1YmQ0MC04YjJjLTRkYzYtYTg0My01YWMxYTk1YThiNTUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.BopkDn1ptIwbmcKHdAOlYHyAOOACXW0Zfgbs0-6BY-E'} alt='profile' />
+                    <h2>{state.currentUser.userName}</h2>
                   </div>
-                  <textarea value={postDescription} onChange={(e) => setPostDesctiption(e.target.value)} placeholder={'Write a caption...'} />
+                  <textarea onBlur={setInputIndex} value={postDescription} onChange={(e) => handleSetPostDescription(e)} placeholder={'Write a caption...'} />
+                  <EmojiPicker
+                    handleAddValue={handleAddEmoji} />
                 </div>
+
               </div>
             ) : (
               <div {...getRootProps({ className: 'dropzone' })} className={isDragActive ? `${fileUploadStyles.content} ${fileUploadStyles.isDragging}` : `${fileUploadStyles.content}`}>
@@ -135,7 +184,6 @@ const FileUpload = ({ open, handleClose }) => {
 
           </div>
         </div>
-
         <span onClick={handleClose} className={fileUploadStyles.exitButton}>X</span>
       </Box>
     </Modal>

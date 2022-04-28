@@ -1,66 +1,227 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RiHeartLine, RiHeartFill } from 'react-icons/ri';
 import { FiSend } from 'react-icons/fi';
 import { FaRegComment } from 'react-icons/fa';
 import moment from 'moment';
 import { useRouter } from 'next/router'
 import postStyles from '../styles/home.module.scss';
+import { AiOutlineEllipsis } from 'react-icons/ai';
+import { useAppContext } from '../context';
+import PostOptionsMenu from './PostOptionsMenu';
+import { GET_COMMENTS_FOR_POST, GET_ALL_LIKES_FOR_POST } from '../utils/queries';
+import { REMOVE_LIKE_FROM_POST, CREATE_LIKE_FOR_POST } from '../utils/mutations';
+import { useQuery, useMutation } from '@apollo/client';
+import Comments from './Comments';
+import Likes from './Likes';
+import Image from 'next/image';
 
 const redColor = 'rgb(255, 93, 93)';
 
-const Post = ({ post, handleViewComments, handleViewLikes }) => {
-  const likedOptions = [true, false];
-  const [liked, setLiked] = useState(likedOptions[Math.floor(Math.random() * likedOptions.length)]); // temp for now to randomize liked/ not liked
-  const handleAddLike = () => setLiked(!liked);
-
-
+const Post = ({ post, postFromUser, handleClosePosts }) => {
+  const [showComments, setShowComments] = useState(false)
+  const [showLikes, setShowLikes] = useState(false)
+  const [scrollPosition, setScrollPosition] = useState(null);
   const router = useRouter()
+  const currentPath = router.pathname
 
-  const handleViewProfile = () => {
-    router.push({
-      pathname: '/profile',
-      query: { user: post.postedBy.userId }
-    })
+  const [liked, setLiked] = useState(false)
+
+  const { data: commentsData, error, refetch } = useQuery(GET_COMMENTS_FOR_POST, {
+    variables: { postId: post.id },
+  })
+
+
+  const { data: likesData, error: likesError, refetch: refetchLikes } = useQuery(GET_ALL_LIKES_FOR_POST, {
+    variables: { postId: post.id },
+  })
+
+
+  const [removeLike] = useMutation(REMOVE_LIKE_FROM_POST)
+  const [createLikeForPost] = useMutation(CREATE_LIKE_FOR_POST)
+
+  const handleSetLike = () => {
+    if (liked) {
+      handleRemoveLike()
+    } else {
+      handleAddLike()
+    }
   }
+
+  const handleRemoveLike = async () => {
+    try {
+      const { data } = await removeLike({
+        variables: {
+          likeOnPostId: Number(post.id),
+          likedByUserId: Number(state.currentUser.id)
+        }
+      });
+      if (data) {
+        setLiked(false)
+        setAnimateRemoveLike(true)
+        setTimeout(() => { setAnimateRemoveLike(false) }, 800)
+        refetchLikes()
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const handleAddLike = async () => {
+    try {
+      const { data } = await createLikeForPost({
+        variables: {
+          likeOnPostId: Number(post.id),
+          likedByUserId: Number(state.currentUser.id)
+        }
+      });
+      if (data) {
+        setLiked(true)
+        setAnimateLike(true)
+        setTimeout(() => { setAnimateLike(false) }, 800)
+        refetchLikes()
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+
+  const handleViewComments = () => {
+    setScrollPosition(window.pageYOffset);
+    setShowComments(true)
+  }
+
+  const handleViewLikes = () => {
+    setScrollPosition(window.pageYOffset);
+    setShowLikes(true)
+  }
+
+
+  const [state] = useAppContext();
+
+  const [animateLike, setAnimateLike] = useState(false)
+  const [animateRemoveLike, setAnimateRemoveLike] = useState(false)
+
+
+  const handleRedirectToProfile = () => {
+    if (postFromUser.id === state.currentUser.id) {
+      router.push({
+        pathname: '/profile'
+      })
+    } else {
+      router.push({
+        pathname: `/profile/${postFromUser.id}`,
+        query: { postFromUser: JSON.stringify(postFromUser) }
+      })
+    }
+  }
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const openPostOptionsMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+
+  useEffect(() => {
+    if (likesData && likesData.getLikesForPost) {
+      likesData.getLikesForPost.some((like) => {
+        setLiked(like.likedByUserId === Number(state?.currentUser?.id))
+      })
+    }
+  }, [likesData])
 
   return (
     <div className={postStyles.postContainer}>
       <div>
-        <img src={post.postedBy.userAvatar} alt={post.postedBy.userAvatar} />
-        <h4 onClick={handleViewProfile}>{post.postedBy.userName}</h4>
+
+        <img
+          src={postFromUser.avatar}
+          alt={postFromUser.avatar}
+          onClick={handleRedirectToProfile}
+        />
+        <h4 onClick={handleRedirectToProfile}>{postFromUser.userName}</h4>
+        {postFromUser.id === state?.currentUser?.id && currentPath === '/profile' ? (
+          <AiOutlineEllipsis onClick={(e) => openPostOptionsMenu(e)} />
+        ) : null}
+
+        <PostOptionsMenu postId={post.id} open={open} anchorEl={anchorEl} handleClose={handleClose} handleClosePosts={handleClosePosts} />
       </div>
       <div className={postStyles.postContent}>
-        <img onDoubleClick={handleAddLike} src={post.postContent} alt={post.postContent} />
-        <RiHeartFill className={liked ? `${postStyles.like} ${postStyles.showLike}` : postStyles.like} />
+        <Image
+          style={{ cursor: 'pointer' }}
+          onDoubleClick={handleSetLike}
+          src={post.postContent}
+          alt={post.postContent}
+          layout={'fill'}
+          objectFit={'cover'}
+
+        />
+        <RiHeartFill
+          className={postStyles.like}
+          id={animateLike ? postStyles.showLike : ''}
+        />
       </div>
 
       <div className={postStyles.actionItems}>
+
         {liked ? (
-          <RiHeartFill onClick={handleAddLike} style={{ color: redColor }} className={postStyles.switchHeartIcon} />
+          <RiHeartFill
+            onClick={handleSetLike}
+            style={{ color: redColor }}
+          />
         ) : (
-          <RiHeartLine onClick={handleAddLike} className={postStyles.switchHeartIcon} />
+          <RiHeartLine
+            onClick={handleSetLike}
+          />
         )}
 
-        <FaRegComment onClick={() => handleViewComments(post)} />
+        <FaRegComment onClick={handleViewComments} />
         <FiSend />
       </div>
 
       <div className={postStyles.details}>
-        {post.likedBy.length > 0 ? (
-          <p>Liked by <strong>{post.likedBy[0].userName}</strong> and <strong onClick={() => handleViewLikes(post.likedBy)} style={{ cursor: 'pointer' }}>others</strong></p>
+        {likesData && likesData.getLikesForPost && likesData.getLikesForPost.length > 0 ? (
+          <p>Liked by <strong>{likesData.getLikesForPost[0].likedBy.userName}</strong> and <strong onClick={handleViewLikes} style={{ cursor: 'pointer' }}>others</strong></p>
         ) : null}
 
-        <p><strong>{post.postedBy.userName}</strong> {post.postDescription}</p>
+        <p><strong>{postFromUser.userName}</strong> {post.postDescription}</p>
 
-        {post.comments.length === 0 ? <p style={{ marginTop: '-.1rem' }}></p> : (
-          post.comments.length > 1 ? (
-            <p onClick={() => handleViewComments(post)}>View all {post.comments.length} comments</p>
-          ) : (
-            <p onClick={() => handleViewComments(post)}>View {post.comments.length} comment</p>
+        {commentsData && commentsData.getCommentsForPost ? (
+          commentsData.getCommentsForPost.length === 0 ? <p style={{ marginTop: '-.1rem' }}></p> : (
+            commentsData.getCommentsForPost.length > 1 ? (
+              <p className={postStyles.viewComments} onClick={handleViewComments}>View all {commentsData.getCommentsForPost.length} comments</p>
+            ) : (
+              <p className={postStyles.viewComments} onClick={handleViewComments}>View {commentsData.getCommentsForPost.length} comment</p>
+            )
           )
-        )}
-        <p>{moment(post.postedOn).fromNow()}</p>
+        ) : null}
+        <p>{moment(post.createdAt).fromNow()}</p>
       </div>
+
+
+      {commentsData && commentsData.getCommentsForPost ? (
+        <Comments
+          showComments={showComments}
+          setShowComments={setShowComments}
+          currentTopPosition={scrollPosition}
+          comments={commentsData.getCommentsForPost}
+          post={post}
+          postFromUser={postFromUser}
+          refetchComments={refetch}
+        />
+      ) : null}
+
+      {likesData && likesData.getLikesForPost ? (
+        <Likes
+          showLikes={showLikes}
+          setShowLikes={setShowLikes}
+          currentTopPosition={scrollPosition}
+          likes={likesData.getLikesForPost} />
+      ) : null}
     </div>
   )
 }

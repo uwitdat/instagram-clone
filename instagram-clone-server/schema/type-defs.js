@@ -2,15 +2,18 @@ import { gql } from 'apollo-server';
 
 export const typeDefs = gql`
   scalar Date
+  scalar Upload
 
   type User {
       id: ID!
-      name: String!
+      name: String
       userName: String!
       avatar: String
       bio: String
       createdAt: Date
       posts: [Post],
+      followers: [User]
+      following: [User]
   }
 
   type Post {
@@ -19,15 +22,45 @@ export const typeDefs = gql`
       postDescription: String
       createdAt: Date!
       userId: Int!
+      postedBy: User
       comments: [Comment]
+      likes: [Like]
   }
 
   type Comment {
     id: ID!
     commentContent: String!
     createdAt: Date!
-    userId: Int!
-    commentedBy: [User]
+    commentedByUserId: Int!
+    commentOnPostId: Int!
+    commentedBy: User!
+    replies: [ReplyToComment]
+  }
+
+  type Like {
+    id: ID!
+    likeOnPostId: Int!
+    likedByUserId: Int!
+    likedBy: User!
+  }
+
+  type Follower {
+    id: ID!
+    followedByUserId: Int!
+    followingUserId: Int!
+  }
+
+  type ReplyToComment {
+    id: ID!
+    replyContent: String!
+    replyToCommentId: Int!
+    replyFromUserId: Int!
+    repliedBy: User!
+    createdAt: Date
+  }
+
+  type File {
+    url: String!
   }
 
   type Query {
@@ -35,28 +68,45 @@ export const typeDefs = gql`
       user(id: ID!): User!
       getAuthedUser: User!
       postsByUser(id: ID!): [Post!]!
+      getCommentsForPost(id: ID!): [Comment!]!
+      getLikesForPost(id: ID!): [Like!]!
+      getAllPosts(count: Int, first: Int!): [Post!]!
+      getAllUserFollowers(id: ID!): [User!]!
+      getAllUserFollowing(id: ID!): [User!]!
   }
 
-input RegisterUserInput {
-    userName: String!
-    name: String = ""
-    password: String!
-    bio: String = ""
-    avatar: String = ""
-}
+  input RegisterUserInput {
+      userName: String!
+      name: String = ""
+      password: String!
+      bio: String = ""
+      avatar: String = ""
+  }
 
-input UpdateUserInput{
-    id: Int
-    userName: String
-    name: String
-    bio: String
-    avatar: String
-}
+  input UpdateUserInput{
+      id: Int
+      userName: String
+      name: String
+      bio: String
+      avatar: String
+  }
 
   input CreatePostInput {
       postContent: String!
       postDescription: String = ""
       userId: Int!
+  }
+
+  input CreateCommentInput {
+    commentContent: String!
+    commentedByUserId: Int!
+    commentOnPostId: Int!
+  }
+
+  input ReplyToCommentInput {
+    replyContent: String!
+    replyToCommentId: Int!
+    replyFromUserId: Int!
   }
 
   type Mutation {
@@ -66,5 +116,13 @@ input UpdateUserInput{
     createPost(input: CreatePostInput!): Post!
     deleteUser(id:ID!): String!
     deletePost(id:ID!): String!
+    createCommentForPost(input: CreateCommentInput): Comment!
+    createLikeForPost(likeOnPostId: Int!, likedByUserId: Int!): Like!
+    removeLike(likeOnPostId: Int!, likedByUserId: Int!): String!
+    followUser(followedByUserId: Int!, followingUserId: Int!): Follower!
+    unfollowUser(userId:ID!, userIdToUnfollow: ID!): String!
+    replyToComment(input: ReplyToCommentInput!): ReplyToComment!
+    uploadFile(file: Upload!): File!
   }
 `;
+

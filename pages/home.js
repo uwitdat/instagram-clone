@@ -1,34 +1,34 @@
 import React from 'react'
 import useSWR from 'swr'
-import NavHeader from '../components/NavHeader';
-import Posts from '../components/Posts';
-import { QUERY_ALL_USERS } from '../utils/queries';
+import NavFooter from '../components/NavFooter';
 import { requireAuthentication } from '../auth';
-import { getCurrentUser } from '../hooks';
-
-const fetcher = (url) => fetch(url).then((res) => res.json());
+import { useQuery } from '@apollo/client';
+import { GET_ALL_POSTS } from '../utils/queries';
+import Post from '../components/Post';
 
 const Home = () => {
-  const { data } = useSWR('/api/posts', fetcher); // replace with posts from server
-  // const { data: dataTest, loading, error: errortest } = useQuery(QUERY_ALL_USERS);
 
-  const [currentUser] = getCurrentUser()
+    const { data: postsData, error } = useQuery(GET_ALL_POSTS);
 
-  console.log(currentUser)
+    if (postsData) {
+        console.log(postsData)
+    }
 
-  // if (error) return <div>Failed to load</div>
-  if (!data) return <div>Loading...</div>
+    return (
+        <React.Fragment>
+            {postsData && postsData.getAllPosts.map((post) => (
+                <Post post={post} user={post.postedBy} />
+            ))}
+            <NavFooter />
+        </React.Fragment>
 
-  return (
-
-    <Posts data={data} header={<NavHeader />} />
-  )
+    )
 }
 
 export const getServerSideProps = requireAuthentication(context => {
-  return {
-    props: {}
-  }
+    return {
+        props: {}
+    }
 })
 
 export default Home;
