@@ -1,1 +1,1 @@
-// obsolute for now while images are hosted locally.
+// obsolete for now while images are hosted locally.

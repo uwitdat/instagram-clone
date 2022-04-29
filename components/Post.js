@@ -11,7 +11,7 @@ import PostOptionsMenu from './PostOptionsMenu';
 import { GET_COMMENTS_FOR_POST, GET_ALL_LIKES_FOR_POST } from '../utils/queries';
 import { REMOVE_LIKE_FROM_POST, CREATE_LIKE_FOR_POST } from '../utils/mutations';
 import { useQuery, useMutation } from '@apollo/client';
-import Comments from './Comments';
+import Comments from '../components/comments/Comments';
 import Likes from './Likes';
 import Image from 'next/image';
 
@@ -137,18 +137,19 @@ const Post = ({ post, postFromUser, handleClosePosts }) => {
   return (
     <div className={postStyles.postContainer}>
       <div>
-
         <img
           src={postFromUser.avatar}
           alt={postFromUser.avatar}
           onClick={handleRedirectToProfile}
         />
+
         <h4 onClick={handleRedirectToProfile}>{postFromUser.userName}</h4>
-        {postFromUser.id === state?.currentUser?.id && currentPath === '/profile' ? (
+        {postFromUser.id === state.currentUser.id && currentPath === '/profile' ? (
           <AiOutlineEllipsis onClick={(e) => openPostOptionsMenu(e)} />
         ) : null}
 
         <PostOptionsMenu postId={post.id} open={open} anchorEl={anchorEl} handleClose={handleClose} handleClosePosts={handleClosePosts} />
+
       </div>
       <div className={postStyles.postContent}>
         <Image

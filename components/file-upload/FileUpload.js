@@ -71,23 +71,6 @@ const FileUpload = ({ open, handleClose }) => {
     catch (err) {
       console.log(err)
     }
-    // setIsSubmitting(true)
-    // const imageRef = ref(storage, `posts/${image.name + v4()}`)
-    // const uploadTask = uploadBytesResumable(imageRef, image);
-
-    // uploadTask.on('state_changed',
-    //   (snapshot) => {
-    //   },
-    //   (error) => {
-    //     console.log(error.message)
-    //   },
-    //   () => {
-    //     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-    //       handleCreateNewPost(downloadURL);
-    //     });
-    //   }
-    // );
-
   }
 
   useEffect(() => {
@@ -181,7 +164,6 @@ const FileUpload = ({ open, handleClose }) => {
                 <input {...getInputProps()} multiple={false} />
               </div>
             )}
-
           </div>
         </div>
         <span onClick={handleClose} className={fileUploadStyles.exitButton}>X</span>
@@ -203,3 +185,21 @@ const modalStyle = {
   p: 4,
   outline: 'none'
 };
+
+//  FIREBASE UPLOAD CODE 
+// setIsSubmitting(true)
+    // const imageRef = ref(storage, `posts/${image.name + v4()}`)
+    // const uploadTask = uploadBytesResumable(imageRef, image);
+
+    // uploadTask.on('state_changed',
+    //   (snapshot) => {
+    //   },
+    //   (error) => {
+    //     console.log(error.message)
+    //   },
+    //   () => {
+    //     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+    //       handleCreateNewPost(downloadURL);
+    //     });
+    //   }
+    // );

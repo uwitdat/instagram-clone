@@ -113,18 +113,8 @@ const Profile = () => {
 
           <div className={profilePageStyles.profileAdditionalDetails}>
             <p>{state.currentUser.bio}</p>
-
             <button onClick={handleShowEditProfile}>Edit Profile</button>
-
-
-            {/*   <div className={profilePageStyles.profileBtnContainer}>
-                <button>Message</button>
-                <button>Follow</button>
-                 TODO: grab and move
-      </div> */}
-
           </div>
-
 
           <div className={profilePageStyles.imageGrid}>
             {state && state.currentUser && state.currentUser.posts ? (
@@ -152,7 +142,6 @@ const Profile = () => {
 
       </div>
       {!showPosts ? <NavFooter /> : null}
-
     </React.Fragment>
   )
 }

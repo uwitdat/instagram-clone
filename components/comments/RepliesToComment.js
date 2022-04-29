@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import commentReplyStyles from '../styles/replies-to-comment.module.scss';
+import commentReplyStyles from '../../styles/replies-to-comment.module.scss';
 import moment from 'moment';
 
 const RepliesToComment = ({ replies, replyTo }) => {
@@ -25,8 +25,6 @@ const RepliesToComment = ({ replies, replyTo }) => {
           </p>
         )
       ) : null}
-
-
       {showReplies ? (
         <section className={commentReplyStyles.container}>
           {replies.map((reply) => (

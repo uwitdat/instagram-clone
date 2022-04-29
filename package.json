@@ -18,6 +18,7 @@
     "apollo-upload-client": "^17.0.0",
     "bcrypt": "^5.0.1",
     "dotenv": "^16.0.0",
+    "faker": "^6.6.6",
     "firebase": "^9.6.11",
     "graphql": "^16.3.0",
     "jsonwebtoken": "^8.5.1",

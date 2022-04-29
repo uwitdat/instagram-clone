@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { getCookie } from '../utils/functions';
 import { createUploadLink } from 'apollo-upload-client';
@@ -20,7 +20,7 @@ export function AppWrapper({ children }) {
   });
 
   const authLink = setContext((_, { headers }) => {
-    // get the authentication token from local storage if it exists
+    // get the authentication token from storage if it exists
     const token = getCookie('JWT');
     // return the headers to the context so httpLink can read them
     return {

@@ -22,4 +22,5 @@ export const setModelRelationships = (db) => {
 
     replyToComment.belongsTo(commentOnPost, { foreignKey: 'replyToCommentId' });
     replyToComment.belongsTo(user, { foreignKey: 'replyFromUserId' })
+
 };

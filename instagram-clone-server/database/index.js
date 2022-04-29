@@ -7,6 +7,7 @@ import { replyToComment } from './models/ReplyToComment.js';
 import { follower } from './models/Follower.js';
 import { setModelRelationships } from './setup.js';
 import dotenv from "dotenv";
+import { users, posts } from './seeds.js';
 
 
 dotenv.config();
@@ -25,7 +26,10 @@ replyToComment(DB);
 
 setModelRelationships(DB);
 
-await DB.sync({ logging: false });
+
+await DB.sync({ force: true, logging: false });
+
+
 
 
 export default DB;

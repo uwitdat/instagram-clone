@@ -5,14 +5,14 @@ import { storage } from '../firebase'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { v4 } from 'uuid';
 import { useMutation } from '@apollo/client';
-import { EDIT_USER_MUTATION } from '../utils/mutations';
+import { EDIT_USER_MUTATION, UPLOAD_FILE } from '../utils/mutations';
 
 
 const EditProfile = ({ showEditProfile, handleCloseEditProfile, currentUser, setCurrentUser }) => {
   const [newUserAvatar, setNewUserAvatar] = useState(null);
   const [preview, setPreview] = useState();
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const inputRef = useRef(null)
+  const inputRef = useRef(null);
+  const [uploadFile] = useMutation(UPLOAD_FILE);
 
   const [editValues, setEditValues] = useState({
     name: '',
@@ -49,23 +49,20 @@ const EditProfile = ({ showEditProfile, handleCloseEditProfile, currentUser, set
 
   }
 
-  const handleUpload = () => {
-    const imageRef = ref(storage, `posts/${newUserAvatar.name + v4()}`)
-    const uploadTask = uploadBytesResumable(imageRef, newUserAvatar);
+  const handleUpload = async () => {
+    if (!newUserAvatar) return;
 
-    uploadTask.on('state_changed',
-      (snapshot) => {
-
-      },
-      (error) => {
-        console.log(error.message)
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          handleSubmitEditUserInfo(downloadURL)
-        });
+    try {
+      const { data } = await uploadFile({
+        variables: { file: newUserAvatar }
+      })
+      if (data) {
+        handleSubmitEditUserInfo(data.uploadFile.url)
       }
-    );
+    }
+    catch (err) {
+      console.log(err)
+    }
   }
 
   const [updateUser] = useMutation(EDIT_USER_MUTATION);
@@ -87,7 +84,6 @@ const EditProfile = ({ showEditProfile, handleCloseEditProfile, currentUser, set
         handleCloseEditProfile()
       }
     } catch (err) {
-      console.log('me')
       console.log(err.message)
     }
   }
