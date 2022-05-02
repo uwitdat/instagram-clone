@@ -110,7 +110,7 @@ const EditProfile = ({ showEditProfile, setShowEditProfile, currentUser, setCurr
       validationSchema={validateFields}
       onSubmit={handleSubmitChanges}
     >
-      {({ values, isValid }) => (
+      {({ values, isValid, errors, touched }) => (
         <Form>
           <Overlay height='100vh' top={0} isShowing={showEditProfile}>
 
@@ -136,15 +136,15 @@ const EditProfile = ({ showEditProfile, setShowEditProfile, currentUser, setCurr
             <section className={editProfileStyles.content}>
               <div>
                 <p>Name</p>
-                <Field placeholder='Name' name='name' />
+                <Field id={errors.name && touched.name ? editProfileStyles.errorInput : ''} placeholder='Name' name='name' />
               </div>
               <div>
                 <p>Username</p>
-                <Field placeholder='Username' name='userName' />
+                <Field id={errors.userName && touched.userName ? editProfileStyles.errorInput : ''} placeholder='Username' name='userName' />
               </div>
               <div>
                 <p>Bio</p>
-                <Field placeholder='Bio' name='bio' />
+                <Field id={errors.bio && touched.bio ? editProfileStyles.errorInput : ''} placeholder='Bio' name='bio' />
               </div>
 
               <div className={editProfileStyles.errorContainer}>
