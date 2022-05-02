@@ -2,7 +2,7 @@ import DB from '../database/index.js';
 
 const comments = DB.models.commentOnPost;
 
-export const getAllComments = async (postId) => {
+export const getCommentsByPostId = async (postId) => {
   try {
     const getComments = await comments.findAll({
       attributes: { exclude: ['commentedByUserId', 'commentOnPostId', 'updatedAt'] },
@@ -19,20 +19,37 @@ export const getAllComments = async (postId) => {
         {
           model: DB.models.replyToComment, as: 'replyToComments',
           attributes: { exclude: ['replyFromUserId', 'replyToCommentId', 'createdAt', 'updatedAt'] },
-          include: [{ model: DB.models.user, as: 'user', attributes: { exclude: ['password', 'createdAt', 'updatedAt'] } }]
+          include: [
+            { model: DB.models.user, as: 'user', attributes: { exclude: ['password', 'createdAt', 'updatedAt'] } }
+          ]
         },
       ]
     });
-
-    if (!getComments) {
-      return res.status(400).send({
-        message: 'no comments found'
-      });
-    }
 
     return getComments;
 
   } catch (err) {
     console.log(err);
   }
+}
+
+export const createNewComment = async (userInput) => {
+  try {
+    const newComment = await DB.models.commentOnPost.create({
+      commentContent: userInput.commentContent,
+      commentOnPostId: userInput.commentOnPostId,
+      commentedByUserId: userInput.commentedByUserId
+    })
+
+    return {
+      status: 'OK',
+      data: newComment
+    }
+  } catch (err) {
+    return {
+      status: 'FAILED',
+      errorMessage: err.message
+    }
+  }
+
 }
