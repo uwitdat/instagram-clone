@@ -1,0 +1,21 @@
+@import '../styles/global.scss';
+
+.nav{
+    color: $color-white;
+    display: flex;
+    padding: 1rem;
+    align-items: center;
+    border-bottom: $nav-border;
+
+    svg{
+        font-size: $icon-size;
+        margin-right: 1rem;
+        cursor: pointer;
+    }
+
+    h3{
+        font-family: $font-primary;
+        font-weight: 700;
+        font-size: 1.3rem;
+    }
+}

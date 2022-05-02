@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_POSTS } from '../utils/queries';
 import Post from './Post';
@@ -12,7 +12,8 @@ const HomePage = () => {
 
   const { data: postsData, fetchMore, networkStatus } = useQuery(GET_ALL_POSTS, {
     variables: { first: 3 },
-    notifyOnNetworkStatusChange: true
+    notifyOnNetworkStatusChange: true,
+    pollInterval: 300000
   });
 
   const fetchMorePosts = () => { // used for infinite scroll

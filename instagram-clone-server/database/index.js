@@ -5,9 +5,9 @@ import { commentOnPost } from './models/Comment.js';
 import { likeOnPost } from './models/Like.js';
 import { replyToComment } from './models/ReplyToComment.js';
 import { follower } from './models/Follower.js';
+import { notification } from './models/Notification.js';
 import { setModelRelationships } from './setup.js';
 import dotenv from "dotenv";
-import { users, posts } from './seeds.js';
 
 
 dotenv.config();
@@ -23,11 +23,12 @@ commentOnPost(DB);
 likeOnPost(DB);
 follower(DB);
 replyToComment(DB);
+notification(DB);
 
 setModelRelationships(DB);
 
 
-await DB.sync({ force: true, logging: false });
+await DB.sync({ logging: false });
 
 
 

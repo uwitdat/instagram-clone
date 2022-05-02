@@ -211,8 +211,6 @@ export const resolvers = {
 
       const name = v4() + filename
 
-      console.log(name)
-
       const pathName = path.join(`../public/images/${name}`)
       await stream.pipe(fs.createWriteStream(pathName))
 

@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Overlay from './Overlay';
 import editProfileStyles from '../styles/edit-profile.module.scss';
-import { storage } from '../firebase'
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { v4 } from 'uuid';
 import { useMutation } from '@apollo/client';
 import { EDIT_USER_MUTATION, UPLOAD_FILE } from '../utils/mutations';
 

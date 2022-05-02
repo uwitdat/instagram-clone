@@ -3,6 +3,7 @@ import overlayStyles from '../styles/overlay.module.scss';
 
 const Overlay = ({ isShowing, children, currentTopPosition, height }) => {
 
+
   useEffect(() => {
     if (isShowing) {
       document.body.style.overflow = "hidden";
