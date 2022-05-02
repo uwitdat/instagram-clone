@@ -9,6 +9,7 @@ import { typeDefs } from './schema/type-defs.js';
 import dotenv from "dotenv";
 import jwt from 'jsonwebtoken';
 import { graphqlUploadExpress } from 'graphql-upload';
+import routes from './routes/index.js';
 
 dotenv.config();
 
@@ -68,6 +69,7 @@ async function init(typeDefs, resolvers) {
   app.use(graphqlUploadExpress());
   server.applyMiddleware({ app });
   app.use(express.static('../public'));
+  app.use('/comments', routes.comments)
 
   await new Promise(resolve => httpServer.listen({ port: PORT }, resolve));
   console.log(`🚀 Server ready at http://localhost:5000${server.graphqlPath}`);
