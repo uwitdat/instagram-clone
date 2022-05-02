@@ -20,6 +20,11 @@
     border-color: transparent;
     cursor: pointer;
     font-size: 1.1rem;
+
+    &:disabled {
+      opacity: .3;
+      cursor: default;
+    }
   }
 
   & > button:first-child {
@@ -87,5 +92,27 @@
         border-bottom: 1px solid $color-white;
       }
     }
+  }
+
+  .inputError {
+    border-bottom: 1px solid red;
+  }
+
+  .errorContainer {
+   margin-top: .5rem;
+   color: white;
+   font-family: $font-primary;
+   font-weight: 600;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+
+   p{
+     width: max-content;
+     margin: .3rem;
+     font-size: 1rem;
+   }
+   
   }
 }

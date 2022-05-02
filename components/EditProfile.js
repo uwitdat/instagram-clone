@@ -3,29 +3,31 @@ import Overlay from './Overlay';
 import editProfileStyles from '../styles/edit-profile.module.scss';
 import { useMutation } from '@apollo/client';
 import { EDIT_USER_MUTATION, UPLOAD_FILE } from '../utils/mutations';
+import * as Yup from "yup";
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 
-const EditProfile = ({ showEditProfile, handleCloseEditProfile, currentUser, setCurrentUser }) => {
+const EditProfile = ({ showEditProfile, setShowEditProfile, currentUser, setCurrentUser }) => {
   const [newUserAvatar, setNewUserAvatar] = useState(null);
   const [preview, setPreview] = useState();
   const inputRef = useRef(null);
   const [uploadFile] = useMutation(UPLOAD_FILE);
 
-  const [editValues, setEditValues] = useState({
-    name: '',
-    userName: '',
-    bio: '',
-    avatar: ''
+  const handleCloseEditProfile = () => {
+    setShowEditProfile(false)
+    setNewUserAvatar(null)
+    setPreview(null)
+  }
+
+  const validateFields = Yup.object({
+    userName: Yup.string()
+      .min(4, 'Username must be a minimum of 4 chatacters')
+      .required('Username is a required field')
+      .matches(/^[aA-zZ\s]+$/, 'Username may not contain special characters'),
+    name: Yup.string().max(15, 'Name can not exceed 15 characters'),
+    bio: Yup.string().max(50, 'Bio can not exceed 50 characters'),
   })
 
-  const handleEditValues = (e) => {
-    const { name, value } = e.target;
-
-    setEditValues({
-      ...editValues,
-      [name]: value
-    })
-  }
 
   const handleOpenFileInput = () => {
     inputRef.current.click()
@@ -37,16 +39,15 @@ const EditProfile = ({ showEditProfile, handleCloseEditProfile, currentUser, set
     }
   }
 
-  const handleSubmitChanges = () => {
+  const handleSubmitChanges = (values) => {
     if (newUserAvatar) {
-      handleUpload()
+      handleUpload(values)
     } else {
-      handleSubmitEditUserInfo()
+      handleSubmitEditUserInfo(values, null)
     }
-
   }
 
-  const handleUpload = async () => {
+  const handleUpload = async (values) => {
     if (!newUserAvatar) return;
 
     try {
@@ -54,7 +55,7 @@ const EditProfile = ({ showEditProfile, handleCloseEditProfile, currentUser, set
         variables: { file: newUserAvatar }
       })
       if (data) {
-        handleSubmitEditUserInfo(data.uploadFile.url)
+        handleSubmitEditUserInfo(values, data.uploadFile.url)
       }
     }
     catch (err) {
@@ -64,8 +65,8 @@ const EditProfile = ({ showEditProfile, handleCloseEditProfile, currentUser, set
 
   const [updateUser] = useMutation(EDIT_USER_MUTATION);
 
-  const handleSubmitEditUserInfo = async (downloadURL) => {
-    const { name, userName, avatar, bio } = editValues;
+  const handleSubmitEditUserInfo = async (values, downloadURL) => {
+    const { name, userName, avatar, bio } = values;
 
     try {
       const { data } = await updateUser({
@@ -76,25 +77,15 @@ const EditProfile = ({ showEditProfile, handleCloseEditProfile, currentUser, set
           ...currentUser,
           currentUser: data.updateUser
         })
-        setNewUserAvatar(null)
-        setPreview(null)
-        handleCloseEditProfile()
+        setNewUserAvatar(null);
+        setPreview(null);
+        handleCloseEditProfile();
       }
     } catch (err) {
-      console.log(err.message)
+      console.log(err.message);
     }
   }
 
-  useEffect(() => {
-    if (currentUser) {
-      setEditValues({
-        name: currentUser.name,
-        userName: currentUser.userName,
-        bio: currentUser.bio,
-        avatar: currentUser.avatar
-      })
-    }
-  }, [currentUser])
 
   useEffect(() => {
     if (!newUserAvatar) {
@@ -107,54 +98,67 @@ const EditProfile = ({ showEditProfile, handleCloseEditProfile, currentUser, set
     return () => URL.revokeObjectURL(objectUrl)
   }, [newUserAvatar])
 
-  useEffect(() => {
-    if (handleCloseEditProfile) {
-      setNewUserAvatar(null)
-      setPreview(null)
-    }
-  }, [handleCloseEditProfile])
-
 
   return (
-    <Overlay height='100vh' top={0} isShowing={showEditProfile}>
+    <Formik
+      initialValues={{
+        name: currentUser ? currentUser.name : '',
+        userName: currentUser ? currentUser.userName : '',
+        bio: currentUser ? currentUser.bio : '',
+        avatar: currentUser ? currentUser.avatar : ''
+      }}
+      validationSchema={validateFields}
+      onSubmit={handleSubmitChanges}
+    >
+      {({ values, isValid }) => (
+        <Form>
+          <Overlay height='100vh' top={0} isShowing={showEditProfile}>
 
-      <nav className={editProfileStyles.nav}>
-        <button onClick={handleCloseEditProfile}>Cancel</button>
-        <h3>Edit profile</h3>
-        <button onClick={handleSubmitChanges}>Done</button>
-      </nav>
+            <nav className={editProfileStyles.nav}>
+              <button type='button' onClick={handleCloseEditProfile}>Cancel</button>
+              <h3>Edit profile</h3>
+              <button disabled={isValid ? false : true} type='submit' onClick={() => handleSubmitChanges(values)}>Done</button>
+            </nav>
 
-      <div className={editProfileStyles.profilePicture}>
-        {!preview ? (
-          <img
-            src={currentUser && currentUser.avatar ? currentUser.avatar : 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/271deea8-e28c-41a3-aaf5-2913f5f48be6/de7834s-6515bd40-8b2c-4dc6-a843-5ac1a95a8b55.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI3MWRlZWE4LWUyOGMtNDFhMy1hYWY1LTI5MTNmNWY0OGJlNlwvZGU3ODM0cy02NTE1YmQ0MC04YjJjLTRkYzYtYTg0My01YWMxYTk1YThiNTUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.BopkDn1ptIwbmcKHdAOlYHyAOOACXW0Zfgbs0-6BY-E'}
-            alt='user profile img' />
-        ) : (
-          <img
-            src={preview}
-            alt='user profile img' />
-        )}
-        <p onClick={handleOpenFileInput}>Change profile picture</p>
-      </div>
+            <div className={editProfileStyles.profilePicture}>
+              {!preview ? (
+                <img
+                  src={currentUser && currentUser.avatar ? currentUser.avatar : 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/271deea8-e28c-41a3-aaf5-2913f5f48be6/de7834s-6515bd40-8b2c-4dc6-a843-5ac1a95a8b55.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI3MWRlZWE4LWUyOGMtNDFhMy1hYWY1LTI5MTNmNWY0OGJlNlwvZGU3ODM0cy02NTE1YmQ0MC04YjJjLTRkYzYtYTg0My01YWMxYTk1YThiNTUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.BopkDn1ptIwbmcKHdAOlYHyAOOACXW0Zfgbs0-6BY-E'}
+                  alt='user profile img' />
+              ) : (
+                <img
+                  src={preview}
+                  alt='user profile img' />
+              )}
+              <p onClick={handleOpenFileInput}>Change profile picture</p>
+            </div>
 
-      <section className={editProfileStyles.content}>
-        <div>
-          <p>Name</p>
-          <input placeholder='Name' name='name' value={editValues.name} onChange={handleEditValues} />
-        </div>
-        <div>
-          <p>Username</p>
-          <input placeholder='Username' name='userName' value={editValues.userName} onChange={handleEditValues} />
-        </div>
-        <div>
-          <p>Bio</p>
-          <input placeholder='Bio' name='bio' value={editValues.bio} onChange={handleEditValues} />
-        </div>
-      </section>
+            <section className={editProfileStyles.content}>
+              <div>
+                <p>Name</p>
+                <Field placeholder='Name' name='name' />
+              </div>
+              <div>
+                <p>Username</p>
+                <Field placeholder='Username' name='userName' />
+              </div>
+              <div>
+                <p>Bio</p>
+                <Field placeholder='Bio' name='bio' />
+              </div>
 
-      <input type='file' ref={inputRef} multiple={false} style={{ display: 'none' }} onChange={handleSetNewUserAvatar} />
+              <div className={editProfileStyles.errorContainer}>
+                <ErrorMessage name='userName' component='p' />
+                <ErrorMessage name='name' component='p' />
+                <ErrorMessage name='bio' component='p' />
+              </div>
+            </section>
+            <input type='file' ref={inputRef} multiple={false} style={{ display: 'none' }} onChange={handleSetNewUserAvatar} />
+          </Overlay>
+        </Form>
+      )}
 
-    </Overlay>
+    </Formik>
   )
 }
 

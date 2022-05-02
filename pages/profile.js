@@ -55,10 +55,6 @@ const Profile = () => {
     setShowEditProfile(true)
   }
 
-  const handleCloseEditProfile = () => {
-    setShowEditProfile(false)
-  }
-
   const PostsNav = () => {
     return (
       <div className={profilePageStyles.PostsNav}>
@@ -76,7 +72,7 @@ const Profile = () => {
   return (
     <React.Fragment>
       {!showPosts ? (<ProfilePageNavHeader currentUser={state.currentUser} />) : null}
-      <EditProfile currentUser={state.currentUser} setCurrentUser={setState} showEditProfile={showEditProfile} handleCloseEditProfile={handleCloseEditProfile} />
+      <EditProfile setShowEditProfile={setShowEditProfile} currentUser={state.currentUser} setCurrentUser={setState} showEditProfile={showEditProfile} />
 
       {state.currentUser ? (
         <div className={profilePageStyles.profileContainer}>
