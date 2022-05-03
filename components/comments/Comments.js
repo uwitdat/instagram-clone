@@ -3,12 +3,13 @@ import commentStyles from '../../styles/comments.module.scss';
 import Overlay from '../Overlay'
 import { useAppContext } from '../../context/index';
 import { useMutation } from '@apollo/client';
-import { CREATE_COMMENT_FOR_POST, CREATE_REPLY_TO_COMMENT } from '../../utils/mutations';
+// import { CREATE_COMMENT_FOR_POST, CREATE_REPLY_TO_COMMENT } from '../../utils/mutations';
 import { useRouter } from 'next/router';
 import RepliesToComment from './RepliesToComment';
 import Comment from './Comment';
 import Input from './Input';
 import CommentDetails from './CommentDetails';
+import axios from 'axios';
 
 const Comments = ({ showComments, setShowComments, currentTopPosition, comments, post, postFromUser, refetchComments }) => {
 
@@ -25,8 +26,8 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, comments,
     commentId: null
   });
 
-  const [createCommentForPost] = useMutation(CREATE_COMMENT_FOR_POST);
-  const [replyToComment] = useMutation(CREATE_REPLY_TO_COMMENT);
+  // const [createCommentForPost] = useMutation(CREATE_COMMENT_FOR_POST);
+  // const [replyToComment] = useMutation(CREATE_REPLY_TO_COMMENT);
 
   const router = useRouter();
 
@@ -64,52 +65,45 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, comments,
   const handleSubmitComment = async () => {
     if (newComment === '') return;
 
-    try {
-      const { data } = await createCommentForPost({
-        variables: {
-          createCommentInput: {
-            commentContent: newComment,
-            commentOnPostId: Number(post.id),
-            commentedByUserId: Number(state.currentUser.id)
-          }
-        }
-      })
-      if (data) {
-        refetchComments();
-        resetValues();
-      }
-    } catch (err) {
-      console.log(err);
+    const createCommentInput = {
+      commentContent: newComment,
+      commentOnPostId: Number(post.id),
+      commentedByUserId: Number(state.currentUser.id)
+    }
+
+    const { data } = await axios.post('http://localhost:5000/comments/new-comment', createCommentInput)
+    if (data.success) {
+      console.log('RES =>', data.data)
+      refetchComments();
+      resetValues();
+    } else {
+      console.log('ERROR =>', data.errorMessage)
     }
   }
-
 
   const submitReply = async () => {
     if (reply.replyContent === '') return;
 
-    try {
-      const { data } = await replyToComment({
-        variables: {
-          replyToCommentInput: {
-            replyContent: reply.replyContent,
-            replyToCommentId: Number(reply.commentId),
-            replyFromUserId: Number(state.currentUser.id)
-          }
-        }
-      })
-      if (data) {
-        refetchComments();
-        resetValues();
-      }
-    } catch (err) {
-      console.log(err)
+    const replyToCommentInput = {
+      replyContent: reply.replyContent,
+      replyToCommentId: Number(reply.commentId),
+      replyFromUserId: Number(state.currentUser.id)
+    }
+
+    const { data } = await axios.post('http://localhost:5000/comments/new-reply', replyToCommentInput)
+    if (data.success) {
+      console.log('RES =>', data.data)
+      refetchComments();
+      resetValues();
+    } else {
+      console.log('ERROR =>', data.errorMessage)
     }
   }
 
   const handleInitReply = (comment) => {
     setReply({
       ...reply,
-      replyingTo: comment.commentedBy.userName,
+      replyingTo: comment.user.userName,
       commentId: comment.id
     })
     setShowEmojisForReply(true);
@@ -127,8 +121,8 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, comments,
             <Comment comment={comment} handleGoToProfile={handleGoToProfile} handleInitReply={handleInitReply} />
 
             <RepliesToComment
-              replies={comment.replies}
-              replyTo={comment.commentedBy.userName} />
+              replies={comment.replyToComments}
+              replyTo={comment.user.userName} />
           </React.Fragment>
         ))}
       </div>

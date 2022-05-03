@@ -4,9 +4,10 @@ import { GET_AUTHED_USER } from '../utils/queries';
 import { useAppContext } from '../context';
 import HomePage from '../components/HomePage';
 import { requireAuthentication } from '../auth';
-
+import axios from 'axios';
 
 export default function App() {
+
   const [isCompleted, setIsCompleted] = useState(false)
 
   const [_, setState] = useAppContext()

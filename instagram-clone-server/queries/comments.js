@@ -34,22 +34,44 @@ export const getCommentsByPostId = async (postId) => {
 }
 
 export const createNewComment = async (userInput) => {
+  const { commentContent, commentOnPostId, commentedByUserId } = userInput;
+
   try {
     const newComment = await DB.models.commentOnPost.create({
-      commentContent: userInput.commentContent,
-      commentOnPostId: userInput.commentOnPostId,
-      commentedByUserId: userInput.commentedByUserId
-    })
+      commentContent,
+      commentOnPostId,
+      commentedByUserId
+    });
 
     return {
-      status: 'OK',
       data: newComment
     }
   } catch (err) {
+
     return {
-      status: 'FAILED',
       errorMessage: err.message
     }
   }
+}
 
+export const createNewReplyToComment = async (userInput) => {
+  const { replyContent, replyToCommentId, replyFromUserId } = userInput;
+
+  try {
+    const newReply = await DB.models.replyToComment.create({
+      replyContent,
+      replyToCommentId,
+      replyFromUserId,
+    });
+
+    return {
+      data: newReply
+    }
+
+  } catch (err) {
+
+    return {
+      errorMessage: err.message
+    }
+  }
 }

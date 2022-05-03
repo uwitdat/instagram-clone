@@ -30,10 +30,10 @@ const RepliesToComment = ({ replies, replyTo }) => {
           {replies.map((reply) => (
             <div key={reply.id} className={commentReplyStyles.reply}>
               <div>
-                <img src={reply.repliedBy.avatar} alt='user' />
+                <img src={reply.user.avatar} alt='user' />
               </div>
               <div>
-                <h4><strong>{reply.repliedBy.userName}</strong> <span>@{replyTo}</span> {reply.replyContent}</h4>
+                <h4><strong>{reply.user.userName}</strong> <span>@{replyTo}</span> {reply.replyContent}</h4>
                 <p>{moment(reply.createdAt).fromNow()}</p>
               </div>
             </div>

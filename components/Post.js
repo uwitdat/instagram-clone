@@ -14,6 +14,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import Comments from '../components/comments/Comments';
 import Likes from './Likes';
 import Image from 'next/image';
+import axios from 'axios';
 
 const redColor = 'rgb(255, 93, 93)';
 
@@ -26,10 +27,20 @@ const Post = ({ post, postFromUser, handleClosePosts }) => {
 
   const [liked, setLiked] = useState(false)
 
-  const { data: commentsData, error, refetch } = useQuery(GET_COMMENTS_FOR_POST, {
-    variables: { postId: post.id },
-  })
+  // const { data: commentsData, error, refetch } = useQuery(GET_COMMENTS_FOR_POST, {
+  //   variables: { postId: post.id },
+  // })
 
+  const [comments, setComments] = useState(null)
+
+  const fetchCommentsForPost = async () => {
+    const res = await axios.get(`http://localhost:5000/comments/${post.id}`)
+    setComments(res.data)
+  }
+
+  useEffect(() => {
+    fetchCommentsForPost()
+  }, [])
 
   const { data: likesData, error: likesError, refetch: refetchLikes } = useQuery(GET_ALL_LIKES_FOR_POST, {
     variables: { postId: post.id },
@@ -100,8 +111,6 @@ const Post = ({ post, postFromUser, handleClosePosts }) => {
   const [state] = useAppContext();
 
   const [animateLike, setAnimateLike] = useState(false)
-  const [animateRemoveLike, setAnimateRemoveLike] = useState(false)
-
 
   const handleRedirectToProfile = () => {
     if (postFromUser.id === state.currentUser.id) {
@@ -191,12 +200,12 @@ const Post = ({ post, postFromUser, handleClosePosts }) => {
 
         <p><strong>{postFromUser.userName}</strong> {post.postDescription}</p>
 
-        {commentsData && commentsData.getCommentsForPost ? (
-          commentsData.getCommentsForPost.length === 0 ? <p style={{ marginTop: '-.1rem' }}></p> : (
-            commentsData.getCommentsForPost.length > 1 ? (
-              <p className={postStyles.viewComments} onClick={handleViewComments}>View all {commentsData.getCommentsForPost.length} comments</p>
+        {comments ? (
+          comments.length === 0 ? <p style={{ marginTop: '-.1rem' }}></p> : (
+            comments.length > 1 ? (
+              <p className={postStyles.viewComments} onClick={handleViewComments}>View all {comments.length} comments</p>
             ) : (
-              <p className={postStyles.viewComments} onClick={handleViewComments}>View {commentsData.getCommentsForPost.length} comment</p>
+              <p className={postStyles.viewComments} onClick={handleViewComments}>View {comments.length} comment</p>
             )
           )
         ) : null}
@@ -204,15 +213,15 @@ const Post = ({ post, postFromUser, handleClosePosts }) => {
       </div>
 
 
-      {commentsData && commentsData.getCommentsForPost ? (
+      {comments ? (
         <Comments
           showComments={showComments}
           setShowComments={setShowComments}
           currentTopPosition={scrollPosition}
-          comments={commentsData.getCommentsForPost}
+          comments={comments}
           post={post}
           postFromUser={postFromUser}
-          refetchComments={refetch}
+          refetchComments={fetchCommentsForPost}
         />
       ) : null}
 

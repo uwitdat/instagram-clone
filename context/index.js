@@ -4,7 +4,9 @@ import { setContext } from '@apollo/client/link/context';
 import { getCookie } from '../utils/functions';
 import { createUploadLink } from 'apollo-upload-client';
 
+
 const AppContext = createContext();
+
 
 export function AppWrapper({ children }) {
 
