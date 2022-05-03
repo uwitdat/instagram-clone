@@ -26,9 +26,6 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, comments,
     commentId: null
   });
 
-  // const [createCommentForPost] = useMutation(CREATE_COMMENT_FOR_POST);
-  // const [replyToComment] = useMutation(CREATE_REPLY_TO_COMMENT);
-
   const router = useRouter();
 
   const handleCloseComments = () => {

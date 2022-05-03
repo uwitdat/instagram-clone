@@ -13,7 +13,6 @@ const HomePage = () => {
   const { data: postsData, fetchMore, networkStatus } = useQuery(GET_ALL_POSTS, {
     variables: { first: 3 },
     notifyOnNetworkStatusChange: true,
-    pollInterval: 300000
   });
 
   const fetchMorePosts = () => { // used for infinite scroll
