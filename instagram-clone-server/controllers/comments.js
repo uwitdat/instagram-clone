@@ -11,8 +11,8 @@ export const newComment = async (req, res) => {
   const newComment = await createNewComment(req.body)
 
   if (newComment.status === 'OK') {
-    return res.status(201).send({ data: newComment.data })
+    return res.status(201).send({ data: newComment.data, status: newComment.status })
   } else {
-    return res.status(500).send({ errorMessage: newComment.errorMessage })
+    return res.status(500).send({ errorMessage: newComment.errorMessage, status: newComment.status })
   }
 }

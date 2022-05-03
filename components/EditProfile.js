@@ -13,10 +13,16 @@ const EditProfile = ({ showEditProfile, setShowEditProfile, currentUser, setCurr
   const inputRef = useRef(null);
   const [uploadFile] = useMutation(UPLOAD_FILE);
 
-  const handleCloseEditProfile = () => {
+  const handleCloseEditProfile = (resetForm) => {
     setShowEditProfile(false)
     setNewUserAvatar(null)
     setPreview(null)
+    resetForm({
+      name: '',
+      userName: '',
+      bio: '',
+      avatar: ''
+    })
   }
 
   const validateFields = Yup.object({
@@ -110,12 +116,12 @@ const EditProfile = ({ showEditProfile, setShowEditProfile, currentUser, setCurr
       validationSchema={validateFields}
       onSubmit={handleSubmitChanges}
     >
-      {({ values, isValid, errors, touched }) => (
+      {({ values, isValid, errors, touched, resetForm }) => (
         <Form>
           <Overlay height='100vh' top={0} isShowing={showEditProfile}>
 
             <nav className={editProfileStyles.nav}>
-              <button type='button' onClick={handleCloseEditProfile}>Cancel</button>
+              <button type='button' onClick={() => handleCloseEditProfile(resetForm)}>Cancel</button>
               <h3>Edit profile</h3>
               <button disabled={isValid ? false : true} type='submit' onClick={() => handleSubmitChanges(values)}>Done</button>
             </nav>
