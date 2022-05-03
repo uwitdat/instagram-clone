@@ -71,7 +71,8 @@ const Post = ({ post, postFromUser, handleClosePosts }) => {
       const { data } = await createLikeForPost({
         variables: {
           likeOnPostId: Number(post.id),
-          likedByUserId: Number(state.currentUser.id)
+          likedByUserId: Number(state.currentUser.id),
+          likeForUserId: Number(postFromUser.id)
         }
       });
       if (data) {

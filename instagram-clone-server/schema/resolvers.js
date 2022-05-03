@@ -23,6 +23,25 @@ export const resolvers = {
   Upload: GraphQLUpload,
 
   Query: {
+    getAllUncheckedNotifs: async (_, args) => {
+      const notifs = await DB.models.notification.findAll({
+        where: {
+          isChecked: false,
+          toUserId: args.id
+        },
+      });
+      return notifs.length;
+    },
+    getAllNotificationsForUser: (_, args) => {
+      return DB.models.notification.findAll({
+        where: {
+          toUserId: args.id
+        },
+        order: [
+          ['createdAt', 'DESC'],
+        ],
+      })
+    },
     users: (parent, args, context) => {
       if (checkForUser(context)) {
         return DB.models.user.findAll()
@@ -173,6 +192,14 @@ export const resolvers = {
       return DB.models.user.findByPk(parent.dataValues.replyFromUserId)
     }
   },
+  Notification: {
+    onPost: (parent, _) => {
+      return DB.models.post.findByPk(parent.dataValues.onPostId)
+    },
+    fromUser: (parent, _) => {
+      return DB.models.user.findByPk(parent.dataValues.fromUserId)
+    }
+  },
   Like: {
     likedBy: async (parent, _) => {
       return DB.models.user.findByPk(parent.dataValues.likedByUserId)
@@ -204,6 +231,18 @@ export const resolvers = {
     }
   },
   Mutation: {
+    flipIsCheckedValues: async (_, args) => {
+      const { ids } = args.input;
+
+      ids.forEach((id) => {
+        DB.models.notification.update(
+          { isChecked: true },
+          { where: { id } })
+      });
+
+      return 'notifications successfully updated'
+    },
+
     uploadFile: async (_, { file }) => {
       const { createReadStream, filename } = await file;
       const stream = createReadStream();
@@ -274,7 +313,7 @@ export const resolvers = {
         userId: newPost.userId
       })
     },
-    createCommentForPost: (_, args) => {
+    createCommentForPost: async (_, args) => {
       const newComment = args.input;
 
       return DB.models.commentOnPost.create({
@@ -283,13 +322,22 @@ export const resolvers = {
         commentedByUserId: newComment.commentedByUserId
       })
     },
-    createLikeForPost: (_, args) => {
-      const { likeOnPostId, likedByUserId } = args;
+    createLikeForPost: async (_, args) => {
+      const { likeOnPostId, likedByUserId, likeForUserId } = args;
 
-      return DB.models.likeOnPost.create({
+      const newLike = await DB.models.likeOnPost.create({
         likeOnPostId,
         likedByUserId
       })
+
+      await DB.models.notification.create({
+        onPostId: likeOnPostId,
+        fromUserId: likedByUserId,
+        notificationType: 'liked your post',
+        toUserId: likeForUserId
+      })
+
+      return newLike;
     },
     replyToComment: (_, args) => {
       const newReply = args.input

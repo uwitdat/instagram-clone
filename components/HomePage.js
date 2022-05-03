@@ -6,14 +6,15 @@ import postStyles from '../styles/home.module.scss';
 import NavHeader from './NavHeader';
 import NavFooter from './NavFooter';
 import { Waypoint } from 'react-waypoint';
+import { useAppContext } from '../context';
 
 
 const HomePage = () => {
+  const [state] = useAppContext();
 
   const { data: postsData, fetchMore, networkStatus } = useQuery(GET_ALL_POSTS, {
     variables: { first: 3 },
     notifyOnNetworkStatusChange: true,
-    pollInterval: 300000
   });
 
   const fetchMorePosts = () => { // used for infinite scroll
@@ -37,10 +38,11 @@ const HomePage = () => {
     })
   }
 
+
   return (
 
     <div>
-      <NavHeader />
+      <NavHeader userId={state && state.currentUser ? state.currentUser.id : null} />
       <div className={postStyles.homeContainer}>
         <section className={postStyles.posts}>
           {postsData && postsData.getAllPosts.map((post, i) => (

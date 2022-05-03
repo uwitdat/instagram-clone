@@ -11,6 +11,7 @@ export const setModelRelationships = (db) => {
     post.belongsTo(user);
     post.hasMany(commentOnPost, { foreignKey: 'commentOnPostId' });
     post.hasMany(likeOnPost, { foreignKey: 'likeOnPostId' });
+    post.hasMany(notification, { foreignKey: 'onPostId' });
 
     commentOnPost.belongsTo(post, { foreignKey: 'commentOnPostId' });
     commentOnPost.belongsTo(user, { foreignKey: 'commentedByUserId' });
@@ -23,9 +24,10 @@ export const setModelRelationships = (db) => {
     follower.belongsTo(user, { foreignKey: 'followedByUserId', as: 'FollowedByUser' });
 
     replyToComment.belongsTo(commentOnPost, { foreignKey: 'replyToCommentId' });
-    replyToComment.belongsTo(user, { foreignKey: 'replyFromUserId' })
+    replyToComment.belongsTo(user, { foreignKey: 'replyFromUserId' });
 
-    notification.belongsTo(user, { foreignKey: 'fromUserId' })
-    notification.belongsTo(user, { foreignKey: 'toUserId' })
+    notification.belongsTo(user, { foreignKey: 'fromUserId' });
+    notification.belongsTo(user, { foreignKey: 'toUserId' });
+    notification.belongsTo(post, { foreignKey: 'onPostId' });
 
 };

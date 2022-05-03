@@ -79,8 +79,8 @@ export const CREATE_COMMENT_FOR_POST = gql`
 
 
 export const CREATE_LIKE_FOR_POST = gql`
-    mutation CreateLikeForPost($likeOnPostId: Int!, $likedByUserId: Int!){      
-        createLikeForPost(likeOnPostId: $likeOnPostId, likedByUserId: $likedByUserId) {
+    mutation CreateLikeForPost($likeOnPostId: Int!, $likedByUserId: Int!, $likeForUserId: Int!){      
+        createLikeForPost(likeOnPostId: $likeOnPostId, likedByUserId: $likedByUserId, likeForUserId: $likeForUserId) {
             id,
             likedByUserId,
             likeOnPostId
@@ -126,5 +126,11 @@ export const UPLOAD_FILE = gql`
         uploadFile(file: $file){
             url
         }
+    }
+`
+
+export const FLIP_IS_CHECKED = gql`
+    mutation FlipIsCheckedValues($ids: NotificationIds!){
+        flipIsCheckedValues(input: $ids)
     }
 `

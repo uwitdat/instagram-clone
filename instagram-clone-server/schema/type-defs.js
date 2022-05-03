@@ -63,6 +63,18 @@ export const typeDefs = gql`
     url: String!
   }
 
+  type Notification {
+    id: ID!
+    notificationType: String!
+    fromUserId: Int!
+    toUserId: Int!
+    onPostId: Int!
+    isChecked: Boolean!
+    createdAt: Date
+    fromUser: User!
+    onPost: Post
+  }
+
   type Query {
       users: [User!]!
       user(id: ID!): User!
@@ -73,6 +85,8 @@ export const typeDefs = gql`
       getAllPosts(count: Int, first: Int!): [Post!]!
       getAllUserFollowers(id: ID!): [User!]!
       getAllUserFollowing(id: ID!): [User!]!
+      getAllNotificationsForUser(id: ID!): [Notification!]!
+      getAllUncheckedNotifs(id: ID!): Int!
   }
 
   input RegisterUserInput {
@@ -109,6 +123,10 @@ export const typeDefs = gql`
     replyFromUserId: Int!
   }
 
+  input NotificationIds {
+    ids: [Int!]
+  }
+
   type Mutation {
     createAndRegisterUser(input:RegisterUserInput!): User!
     loginUser(userName: String!, password: String!): String!
@@ -117,12 +135,13 @@ export const typeDefs = gql`
     deleteUser(id:ID!): String!
     deletePost(id:ID!): String!
     createCommentForPost(input: CreateCommentInput): Comment!
-    createLikeForPost(likeOnPostId: Int!, likedByUserId: Int!): Like!
+    createLikeForPost(likeOnPostId: Int!, likedByUserId: Int!, likeForUserId: Int!): Like!
     removeLike(likeOnPostId: Int!, likedByUserId: Int!): String!
     followUser(followedByUserId: Int!, followingUserId: Int!): Follower!
     unfollowUser(userId:ID!, userIdToUnfollow: ID!): String!
     replyToComment(input: ReplyToCommentInput!): ReplyToComment!
     uploadFile(file: Upload!): File!
+    flipIsCheckedValues(input: NotificationIds): String!
   }
 `;
 

@@ -1,21 +1,69 @@
 @import '../styles/global.scss';
 
-.nav{
-    color: $color-white;
-    display: flex;
-    padding: 1rem;
-    align-items: center;
-    border-bottom: $nav-border;
+.nav {
+  color: $color-white;
+  display: flex;
+  padding: 1rem;
+  align-items: center;
+  border-bottom: $nav-border;
+  background-color: $color-black;
+  position: sticky;
+  top: 0;
 
-    svg{
-        font-size: $icon-size;
-        margin-right: 1rem;
-        cursor: pointer;
-    }
+  svg {
+    font-size: $icon-size;
+    margin-right: 1rem;
+    cursor: pointer;
+  }
 
-    h3{
-        font-family: $font-primary;
-        font-weight: 700;
-        font-size: 1.3rem;
-    }
+  h3 {
+    font-family: $font-primary;
+    font-weight: 700;
+    font-size: 1.3rem;
+  }
 }
+
+
+.container {
+  margin-top: 1rem;
+
+  .notification {  
+    color: $color-white;
+    font-family: $font-primary;
+    padding: .4rem 1rem;
+    display: flex;
+    align-items: center;
+  
+    p{
+      font-weight: 400;
+      font-size: .8rem;
+      line-height: 1.1;
+  
+      strong {
+        font-weight: 700;
+      }
+  
+      span {
+        color: $color-grey;
+        font-size: .75rem;
+      }
+    }
+  
+    .userImg {
+      aspect-ratio: 1;
+      width: 2.5rem;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-right: 1rem;
+    }
+  
+    .postImg { 
+      aspect-ratio: 1;
+      width: 2.8rem;
+      object-fit: cover;
+      margin-left: auto;
+      padding-left: 1rem;
+    }
+  }
+}
+
