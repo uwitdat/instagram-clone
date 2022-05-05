@@ -1,0 +1,128 @@
+@import './global.scss';
+
+
+.nav {
+  color: $color-white;
+  font-family: $font-primary;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+
+  h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0 auto;
+  }
+
+  svg {
+    font-size: $icon-size;
+    cursor: pointer;
+  }
+}
+
+.input {
+position: relative;
+display: flex;
+width: 100%;
+
+  svg{
+    color: $color-white;
+    font-size: $icon-size;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 1rem;
+  }
+
+  input {
+    width: 100%;
+    padding: .6rem;
+    font-size: 1.1rem;
+    outline: none;
+    background-color: rgb(51, 51, 51);
+    border-color: transparent;
+    color: $color-white;
+    border-bottom: $nav-border;
+    border-top: $nav-border;
+    padding-left: 3.5rem;
+  
+    &::placeholder {
+      font-family: $font-primary;
+      color: $color-grey;
+      opacity: .5;
+      font-size: 1rem;
+    }
+  }
+
+}
+
+.results {
+  color: $color-white;
+  margin-top: 2rem;
+  text-align: center;
+
+
+  div {
+    display: flex;
+    align-items: center;
+    padding: .5rem;
+
+    .details{
+      border: none;
+      font-family: $font-primary;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      h3 {
+        font-weight: 700;
+        font-size: 1rem;
+      }
+
+      p {
+        font-size: .9rem;
+        margin-top: .1rem;
+        color: $color-grey;
+      }
+    }
+
+    img {
+      aspect-ratio: 1;
+      height: 3rem;
+      border-radius: 50%;
+      object-fit: cover;
+      border: $nav-border;
+      margin-left: 1rem;
+      margin-right: .5rem;
+    }
+
+    .btnFollowing,
+    .btnFollow {
+      margin-left: auto;
+      margin-right: .5rem;
+      width: 7rem;
+      padding: .3rem 0;
+      border-radius: 3px;
+      font-weight: 700;
+      font-family: $font-primary;
+      color: $color-white;
+      cursor: pointer;
+    }
+
+    .btnFollowing {
+      background-color: $color-black;
+      border: 1px solid $color-white;
+    }
+
+    .btnFollow {
+      background-color: $color-blue-dark;
+      border-color: transparent;
+
+    }
+  }
+
+  .noResults {
+    font-family: $font-primary;
+    font-weight: 700;
+  }
+}
