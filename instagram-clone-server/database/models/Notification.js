@@ -5,6 +5,10 @@ export const notification = (db) => {
     notificationType: {
       type: DataTypes.ENUM('liked your post', 'started following you', 'commented:'),
       allowNull: false
+    },
+    isChecked: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     }
   });
 }

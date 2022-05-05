@@ -33,6 +33,26 @@
       cursor: pointer;
     }
   }
+
+  .notif {
+    position: relative;
+
+    p {
+      color: $color-white;
+      font-size: .5rem;
+      font-family: $font-primary;
+      font-weight: 600;
+      width: .8rem;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background-color: rgb(255, 74, 74);
+      position: absolute;
+      bottom: 4px;
+      right: 1px;
+    }
+  }
 }
 
 .navIsScrolling {

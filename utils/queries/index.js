@@ -309,3 +309,29 @@ export const GET_ALL_USER_FOLLOWING = gql`
     }
   }
 `
+
+export const GET_NOTIFS_INT = gql`
+  query GetAllUncheckedNotifs($userId: ID!) {
+    getAllUncheckedNotifs(id: $userId)
+  }
+`
+
+export const GET_NOTIFICATIONS_FOR_USER = gql`
+  query GetAllNotificationsForUser($userId: ID!){
+    getAllNotificationsForUser(id: $userId) {
+      id
+      notificationType
+      createdAt
+      isChecked
+      onPost {
+        id
+        postContent
+      }
+      fromUser {
+        id
+        userName
+        avatar
+      }
+    }
+  }
+`

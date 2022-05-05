@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import navStyles from '../styles/nav-header.module.scss';
 import { MdOutlineAddBox } from 'react-icons/md';
 import { RiHeartLine } from 'react-icons/ri';
@@ -7,8 +7,11 @@ import Router from 'next/router';
 import { eraseCookie } from '../utils/functions';
 import FileUpload from './file-upload/FileUpload';
 import Notifications from './Notifications';
+import { useQuery } from '@apollo/client';
+import { GET_NOTIFICATIONS_FOR_USER, GET_NOTIFS_INT } from '../utils/queries';
 
-const NavHeader = ({ refetchAllPosts }) => {
+
+const NavHeader = ({ refetchAllPosts, userId }) => {
   const router = Router;
   const COOKIE_NAME = 'JWT';
 
@@ -33,13 +36,24 @@ const NavHeader = ({ refetchAllPosts }) => {
     setShowNotifications(false)
   }
 
+
+  const { data: notificationsNotChecked, refetch } = useQuery(GET_NOTIFS_INT,
+    {
+      variables: { userId }
+    })
+
   return (
     <React.Fragment>
       <nav className={navStyles.nav}>
         <h1>Instagram</h1>
         <ul>
           <li><MdOutlineAddBox onClick={handleShowNewPostModal} /></li>
-          <li><RiHeartLine onClick={handleShowNotifications} /></li>
+          <li className={navStyles.notif}>
+            <RiHeartLine onClick={handleShowNotifications} />
+            {notificationsNotChecked && notificationsNotChecked.getAllUncheckedNotifs > 0 ? (
+              <p onClick={handleShowNotifications}>{notificationsNotChecked.getAllUncheckedNotifs}</p>
+            ) : null}
+          </li>
           <li><FiLogOut onClick={handleUserLogOut} /></li>
         </ul>
       </nav>
@@ -47,7 +61,7 @@ const NavHeader = ({ refetchAllPosts }) => {
         <FileUpload refetchAllPosts={refetchAllPosts} open={newPostModal} handleClose={handleCloseNewPostModal} />
       ) : null}
 
-      <Notifications scrollPosition={scrollPosition} handleHideNotifications={handleHideNotifications} showNotifications={showNotifications} />
+      <Notifications refetchInt={refetch} userId={userId} scrollPosition={scrollPosition} handleHideNotifications={handleHideNotifications} showNotifications={showNotifications} />
     </React.Fragment>
   )
 
