@@ -144,6 +144,7 @@ export const typeDefs = gql`
     replyToComment(input: ReplyToCommentInput!): ReplyToComment!
     uploadFile(file: Upload!): File!
     flipIsCheckedValues(input: NotificationIds): String!
+    searchUsers(searchVal: String!): [User!]!
   }
 `;
 

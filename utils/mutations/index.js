@@ -134,3 +134,15 @@ export const FLIP_IS_CHECKED = gql`
         flipIsCheckedValues(input: $ids)
     }
 `
+
+export const SEARCH_USERS = gql`
+    mutation SearchUsers($searchVal: String!){
+        searchUsers(searchVal: $searchVal){
+            id
+            userName
+            name
+            bio
+            avatar
+        }
+    }
+`

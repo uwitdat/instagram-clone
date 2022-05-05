@@ -7,6 +7,11 @@ import { GraphQLUpload } from 'graphql-upload';
 import path, { dirname } from 'path';
 import fs from 'fs';
 import { v4 } from "uuid";
+import Sequelize from 'sequelize';
+
+
+
+const Op = Sequelize.Op;
 
 const { GraphQLDateTime } = pkg;
 
@@ -231,6 +236,19 @@ export const resolvers = {
     }
   },
   Mutation: {
+    searchUsers: async (_, args) => {
+      const { searchVal } = args;
+
+      console.log('val', searchVal)
+
+      return DB.models.user.findAll({
+        where: {
+          userName: {
+            [Op.like]: '%' + searchVal + '%'
+          }
+        }
+      })
+    },
     flipIsCheckedValues: async (_, args) => {
       const { ids } = args.input;
 
