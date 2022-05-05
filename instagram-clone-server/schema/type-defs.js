@@ -66,6 +66,7 @@ export const typeDefs = gql`
   type Notification {
     id: ID!
     notificationType: String!
+    commentContent: String
     fromUserId: Int!
     toUserId: Int!
     onPostId: Int!
@@ -115,6 +116,7 @@ export const typeDefs = gql`
     commentContent: String!
     commentedByUserId: Int!
     commentOnPostId: Int!
+    commentToUserId: Int!
   }
 
   input ReplyToCommentInput {

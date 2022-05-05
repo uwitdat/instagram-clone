@@ -9,6 +9,10 @@ export const notification = (db) => {
     isChecked: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
+    },
+    commentContent: {
+      type: DataTypes.TEXT,
+      defaultValue: null
     }
   });
 }

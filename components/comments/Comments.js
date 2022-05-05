@@ -70,7 +70,8 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, comments,
           createCommentInput: {
             commentContent: newComment,
             commentOnPostId: Number(post.id),
-            commentedByUserId: Number(state.currentUser.id)
+            commentedByUserId: Number(state.currentUser.id),
+            commentToUserId: Number(postFromUser.id)
           }
         }
       })

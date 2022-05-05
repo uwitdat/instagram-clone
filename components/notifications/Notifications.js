@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import Overlay from './Overlay';
+import React, { useState, useEffect, useMemo } from 'react';
+import Overlay from '../Overlay';
 import { MdOutlineArrowBackIosNew } from 'react-icons/md';
-import notificationStyles from '../styles/notifications.module.scss';
-import moment from 'moment';
+import notificationStyles from '../../styles/notifications.module.scss';
 import { useMutation, useQuery } from '@apollo/client';
-import { FLIP_IS_CHECKED } from '../utils/mutations';
-import { GET_NOTIFICATIONS_FOR_USER } from '../utils/queries';
-import { Spinner } from './Spinner';
+import { FLIP_IS_CHECKED } from '../../utils/mutations';
+import { GET_NOTIFICATIONS_FOR_USER } from '../../utils/queries';
+import { Spinner } from '../Spinner';
+import LikedYourPost from './LikedYourPost';
+import Commented from './Commented';
+import StartedFollowingYou from './StartedFollowingYou';
 
 const Notifications = ({ showNotifications, handleHideNotifications, scrollPosition, userId, refetchInt }) => {
 
@@ -53,6 +55,22 @@ const Notifications = ({ showNotifications, handleHideNotifications, scrollPosit
   }, [notifications])
 
 
+  const notifs = useMemo(() => {
+    if (notifications && notifications.getAllNotificationsForUser) {
+      return notifications.getAllNotificationsForUser.map((notif) => {
+
+        if (notif.notificationType === 'liked your post') {
+          return <LikedYourPost notif={notif} key={notif.id} />
+        } else if (notif.notificationType === 'commented:') {
+          return <Commented notif={notif} key={notif.id} />
+        } else if (notif.notificationType === 'started following you') {
+          return <StartedFollowingYou notif={notif} key={notif.id} />
+        }
+      })
+    }
+  }, [notifications])
+
+
   return (
     <Overlay isShowing={showNotifications} currentTopPosition={scrollPosition} height={'94.5vh'}>
       <nav className={notificationStyles.nav}>
@@ -63,13 +81,7 @@ const Notifications = ({ showNotifications, handleHideNotifications, scrollPosit
         <Spinner />
       ) : (
         <section className={notificationStyles.container}>
-          {notifications && notifications.getAllNotificationsForUser.map((notif) => (
-            <div key={notif.id} className={notificationStyles.notification}>
-              <img className={notificationStyles.userImg} src={notif.fromUser.avatar} alt={notif.fromUser.avatar} />
-              <p><strong>{notif.fromUser.userName}</strong> {notif.notificationType}. <span>{moment(notif.createdAt).fromNow()}</span></p>
-              <img className={notificationStyles.postImg} src={notif.onPost.postContent} alt={notif.onPost.postContent} />
-            </div>
-          ))}
+          {notifs}
         </section>
       )}
 

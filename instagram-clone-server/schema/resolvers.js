@@ -268,10 +268,18 @@ export const resolvers = {
     followUser: async (_, args) => {
       const { followedByUserId, followingUserId } = args;
 
-      return DB.models.follower.create({
+      const newFollower = await DB.models.follower.create({
         followedByUserId,
         followingUserId
+      });
+
+      await DB.models.notification.create({
+        notificationType: 'started following you',
+        fromUserId: followedByUserId,
+        toUserId: followingUserId
       })
+
+      return newFollower;
     },
     unfollowUser: async (_, args) => {
       const { userId, userIdToUnfollow } = args;
@@ -316,11 +324,22 @@ export const resolvers = {
     createCommentForPost: async (_, args) => {
       const newComment = args.input;
 
-      return DB.models.commentOnPost.create({
+      const comment = await DB.models.commentOnPost.create({
         commentContent: newComment.commentContent,
         commentOnPostId: newComment.commentOnPostId,
         commentedByUserId: newComment.commentedByUserId
       })
+
+      await DB.models.notification.create({
+        commentContent: newComment.commentContent,
+        onPostId: newComment.commentOnPostId,
+        fromUserId: newComment.commentedByUserId,
+        toUserId: newComment.commentToUserId,
+        notificationType: 'commented:'
+      })
+
+
+      return comment;
     },
     createLikeForPost: async (_, args) => {
       const { likeOnPostId, likedByUserId, likeForUserId } = args;

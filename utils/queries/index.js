@@ -323,14 +323,46 @@ export const GET_NOTIFICATIONS_FOR_USER = gql`
       notificationType
       createdAt
       isChecked
+      commentContent
       onPost {
         id
         postContent
       }
       fromUser {
         id
+        name
         userName
+        bio
         avatar
+          posts  {
+          id
+          postContent
+          postDescription
+          createdAt
+          userId
+          comments {
+            id
+            commentContent
+            createdAt
+            commentedBy {
+              id
+              userName
+              name
+              avatar
+              bio
+            }
+          }
+          likes {
+            id
+            likedBy {
+              id
+              userName
+              name
+              avatar
+              bio
+            }
+          }
+        }
       }
     }
   }

@@ -6,7 +6,7 @@ import { FiLogOut } from 'react-icons/fi';
 import Router from 'next/router';
 import { eraseCookie } from '../utils/functions';
 import FileUpload from './file-upload/FileUpload';
-import Notifications from './Notifications';
+import Notifications from './notifications/Notifications';
 import { useQuery } from '@apollo/client';
 import { GET_NOTIFICATIONS_FOR_USER, GET_NOTIFS_INT } from '../utils/queries';
 
