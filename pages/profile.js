@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import NavFooter from '../components/NavFooter';
 import ProfilePageNavHeader from '../components/ProfilePageNavHeader';
 import { withRouter } from 'next/router'
@@ -13,6 +13,7 @@ import { getCurrentUser } from '../hooks';
 import { GET_ALL_USER_FOLLOWERS, GET_ALL_USER_FOLLOWING } from '../utils/queries';
 import { useQuery } from '@apollo/client';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 const Profile = () => {
   const [state, setState] = getCurrentUser();
@@ -25,10 +26,14 @@ const Profile = () => {
     variables: { userId: state?.currentUser?.id }
   });
 
-  const [showPosts, setShowPosts] = useState(false)
+  const router = useRouter();
+
+  const [props] = useState(router.query.props && router.query.props !== '' ? JSON.parse(router.query.props) : null);
+
+  const [showPosts, setShowPosts] = useState(props ? props.showPosts : false)
   const [showFollowers, setShowFollowers] = useState(false)
   const [followersEntryPoint, setFollowersEntryPoint] = useState(null)
-  const [indexOfClickedPost, setIndexOfClickedPost] = useState(null)
+  const [indexOfClickedPost, setIndexOfClickedPost] = useState(props ? props.idxOfPost : null)
   const [showEditProfile, setShowEditProfile] = useState(false)
 
   const showPostDetails = (indexOfPost) => {

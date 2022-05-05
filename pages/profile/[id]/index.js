@@ -87,11 +87,12 @@ const UserProfileById = () => {
     }
   }, [followersData])
 
-
   const [showPosts, setShowPosts] = useState(false)
   const [showFollowers, setShowFollowers] = useState(false)
   const [followersEntryPoint, setFollowersEntryPoint] = useState(null)
   const [indexOfClickedPost, setIndexOfClickedPost] = useState(null)
+
+
 
   const handleClosePosts = () => {
     setShowPosts(false)

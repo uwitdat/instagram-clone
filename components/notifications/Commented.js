@@ -20,6 +20,22 @@ const Commented = ({ notif }) => {
     }
   }
 
+  const handleViewPost = () => {
+    const idxOfPost = notif.fromUser.posts.findIndex(post => post.id === notif.onPost.id);
+
+    const props = {
+      showPosts: true,
+      idxOfPost: idxOfPost
+    }
+
+    router.push({
+      pathname: '/profile',
+      query: {
+        props: JSON.stringify(props)
+      }
+    })
+  }
+
   return (
     <div key={notif.id} className={notificationStyles.notification}>
       <img onClick={handleViewProfile} className={notificationStyles.userImg} src={notif.fromUser.avatar} alt={notif.fromUser.avatar} />
@@ -30,7 +46,7 @@ const Commented = ({ notif }) => {
         {' '}
         <span>{moment(notif.createdAt).fromNow()}</span>
       </p>
-      <img className={notificationStyles.postImg} src={notif.onPost.postContent} alt={notif.onPost.postContent} />
+      <img onClick={handleViewPost} className={notificationStyles.postImg} src={notif.onPost.postContent} alt={notif.onPost.postContent} />
     </div>
   )
 }

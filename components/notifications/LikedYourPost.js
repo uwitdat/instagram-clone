@@ -15,9 +15,27 @@ const LikedYourPost = ({ notif }) => {
     } else {
       router.push({
         pathname: `/profile/${notif.fromUser.id}`,
-        query: { postFromUser: JSON.stringify(notif.fromUser) }
+        query: {
+          postFromUser: JSON.stringify(notif.fromUser)
+        }
       })
     }
+  }
+
+  const handleViewPost = () => {
+    const idxOfPost = notif.fromUser.posts.findIndex(post => post.id === notif.onPost.id);
+
+    const props = {
+      showPosts: true,
+      idxOfPost: idxOfPost
+    }
+
+    router.push({
+      pathname: '/profile',
+      query: {
+        props: JSON.stringify(props)
+      }
+    })
   }
 
   return (
@@ -30,7 +48,7 @@ const LikedYourPost = ({ notif }) => {
         {' '}
         <span>{moment(notif.createdAt).fromNow()}</span>
       </p>
-      <img className={notificationStyles.postImg} src={notif.onPost.postContent} alt={notif.onPost.postContent} />
+      <img onClick={handleViewPost} className={notificationStyles.postImg} src={notif.onPost.postContent} alt={notif.onPost.postContent} />
     </div>
   )
 }
