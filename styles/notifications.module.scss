@@ -38,6 +38,7 @@
       font-weight: 400;
       font-size: .8rem;
       line-height: 1.1;
+      margin-right: 2rem;
   
       strong {
         font-weight: 700;
@@ -47,7 +48,6 @@
       span {
         color: $color-grey;
         font-size: .75rem;
-        margin-right: 1rem;
       }
     }
   
@@ -74,8 +74,8 @@
       color: $color-white;
       font-weight: 700;
       font-size: .8rem;
-      padding: .3rem 0;
-      width: 6rem;
+      padding: .3rem 1rem;
+
       margin-left: auto;
       cursor: pointer;
       border-radius: 3px;
