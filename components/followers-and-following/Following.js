@@ -4,6 +4,7 @@ import { AiOutlineEllipsis } from 'react-icons/ai';
 import { useMutation } from '@apollo/client';
 import { UNFOLLOW_USER } from '../../utils/mutations';
 import { useAppContext } from '../../context';
+import { checkProfImage } from '../../utils/functions';
 
 const Following = ({ following, switchFollowing, handleViewProfile, refetchFollowing }) => {
   const [state] = useAppContext();
@@ -42,13 +43,10 @@ const Following = ({ following, switchFollowing, handleViewProfile, refetchFollo
                 <p>{following.name}</p>
               </div>
             </div>
-            {following.id === state.currentUser.id || following.id !== state.currentUser.id ? null : (
-              <div>
-                <button onClick={() => handleUnfollowUser(following.id)}>Following</button>
-                <AiOutlineEllipsis />
-              </div>
-            )}
-
+            <div>
+              <button onClick={() => handleUnfollowUser(following.id)}>Following</button>
+              <AiOutlineEllipsis />
+            </div>
           </div>
         ))}
       </section>

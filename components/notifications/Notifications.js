@@ -54,6 +54,12 @@ const Notifications = ({ showNotifications, handleHideNotifications, scrollPosit
     }
   }, [notifications])
 
+  useEffect(() => {
+    if (ids) {
+      flipValues();
+    }
+  }, [ids])
+
 
   const notifs = useMemo(() => {
     if (notifications && notifications.getAllNotificationsForUser) {

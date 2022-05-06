@@ -8,7 +8,7 @@ import { eraseCookie } from '../utils/functions';
 import FileUpload from './file-upload/FileUpload';
 import Notifications from './notifications/Notifications';
 import { useQuery } from '@apollo/client';
-import { GET_NOTIFICATIONS_FOR_USER, GET_NOTIFS_INT } from '../utils/queries';
+import { GET_NOTIFS_INT } from '../utils/queries';
 
 
 const NavHeader = ({ refetchAllPosts, userId }) => {
@@ -39,8 +39,9 @@ const NavHeader = ({ refetchAllPosts, userId }) => {
 
   const { data: notificationsNotChecked, refetch } = useQuery(GET_NOTIFS_INT,
     {
-      variables: { userId }
+      variables: { userId },
     })
+
 
   return (
     <React.Fragment>

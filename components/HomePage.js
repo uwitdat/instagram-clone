@@ -7,6 +7,7 @@ import NavHeader from './NavHeader';
 import NavFooter from './NavFooter';
 import { Waypoint } from 'react-waypoint';
 import { useAppContext } from '../context';
+import { Spinner } from './Spinner';
 
 
 const HomePage = () => {
@@ -40,24 +41,26 @@ const HomePage = () => {
 
 
   return (
-
     <div>
       <NavHeader userId={state && state.currentUser ? state.currentUser.id : null} />
-      <div className={postStyles.homeContainer}>
-        <section className={postStyles.posts}>
-          {postsData && postsData.getAllPosts.map((post, i) => (
-            <React.Fragment key={post.id}>
-              <Post post={post} postFromUser={post.postedBy} />
+      {postsData && postsData.getAllPosts ? (
 
-              {i === postsData.getAllPosts.length - 1 &&
-                <Waypoint onEnter={fetchMorePosts} />
-              }
-            </React.Fragment>
-          ))}
-          {networkStatus === 3 && <h1>loading more...</h1>}
-        </section>
+        <div className={postStyles.homeContainer}>
+          <section className={postStyles.posts}>
+            {postsData && postsData.getAllPosts.map((post, i) => (
+              <React.Fragment key={post.id}>
+                <Post post={post} postFromUser={post.postedBy} />
 
-      </div>
+                {i === postsData.getAllPosts.length - 1 &&
+                  <Waypoint onEnter={fetchMorePosts} />
+                }
+              </React.Fragment>
+            ))}
+            {networkStatus === 3 && <h1>loading more...</h1>}
+          </section>
+        </div>
+
+      ) : <Spinner />}
       <NavFooter />
     </div>
   )
