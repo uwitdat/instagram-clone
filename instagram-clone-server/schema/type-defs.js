@@ -84,6 +84,7 @@ export const typeDefs = gql`
       getCommentsForPost(id: ID!): [Comment!]!
       getLikesForPost(id: ID!): [Like!]!
       getAllPosts(count: Int, first: Int!): [Post!]!
+      getAllPostsNoOffset: [Post!]!
       getAllUserFollowers(id: ID!): [User!]!
       getAllUserFollowing(id: ID!): [User!]!
       getAllNotificationsForUser(id: ID!): [Notification!]!
@@ -145,6 +146,8 @@ export const typeDefs = gql`
     uploadFile(file: Upload!): File!
     flipIsCheckedValues(input: NotificationIds): String!
     searchUsers(searchVal: String!): [User!]!
+    createUsers: String!
+    createPosts: String!
   }
 `;
 

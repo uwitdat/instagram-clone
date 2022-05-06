@@ -367,3 +367,56 @@ export const GET_NOTIFICATIONS_FOR_USER = gql`
     }
   }
 `
+
+export const GET_POSTS_NO_OFFSET = gql`
+  query GetAllPostsNoOffset{
+  getAllPostsNoOffset {
+    id
+    postContent
+    postDescription
+    createdAt
+    postedBy {
+       id
+        userName
+        name
+        avatar
+        bio
+    }
+    comments {
+      id
+      commentContent
+      createdAt
+      commentedBy {
+        id
+        userName
+        name
+        avatar
+        bio
+      }
+      replies {
+        id
+        replyContent
+        replyToCommentId
+        createdAt
+        repliedBy {
+          id
+          avatar
+          userName
+          name
+          bio
+        }
+      }
+    }
+    likes {
+      id
+      likedBy {
+        id
+        userName
+        name
+        avatar
+        bio
+      }
+    }
+  }
+}
+`

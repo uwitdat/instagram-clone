@@ -30,7 +30,4 @@ setModelRelationships(DB);
 
 await DB.sync({ logging: false });
 
-
-
-
 export default DB;

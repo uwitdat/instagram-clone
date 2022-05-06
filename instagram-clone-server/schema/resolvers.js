@@ -8,7 +8,7 @@ import path, { dirname } from 'path';
 import fs from 'fs';
 import { v4 } from "uuid";
 import Sequelize from 'sequelize';
-
+import { createDummyUsers, createDummyPosts } from "./seeds.js";
 
 
 const Op = Sequelize.Op;
@@ -81,6 +81,13 @@ export const resolvers = {
       return DB.models.post.findAll({
 
         offset: count, limit: first,
+        order: [
+          ['createdAt', 'DESC'],
+        ],
+      })
+    },
+    getAllPostsNoOffset: () => {
+      return DB.models.post.findAll({
         order: [
           ['createdAt', 'DESC'],
         ],
@@ -236,10 +243,34 @@ export const resolvers = {
     }
   },
   Mutation: {
+    createUsers: async () => {
+      const users = createDummyUsers();
+
+      users.forEach((user) => {
+        DB.models.user.create({
+          name: user.name,
+          userName: user.userName,
+          bio: user.bio,
+          password: user.password,
+          avatar: user.avatar
+        })
+      })
+      return 'successfully created users data'
+    },
+    createPosts: async () => {
+      const posts = createDummyPosts();
+
+      posts.forEach((post) => {
+        DB.models.post.create({
+          postContent: post.postContent,
+          postDescription: post.postDescription,
+          userId: post.userId
+        })
+      })
+      return 'successfully created posts data'
+    },
     searchUsers: async (_, args) => {
       const { searchVal } = args;
-
-      console.log('val', searchVal)
 
       return DB.models.user.findAll({
         where: {
