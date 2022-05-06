@@ -393,28 +393,20 @@ export const resolvers = {
     createLikeForPost: async (_, args) => {
       const { likeOnPostId, likedByUserId, likeForUserId } = args;
 
-      const isLiked = await DB.models.likeOnPost.findOne({ // check if it already exists
-        where: { likeOnPostId, likedByUserId }
+
+      const newLike = await DB.models.likeOnPost.create({
+        likeOnPostId,
+        likedByUserId
       })
 
-      if (isLiked) {
-        return;
-      } else {
+      await DB.models.notification.create({
+        onPostId: likeOnPostId,
+        fromUserId: likedByUserId,
+        notificationType: 'liked your post',
+        toUserId: likeForUserId
+      })
 
-        const newLike = await DB.models.likeOnPost.create({
-          likeOnPostId,
-          likedByUserId
-        })
-
-        await DB.models.notification.create({
-          onPostId: likeOnPostId,
-          fromUserId: likedByUserId,
-          notificationType: 'liked your post',
-          toUserId: likeForUserId
-        })
-
-        return newLike;
-      }
+      return newLike;
 
     },
     replyToComment: (_, args) => {
