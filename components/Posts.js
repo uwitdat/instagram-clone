@@ -6,6 +6,7 @@ import NavFooter from '../components/NavFooter';
 const Posts = ({ user, currentUser, setCurrentUser, header, indexOfClickedPost, noLoop, handleClosePosts }) => {
 
   const postsRef = useRef(null)
+  const [userPosts, setUserPosts] = useState(user.posts)
 
   const scrollToTopOfPost = (postsRef) => {
     const yOffset = -60;
@@ -26,8 +27,18 @@ const Posts = ({ user, currentUser, setCurrentUser, header, indexOfClickedPost, 
       {header}
       <div className={postStyles.homeContainer}>
         <section ref={postsRef} className={postStyles.posts}>
-          {user && user.posts.map((post, idx) => (
-            <Post handleClosePosts={handleClosePosts} user={user} currentUser={currentUser} setCurrentUser={setCurrentUser} postFromUser={user} key={idx} post={post} />
+          {userPosts && userPosts.map((post, idx) => (
+            <Post
+              handleClosePosts={handleClosePosts}
+              user={user}
+              currentUser={currentUser}
+              setCurrentUser={setCurrentUser}
+              postFromUser={user}
+              key={idx}
+              post={post}
+              setPosts={setUserPosts}
+              posts={userPosts}
+            />
           ))}
         </section>
       </div>

@@ -98,9 +98,50 @@ query PostsByUser($userId: ID!){
     postContent
     postDescription
     createdAt
-    userId
-  }
-}`
+    postedBy {
+        avatar
+        bio
+        userName
+        name
+      }
+    likes {
+        id,
+        likedByUserId,
+        likedBy {
+          id
+          avatar
+          bio
+          userName
+          name
+        }
+      }
+    comments{
+        commentContent
+        id
+        createdAt
+        commentedBy {
+          id
+          userName
+          name
+          avatar
+          bio
+        }
+        replies {
+          id
+          replyContent
+          replyToCommentId
+          createdAt
+          repliedBy {
+            id
+            avatar
+            userName
+            name
+            bio
+          }
+        }
+      }
+    }
+  }`
 
 export const GET_USER_BY_ID = gql`
   query User($userId: ID!){

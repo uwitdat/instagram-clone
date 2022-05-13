@@ -2,15 +2,16 @@ import React, { useState } from 'react';
 import commentStyles from '../../styles/comments.module.scss';
 import Overlay from '../Overlay'
 import { useAppContext } from '../../context/index';
-import { useMutation } from '@apollo/client';
+import { useMutation, useLazyQuery } from '@apollo/client';
 import { CREATE_COMMENT_FOR_POST, CREATE_REPLY_TO_COMMENT } from '../../utils/mutations';
+import { GET_POSTS_FROM_USER } from '../../utils/queries';
 import { useRouter } from 'next/router';
 import RepliesToComment from './RepliesToComment';
 import Comment from './Comment';
 import Input from './Input';
 import CommentDetails from './CommentDetails';
 
-const Comments = ({ currentUser, showComments, setShowComments, currentTopPosition, post, setPost, postFromUser, resetUser }) => {
+const Comments = ({ currentUser, showComments, setShowComments, currentTopPosition, post, setPosts, postFromUser, resetUser }) => {
 
   const [newComment, setNewComment] = useState('');
   const [cursorIndex, setCursorIndex] = useState('');
@@ -61,6 +62,8 @@ const Comments = ({ currentUser, showComments, setShowComments, currentTopPositi
     }
   }
 
+  const [postsByUser] = useLazyQuery(GET_POSTS_FROM_USER)
+
   const handleSubmitComment = async () => {
     if (newComment === '') return;
 
@@ -77,11 +80,20 @@ const Comments = ({ currentUser, showComments, setShowComments, currentTopPositi
       })
       if (data) {
         // make fetch for comments by post id
-        console.log(data)
-        setPost({
-          ...post,
-          comments: [data.createCommentForPost, ...post.comments]
+        // console.log(data)
+        // setPost({
+        //   ...post,
+        //   comments: [data.createCommentForPost, ...post.comments]
+        // })
+        const { data } = await postsByUser({
+          variables: {
+            userId: postFromUser.id
+          }
         })
+        if (data && data.postsByUser) {
+          setPosts(data.postsByUser);
+        }
+
         // refetchPosts();
         if (resetUser !== undefined) {
           resetUser();
@@ -110,19 +122,28 @@ const Comments = ({ currentUser, showComments, setShowComments, currentTopPositi
       })
       if (data) {
 
-        const findIdx = (comment) => comment.id === reply.commentId;
+        const { data } = await postsByUser({
+          variables: {
+            userId: postFromUser.id
+          }
+        })
+        if (data && data.postsByUser) {
+          setPosts(data.postsByUser);
+        }
 
-        const idx = post.comments.findIndex(findIdx);
+        // const findIdx = (comment) => comment.id === reply.commentId;
 
-        setPost({
-          ...post,
-          comments: Object.assign([...post.comments], {
-            [idx]: {
-              ...post.comments[idx],
-              replies: [data.replyToComment, ...post.comments[idx].replies]
-            }
-          })
-        });
+        // const idx = post.comments.findIndex(findIdx);
+
+        // setPost({
+        //   ...post,
+        //   comments: Object.assign([...post.comments], {
+        //     [idx]: {
+        //       ...post.comments[idx],
+        //       replies: [data.replyToComment, ...post.comments[idx].replies]
+        //     }
+        //   })
+        // });
         if (resetUser !== undefined) {
           resetUser();
         }

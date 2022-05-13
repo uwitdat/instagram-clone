@@ -8,14 +8,16 @@ import postStyles from '../styles/home.module.scss';
 import { AiOutlineEllipsis } from 'react-icons/ai';
 import PostOptionsMenu from './PostOptionsMenu';
 import { REMOVE_LIKE_FROM_POST, CREATE_LIKE_FOR_POST } from '../utils/mutations';
-import { useMutation } from '@apollo/client';
+import { GET_POSTS_FROM_USER } from '../utils/queries';
+import { useMutation, useLazyQuery } from '@apollo/client';
 import Comments from '../components/comments/Comments';
 import Likes from './Likes';
 import Image from 'next/image';
 
+
 const redColor = 'rgb(255, 93, 93)';
 
-const Post = ({ post, postFromUser, handleClosePosts, currentUser, setCurrentUser, resetUser }) => {
+const Post = ({ post, postFromUser, handleClosePosts, currentUser, setCurrentUser, resetUser, setPosts }) => {
   const [showComments, setShowComments] = useState(false)
   const [showLikes, setShowLikes] = useState(false)
   const [scrollPosition, setScrollPosition] = useState(null);
@@ -25,6 +27,9 @@ const Post = ({ post, postFromUser, handleClosePosts, currentUser, setCurrentUse
   const [userPost, setUserPost] = useState(post);
 
   const [liked, setLiked] = useState(null);
+
+
+  const [postsByUser] = useLazyQuery(GET_POSTS_FROM_USER)
 
   const [removeLike] = useMutation(REMOVE_LIKE_FROM_POST);
   const [createLikeForPost] = useMutation(CREATE_LIKE_FOR_POST);
@@ -197,35 +202,36 @@ const Post = ({ post, postFromUser, handleClosePosts, currentUser, setCurrentUse
       </div>
 
       <div className={postStyles.details}>
-        {userPost && userPost.likes.length > 0 ? (
-          <p>Liked by <strong>{userPost.likes[0].likedBy.userName}</strong> and <strong onClick={handleViewLikes} style={{ cursor: 'pointer' }}>others</strong></p>
+        {post && post.likes.length > 0 ? (
+          <p>Liked by <strong>{post.likes[0].likedBy.userName}</strong> and <strong onClick={handleViewLikes} style={{ cursor: 'pointer' }}>others</strong></p>
         ) : null}
 
-        <p><strong>{postFromUser.userName}</strong> {userPost.postDescription}</p>
+        <p><strong>{postFromUser.userName}</strong> {post.postDescription}</p>
 
-        {userPost ? (
-          userPost.comments.length === 0 ? <p style={{ marginTop: '-.1rem' }}></p> : (
-            userPost.comments.length > 1 ? (
-              <p className={postStyles.viewComments} onClick={handleViewComments}>View all {userPost.comments.length} comments</p>
+        {post ? (
+          post.comments.length === 0 ? <p style={{ marginTop: '-.1rem' }}></p> : (
+            post.comments.length > 1 ? (
+              <p className={postStyles.viewComments} onClick={handleViewComments}>View all {post.comments.length} comments</p>
             ) : (
-              <p className={postStyles.viewComments} onClick={handleViewComments}>View {userPost.comments.length} comment</p>
+              <p className={postStyles.viewComments} onClick={handleViewComments}>View {post.comments.length} comment</p>
             )
           )
         ) : null}
-        <p style={{ fontSize: '.7rem' }}>{moment(userPost.createdAt).fromNow()}</p>
+        <p style={{ fontSize: '.7rem' }}>{moment(post.createdAt).fromNow()}</p>
       </div>
 
 
-      {userPost ? (
+      {post ? (
         <Comments
           showComments={showComments}
           setShowComments={setShowComments}
           currentTopPosition={scrollPosition}
-          post={userPost}
+          post={post}
           setPost={setUserPost}
           postFromUser={postFromUser}
           currentUser={currentUser}
           resetUser={resetUser}
+          setPosts={setPosts}
         />
       ) : null}
 
