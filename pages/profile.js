@@ -143,7 +143,7 @@ const Profile = () => {
 
       <div className={profilePageStyles.postsContainer}>
         {showPosts ? (
-          <Posts handleClosePosts={handleClosePosts} noLoop={false} user={state} setCurrentUser={setState} header={<PostsNav />} indexOfClickedPost={indexOfClickedPost} />
+          <Posts handleClosePosts={handleClosePosts} noLoop={false} currentUser={state} user={state} setCurrentUser={setState} header={<PostsNav />} indexOfClickedPost={indexOfClickedPost} />
         ) : null}
 
       </div>

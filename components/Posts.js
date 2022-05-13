@@ -19,15 +19,14 @@ const Posts = ({ user, currentUser, setCurrentUser, header, indexOfClickedPost, 
     }
   }, [postsRef])
 
-  console.log(user)
-  const [postFromUser, setPostFromUser] = useState(user)
+
 
   return (
     <div>
       {header}
       <div className={postStyles.homeContainer}>
         <section ref={postsRef} className={postStyles.posts}>
-          {postFromUser && postFromUser.posts.map((post, idx) => (
+          {user && user.posts.map((post, idx) => (
             <Post handleClosePosts={handleClosePosts} user={user} currentUser={currentUser} setCurrentUser={setCurrentUser} postFromUser={user} key={idx} post={post} />
           ))}
         </section>
