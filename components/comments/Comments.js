@@ -10,9 +10,8 @@ import Comment from './Comment';
 import Input from './Input';
 import CommentDetails from './CommentDetails';
 
-const Comments = ({ showComments, setShowComments, currentTopPosition, comments, post, postFromUser, refetchComments }) => {
+const Comments = ({ currentUser, showComments, setShowComments, currentTopPosition, post, setPost, postFromUser, resetUser }) => {
 
-  const [state] = useAppContext();
   const [newComment, setNewComment] = useState('');
   const [cursorIndex, setCursorIndex] = useState('');
   const [cursorIndexReply, setCursorIndexReply] = useState('');
@@ -24,6 +23,7 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, comments,
     replyContent: '',
     commentId: null
   });
+
 
   const [createCommentForPost] = useMutation(CREATE_COMMENT_FOR_POST);
   const [replyToComment] = useMutation(CREATE_REPLY_TO_COMMENT);
@@ -51,7 +51,7 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, comments,
 
 
   const handleGoToProfile = (comment) => {
-    if (comment.commentedBy.id === state.currentUser.id) {
+    if (comment.commentedBy.id === currentUser.id) {
       router.push('/profile');
     } else {
       router.push({
@@ -70,13 +70,23 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, comments,
           createCommentInput: {
             commentContent: newComment,
             commentOnPostId: Number(post.id),
-            commentedByUserId: Number(state.currentUser.id),
+            commentedByUserId: Number(currentUser.id),
             commentToUserId: Number(postFromUser.id)
           }
         }
       })
       if (data) {
-        refetchComments();
+        // make fetch for comments by post id
+        console.log(data)
+        setPost({
+          ...post,
+          comments: [data.createCommentForPost, ...post.comments]
+        })
+        // refetchPosts();
+        if (resetUser !== undefined) {
+          resetUser();
+        }
+
         resetValues();
       }
     } catch (err) {
@@ -94,12 +104,29 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, comments,
           replyToCommentInput: {
             replyContent: reply.replyContent,
             replyToCommentId: Number(reply.commentId),
-            replyFromUserId: Number(state.currentUser.id)
+            replyFromUserId: Number(currentUser.id)
           }
         }
       })
       if (data) {
-        refetchComments();
+
+        const findIdx = (comment) => comment.id === reply.commentId;
+
+        const idx = post.comments.findIndex(findIdx);
+
+        setPost({
+          ...post,
+          comments: Object.assign([...post.comments], {
+            [idx]: {
+              ...post.comments[idx],
+              replies: [data.replyToComment, ...post.comments[idx].replies]
+            }
+          })
+        });
+        if (resetUser !== undefined) {
+          resetUser();
+        }
+
         resetValues();
       }
     } catch (err) {
@@ -123,7 +150,7 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, comments,
       <CommentDetails post={post} postFromUser={postFromUser} handleCloseComments={handleCloseComments} />
 
       <div className={commentStyles.commentContent}>
-        {comments && comments.map((comment) => (
+        {post.comments && post.comments.map((comment) => (
           <React.Fragment key={comment.id}>
             <Comment comment={comment} handleGoToProfile={handleGoToProfile} handleInitReply={handleInitReply} />
 
@@ -144,7 +171,7 @@ const Comments = ({ showComments, setShowComments, currentTopPosition, comments,
         setShowEmojis={setShowEmojis}
         showEmojisForReply={showEmojisForReply}
         setShowEmojisForReply={setShowEmojisForReply}
-        state={state}
+        currentUser={currentUser}
         handleSubmitComment={handleSubmitComment}
         submitReply={submitReply}
         cursorIndex={cursorIndex}

@@ -70,9 +70,27 @@ export const CREATE_COMMENT_FOR_POST = gql`
         createCommentForPost(input: $createCommentInput){
             id
             commentContent
-            commentedByUserId
-            commentOnPostId
             createdAt
+            commentedBy {
+                id
+                userName
+                name
+                bio
+                avatar
+            }
+            replies {
+                id
+                replyContent
+                replyToCommentId
+                createdAt
+                repliedBy {
+                    id
+                    avatar
+                    userName
+                    name
+                    bio
+                }
+            }
         }
     }
 `
@@ -82,8 +100,14 @@ export const CREATE_LIKE_FOR_POST = gql`
     mutation CreateLikeForPost($likeOnPostId: Int!, $likedByUserId: Int!, $likeForUserId: Int!){      
         createLikeForPost(likeOnPostId: $likeOnPostId, likedByUserId: $likedByUserId, likeForUserId: $likeForUserId) {
             id,
-            likedByUserId,
-            likeOnPostId
+            likedByUserId
+            likedBy {
+                avatar
+                id
+                bio
+                userName
+                name
+            }
         }
     }
 `
@@ -117,6 +141,13 @@ export const CREATE_REPLY_TO_COMMENT = gql`
             replyContent
             replyToCommentId
             replyFromUserId
+            repliedBy {
+              id
+              avatar
+              userName
+              name
+              bio
+            }
         }
     }
 `

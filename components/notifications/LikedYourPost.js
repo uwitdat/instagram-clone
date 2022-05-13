@@ -2,15 +2,14 @@ import React from 'react';
 import notificationStyles from '../../styles/notifications.module.scss';
 import moment from 'moment';
 import { useRouter } from 'next/router';
-import { useAppContext } from '../../context';
 import { handleRouteToProfile } from './utils';
 
-const LikedYourPost = ({ notif }) => {
-  const [state] = useAppContext();
+const LikedYourPost = ({ notif, currentUser }) => {
+
   const router = useRouter();
 
   const handleViewProfile = () => {
-    if (handleRouteToProfile(notif, state)) {
+    if (handleRouteToProfile(notif, currentUser)) {
       router.push('/profile')
     } else {
       router.push({
@@ -23,7 +22,7 @@ const LikedYourPost = ({ notif }) => {
   }
 
   const handleViewPost = () => {
-    const idxOfPost = notif.fromUser.posts.findIndex(post => post.id === notif.onPost.id);
+    const idxOfPost = currentUser.posts.findIndex(post => post.id === notif.onPost.id);
 
     const props = {
       showPosts: true,
@@ -33,6 +32,7 @@ const LikedYourPost = ({ notif }) => {
     router.push({
       pathname: '/profile',
       query: {
+        currentUser: JSON.stringify(currentUser),
         props: JSON.stringify(props)
       }
     })

@@ -1,9 +1,9 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import postStyles from '../styles/home.module.scss';
 import Post from '../components/Post';
 import NavFooter from '../components/NavFooter';
 
-const Posts = ({ user, header, indexOfClickedPost, noLoop, handleClosePosts }) => {
+const Posts = ({ user, currentUser, setCurrentUser, header, indexOfClickedPost, noLoop, handleClosePosts }) => {
 
   const postsRef = useRef(null)
 
@@ -19,17 +19,20 @@ const Posts = ({ user, header, indexOfClickedPost, noLoop, handleClosePosts }) =
     }
   }, [postsRef])
 
+  console.log(user)
+  const [postFromUser, setPostFromUser] = useState(user)
+
   return (
     <div>
       {header}
       <div className={postStyles.homeContainer}>
         <section ref={postsRef} className={postStyles.posts}>
-          {user && user.posts.map((post, idx) => (
-            <Post handleClosePosts={handleClosePosts} postFromUser={user} key={idx} post={post} />
+          {postFromUser && postFromUser.posts.map((post, idx) => (
+            <Post handleClosePosts={handleClosePosts} user={user} currentUser={currentUser} setCurrentUser={setCurrentUser} postFromUser={user} key={idx} post={post} />
           ))}
         </section>
       </div>
-      {noLoop ? null : <NavFooter />}
+      {noLoop ? null : <NavFooter currentUser={currentUser} setCurrentUser={setCurrentUser} />}
 
     </div>
   )

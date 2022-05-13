@@ -11,7 +11,7 @@ export const setModelRelationships = (db) => {
     post.belongsTo(user);
     post.hasMany(commentOnPost, { foreignKey: 'commentOnPostId' }, { onDelete: 'cascade' });
     post.hasMany(likeOnPost, { foreignKey: 'likeOnPostId' }, { onDelete: 'cascade' });
-    post.hasMany(notification, { foreignKey: 'onPostId' }, { onDelete: 'cascade' });
+    post.hasMany(notification, { foreignKey: 'onPostId', onDelete: 'CASCADE' });
 
     commentOnPost.belongsTo(post, { foreignKey: 'commentOnPostId' });
     commentOnPost.belongsTo(user, { foreignKey: 'commentedByUserId' });
@@ -28,6 +28,6 @@ export const setModelRelationships = (db) => {
 
     notification.belongsTo(user, { foreignKey: 'fromUserId' });
     notification.belongsTo(user, { foreignKey: 'toUserId' });
-    notification.belongsTo(post, { foreignKey: 'onPostId' });
+    notification.belongsTo(post, { foreignKey: 'onPostId', onDelete: 'CASCADE' });
 
 };

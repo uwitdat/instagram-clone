@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import notificationStyles from '../../styles/notifications.module.scss';
 import moment from 'moment';
-import { useAppContext } from '../../context/index';
 import { useRouter } from 'next/router';
 import { handleRouteToProfile } from './utils';
 import { FOLLOW_USER, UNFOLLOW_USER } from '../../utils/mutations';
 import { useMutation } from '@apollo/client';
 
 
-const StartedFollowingYou = ({ notif }) => {
+const StartedFollowingYou = ({ notif, currentUser }) => {
   const [isFollowing, setIsFollowing] = useState(null);
-  const [state] = useAppContext();
   const router = useRouter();
 
   const [followUser] = useMutation(FOLLOW_USER);
@@ -22,7 +20,7 @@ const StartedFollowingYou = ({ notif }) => {
       try {
         const { data } = await unfollowUser({
           variables: {
-            userId: Number(state.currentUser.id),
+            userId: Number(currentUser.id),
             userIdToUnfollow: Number(notif.fromUser.id)
           }
         });
@@ -38,7 +36,7 @@ const StartedFollowingYou = ({ notif }) => {
       try {
         const { data } = await followUser({
           variables: {
-            followedByUserId: Number(state.currentUser.id),
+            followedByUserId: Number(currentUser.id),
             followingUserId: Number(notif.fromUser.id)
           }
         });
@@ -54,8 +52,14 @@ const StartedFollowingYou = ({ notif }) => {
 
 
   const handleViewProfile = () => {
-    if (handleRouteToProfile(notif, state)) {
-      router.push('/profile')
+    if (handleRouteToProfile(notif, currentUser)) {
+      router.push({
+        pathname: '/profile',
+        query: {
+          currentUser: JSON.stringify(currentUser),
+          props: JSON.stringify(props)
+        }
+      })
     } else {
       router.push({
         pathname: `/profile/${notif.fromUser.id}`,
@@ -67,7 +71,7 @@ const StartedFollowingYou = ({ notif }) => {
 
 
   useEffect(() => {
-    const followingIds = state.currentUser.following.map((follow) => follow.id)
+    const followingIds = currentUser.following.map((follow) => follow.id)
 
     if (followingIds.includes(notif.fromUser.id)) {
       setIsFollowing(true)

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Overlay from './Overlay';
 import editProfileStyles from '../styles/edit-profile.module.scss';
-import { useMutation } from '@apollo/client';
+import { defaultDataIdFromObject, useMutation } from '@apollo/client';
 import { EDIT_USER_MUTATION, UPLOAD_FILE } from '../utils/mutations';
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -73,9 +73,13 @@ const EditProfile = ({ showEditProfile, setShowEditProfile, currentUser, setCurr
         variables: { updateUserInput: { id: Number(currentUser.id), name, userName, avatar: downloadURL ? downloadURL : avatar, bio } }
       })
       if (data.updateUser) {
+
         setCurrentUser({
           ...currentUser,
-          currentUser: data.updateUser
+          name: data.updateUser.name,
+          userName: data.updateUser.userName,
+          bio: data.updateUser.bio,
+          avatar: data.updateUser.avatar
         })
         setNewUserAvatar(null);
         setPreview(null);

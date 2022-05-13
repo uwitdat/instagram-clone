@@ -10,67 +10,45 @@ import LikedYourPost from './LikedYourPost';
 import Commented from './Commented';
 import StartedFollowingYou from './StartedFollowingYou';
 
-const Notifications = ({ showNotifications, handleHideNotifications, scrollPosition, userId, refetchInt }) => {
-
+const Notifications = ({ setIds, ids, refetchAllNotis, notifications, currentUser, showNotifications, handleHideNotifications, scrollPosition, isLoading, refetchUncheckedNotifs }) => {
 
   const handleCloseNotifs = async () => {
-    const res = await flipValues()
-    if (res) {
-      refetchInt()
-      refetchNotifs()
-      setTimeout(() => { handleHideNotifications() }, 200)
-    }
+    setTimeout(() => { handleHideNotifications() }, 200)
   }
 
   const [flipIsCheckedValues] = useMutation(FLIP_IS_CHECKED)
-  const [ids, setIds] = useState(null)
 
-  const flipValues = async () => {
-    try {
-      const { data } = await flipIsCheckedValues({
-        variables: {
-          ids: {
-            ids
-          }
+  const handleResetValues = async () => {
+    await flipIsCheckedValues({
+      variables: {
+        ids: {
+          ids
         }
-      })
-      if (data) {
-        return true
       }
-    } catch (err) {
-      console.log(err.messsage)
-    }
+    })
+    setIds(null);
+    setTimeout(() => { refetchAllNotis() }, 500);
   }
 
-  const { data: notifications, isLoading, refetch: refetchNotifs } = useQuery(GET_NOTIFICATIONS_FOR_USER,
-    {
-      variables: { userId }
-    })
-
-
   useEffect(() => {
-    if (notifications) {
-      setIds(notifications.getAllNotificationsForUser.filter((notif) => notif.isChecked === false).map((notif) => Number(notif.id)))
+    if (showNotifications) {
+      ids.length > 0 ? handleResetValues() : null;
     }
-  }, [notifications])
 
-  useEffect(() => {
-    if (ids) {
-      flipValues();
-    }
-  }, [ids])
+  }, [showNotifications])
+
 
 
   const notifs = useMemo(() => {
-    if (notifications && notifications.getAllNotificationsForUser) {
-      return notifications.getAllNotificationsForUser.map((notif) => {
+    if (notifications) {
+      return notifications.map((notif) => {
 
         if (notif.notificationType === 'liked your post') {
-          return <LikedYourPost notif={notif} key={notif.id} />
+          return <LikedYourPost notif={notif} key={notif.id} currentUser={currentUser} />
         } else if (notif.notificationType === 'commented:') {
-          return <Commented notif={notif} key={notif.id} />
+          return <Commented notif={notif} key={notif.id} currentUser={currentUser} />
         } else if (notif.notificationType === 'started following you') {
-          return <StartedFollowingYou notif={notif} key={notif.id} />
+          return <StartedFollowingYou notif={notif} key={notif.id} currentUser={currentUser} />
         }
       })
     }

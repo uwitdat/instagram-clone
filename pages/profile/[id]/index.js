@@ -7,16 +7,18 @@ import profileHeaderStyles from '../../../styles/profile-header.module.scss';
 import FollowersAndFollowing from '../../../components/followers-and-following/FollowersAndFollowing';
 import Posts from '../../../components/Posts';
 import NavFooter from '../../../components/NavFooter';
-import { GET_ALL_USER_FOLLOWERS, GET_ALL_USER_FOLLOWING } from '../../../utils/queries';
+import { GET_ALL_USER_FOLLOWERS, GET_ALL_USER_FOLLOWING, GET_AUTHED_USER } from '../../../utils/queries';
 import { useQuery, useMutation } from '@apollo/client';
-import { useAppContext } from '../../../context';
 import { FOLLOW_USER, UNFOLLOW_USER } from '../../../utils/mutations';
 
 const UserProfileById = () => {
   const router = useRouter();
-  const [state, setState] = useAppContext();
   const postFromUser = JSON.parse(router.query.postFromUser);
-  const [isFollowing, setIsFollowing] = useState(false)
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [user, setUser] = useState(null);
+
+
+  const { data: currentUser, refetch: refetchCurrentUser } = useQuery(GET_AUTHED_USER);
 
   const { data: followersData, refetch: refetchFollowers } = useQuery(GET_ALL_USER_FOLLOWERS, {
     variables: { userId: Number(postFromUser?.id) }
@@ -39,17 +41,13 @@ const UserProfileById = () => {
     try {
       const { data } = await followUser({
         variables: {
-          followedByUserId: Number(state.currentUser.id),
+          followedByUserId: Number(currentUser.getAuthedUser.id),
           followingUserId: Number(postFromUser.id)
         }
       })
       if (data) {
         refetchFollowers()
-        const { data } = await state.refetchCurrentUser()
-        setState({
-          ...state,
-          currentUser: data.getAuthedUser
-        })
+        refetchCurrentUser();
       }
     } catch (err) {
       console.log(err)
@@ -60,17 +58,13 @@ const UserProfileById = () => {
     try {
       const { data } = await unfollowUser({
         variables: {
-          userId: Number(state.currentUser.id),
+          userId: Number(currentUser.getAuthedUser.id),
           userIdToUnfollow: Number(postFromUser.id)
         }
       })
       if (data) {
         refetchFollowers()
-        const { data } = await state.refetchCurrentUser()
-        setState({
-          ...state,
-          currentUser: data.getAuthedUser
-        })
+        refetchCurrentUser();
       }
     } catch (err) {
       console.log(err)
@@ -81,11 +75,22 @@ const UserProfileById = () => {
   useEffect(() => {
     if (followersData && followersData?.getAllUserFollowers) {
 
-      const isIdInArray = (follower) => follower.id === state.currentUser.id;
+      const isIdInArray = (follower) => follower.id === currentUser?.getAuthedUser.id;
       setIsFollowing(followersData?.getAllUserFollowers.some(isIdInArray))
 
     }
   }, [followersData])
+
+  useEffect(() => {
+    if (currentUser && currentUser.getAuthedUser) {
+      setUser(currentUser.getAuthedUser);
+    }
+  }, [currentUser])
+
+  useEffect(() => {
+    refetchFollowers();
+    refetchFollowing();
+  }, [])
 
   const [showPosts, setShowPosts] = useState(false)
   const [showFollowers, setShowFollowers] = useState(false)
@@ -158,7 +163,7 @@ const UserProfileById = () => {
               </div>
               <div onClick={() => handleShowFollowers(0)}>
 
-                {followersData && state ? (
+                {followersData && currentUser && currentUser.getAuthedUser ? (
                   <h4>{followersData && followersData.getAllUserFollowers.length}</h4>
                 ) : (
                   <h4 style={{ color: 'transparent' }}>...</h4>
@@ -168,7 +173,7 @@ const UserProfileById = () => {
                 <p>Followers</p>
               </div>
               <div onClick={() => handleShowFollowers(1)}>
-                {followingData && state ? (
+                {followingData && currentUser && currentUser.getAuthedUser ? (
                   <h4>{followingData && followingData.getAllUserFollowing.length}</h4>
                 ) : (
                   <h4 style={{ color: 'transparent' }}>...</h4>
@@ -181,6 +186,7 @@ const UserProfileById = () => {
 
           {followersData && followingData ? (
             <FollowersAndFollowing
+              currentUser={user}
               userName={postFromUser.userName}
               followers={followersData.getAllUserFollowers}
               following={followingData.getAllUserFollowing}
@@ -223,11 +229,19 @@ const UserProfileById = () => {
 
       <div className={profilePageStyles.postsContainer}>
         {showPosts ? (
-          <Posts handleClosePosts={handleClosePosts} noLoop={false} user={postFromUser} header={<PostsNav />} indexOfClickedPost={indexOfClickedPost} />
+          <Posts
+            handleClosePosts={handleClosePosts}
+            noLoop={false}
+            user={postFromUser}
+            header={<PostsNav />}
+            indexOfClickedPost={indexOfClickedPost}
+            currentUser={user}
+            setCurrentUser={setUser}
+          />
         ) : null}
 
       </div>
-      {!showPosts ? <NavFooter /> : null}
+      {!showPosts ? <NavFooter currentUser={user} setCurrentUser={setUser} /> : null}
     </div>
   )
 }

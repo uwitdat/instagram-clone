@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { SEARCH_USERS } from '../../utils/mutations';
-import { FOLLOW_USER, UNFOLLOW_USER } from '../../utils/mutations';
-import { useMutation } from '@apollo/client';
+import { FOLLOW_USER, UNFOLLOW_USER, SEARCH_USERS } from '../../utils/mutations';
+import { useMutation, useQuery } from '@apollo/client';
 import searchStyles from '../../styles/search.module.scss';
 import Overlay from '../Overlay';
 import { MdOutlineArrowBackIosNew } from 'react-icons/md';
-import { AiOutlineConsoleSql, AiOutlineSearch } from 'react-icons/ai';
+import { AiOutlineSearch } from 'react-icons/ai';
+import { GET_AUTHED_USER } from '../../utils/queries';
+import { useLazyQuery } from '@apollo/client';
 
 
-const Search = ({ state, showSearch, setShowSearch, currentTopPosition, setState }) => {
+
+const Search = ({ currentUser, showSearch, setShowSearch, currentTopPosition, setCurrentUser }) => {
   const [inputVal, setInputVal] = useState('');
   const [searchUsers] = useMutation(SEARCH_USERS);
   const [results, setResults] = useState([]);
   const [noResultsMsg, setNoResultsMsg] = useState('');
+
+  const [getAuthedUser] = useLazyQuery(GET_AUTHED_USER);
 
   const handleSearchUsers = async () => {
     try {
@@ -55,24 +59,25 @@ const Search = ({ state, showSearch, setShowSearch, currentTopPosition, setState
   const IsResultFollowingUser = ({ user }) => {
     const [followUser] = useMutation(FOLLOW_USER);
     const [unfollowUser] = useMutation(UNFOLLOW_USER);
-    const [isFollowing, setIsFollowing] = useState(true);
+    const [isFollowing, setIsFollowing] = useState(null);
 
     const handlefollow = async () => {
       try {
         const { data } = await followUser({
           variables: {
-            followedByUserId: Number(state.currentUser.id),
+            followedByUserId: Number(currentUser.id),
             followingUserId: Number(user.id)
           }
         });
         if (data) {
-          setState({
-            ...state,
-            currentUser: {
-              ...state.currentUser,
-              following: [user, ...state.currentUser.following]
-            }
-          })
+          // setCurrentUser({
+          //   ...currentUser,
+          //   following: [user, ...currentUser.following]
+          // })
+          const { data } = await getAuthedUser();
+          if (data && data.getAuthedUser) {
+            setCurrentUser(data.getAuthedUser)
+          }
           setIsFollowing(true);
         }
       } catch (err) {
@@ -83,18 +88,19 @@ const Search = ({ state, showSearch, setShowSearch, currentTopPosition, setState
       try {
         const { data } = await unfollowUser({
           variables: {
-            userId: Number(state.currentUser.id),
+            userId: Number(currentUser.id),
             userIdToUnfollow: Number(user.id)
           }
         });
         if (data) {
-          setState({
-            ...state,
-            currentUser: {
-              ...state.currentUser,
-              following: state.currentUser.following.filter((follow) => follow.id !== user.id)
-            }
-          })
+          // setCurrentUser({
+          //   ...currentUser,
+          //   following: currentUser.following.filter((follow) => follow.id !== user.id)
+          // })
+          const { data } = await getAuthedUser();
+          if (data && data.getAuthedUser) {
+            setCurrentUser(data.getAuthedUser)
+          }
           setIsFollowing(false);
         }
       } catch (err) {
@@ -103,7 +109,7 @@ const Search = ({ state, showSearch, setShowSearch, currentTopPosition, setState
     }
 
     useEffect(() => {
-      const ids = state.currentUser.following.map((follow) => follow.id)
+      const ids = currentUser.following.map((follow) => follow.id)
       setIsFollowing(ids.includes(user.id))
     }, [])
 
@@ -135,7 +141,7 @@ const Search = ({ state, showSearch, setShowSearch, currentTopPosition, setState
               <h3>{user.userName}</h3>
               <p>{user.name}</p>
             </div>
-            {state.currentUser.id === user.id ? null : (
+            {currentUser.id === user.id ? null : (
               <IsResultFollowingUser user={user} />
             )}
           </div>

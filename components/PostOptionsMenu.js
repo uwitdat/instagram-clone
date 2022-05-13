@@ -2,12 +2,10 @@ import React from 'react'
 import Menu from '@mui/material/Menu';
 import { useMutation } from '@apollo/client';
 import { DELETE_POST_MUTATION } from '../utils/mutations';
-import { useAppContext } from '../context';
 
-const PostOptionsMenu = ({ anchorEl, open, handleClose, postId, handleClosePosts }) => {
+const PostOptionsMenu = ({ currentUser, setCurrentUser, anchorEl, open, handleClose, postId, handleClosePosts }) => {
 
   const [deletePost] = useMutation(DELETE_POST_MUTATION)
-  const [state, setState] = useAppContext()
 
   const removePostFromUser = async () => {
     try {
@@ -24,12 +22,9 @@ const PostOptionsMenu = ({ anchorEl, open, handleClose, postId, handleClosePosts
   }
 
   const removePostFromState = (id) => {
-    setState({
-      ...state,
-      currentUser: {
-        ...state.currentUser,
-        posts: state.currentUser.posts.filter((post) => post.id !== id)
-      }
+    setCurrentUser({
+      ...currentUser,
+      posts: currentUser.posts.filter((post) => post.id !== id)
     })
   }
 

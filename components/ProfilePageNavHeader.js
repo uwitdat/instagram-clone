@@ -6,7 +6,7 @@ import FileUpload from './file-upload/FileUpload';
 import { eraseCookie } from '../utils/functions';
 import Router from 'next/router';
 
-const ProfilePageNavHeader = ({ currentUser }) => {
+const ProfilePageNavHeader = ({ currentUser, setCurrentUser }) => {
   const router = Router;
   const COOKIE_NAME = 'JWT';
 
@@ -39,7 +39,7 @@ const ProfilePageNavHeader = ({ currentUser }) => {
         </li>
       </ul>
       {newPostModal ? (
-        <FileUpload open={newPostModal} handleClose={handleCloseNewPostModal} />
+        <FileUpload setCurrentUser={setCurrentUser} currentUser={currentUser} open={newPostModal} handleClose={handleCloseNewPostModal} />
       ) : null}
     </nav>
   )

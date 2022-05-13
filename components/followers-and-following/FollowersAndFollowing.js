@@ -5,7 +5,6 @@ import Following from './Following';
 import { MdOutlineArrowBackIosNew } from 'react-icons/md';
 import { useRouter } from 'next/router'
 import followerStyles from '../../styles/followers-and-following.module.scss';
-import { useAppContext } from '../../context';
 
 
 const FollowersAndFollowing = ({
@@ -16,7 +15,9 @@ const FollowersAndFollowing = ({
   handleHideFollowers,
   entryPoint,
   setFollowersEntryPoint,
-  refetchFollowing
+  refetchFollowing,
+  currentUser,
+  setCurrentUser
 }) => {
 
 
@@ -41,11 +42,11 @@ const FollowersAndFollowing = ({
   }
 
   const router = useRouter()
-  const [state] = useAppContext()
+
 
   const handleViewProfile = (id, user) => {
     handleClosePanel()
-    if (id === state.currentUser.id) {
+    if (id === currentUser.id) {
       router.push('/profile')
     } else {
       router.push({
@@ -83,11 +84,11 @@ const FollowersAndFollowing = ({
         {entryPoint === 0 ? (
           <React.Fragment>
             <Followers followers={followers} switchFollowers={switchFollowers} handleViewProfile={handleViewProfile} />
-            <Following refetchFollowing={refetchFollowing} following={following} switchFollowing={switchFollowing} handleViewProfile={handleViewProfile} />
+            <Following currentUser={currentUser} setCurrentUser={setCurrentUser} refetchFollowing={refetchFollowing} following={following} switchFollowing={switchFollowing} handleViewProfile={handleViewProfile} />
           </React.Fragment>
         ) : (
           <React.Fragment>
-            <Following refetchFollowing={refetchFollowing} following={following} switchFollowing={switchFollowing} handleViewProfile={handleViewProfile} />
+            <Following currentUser={currentUser} setCurrentUser={setCurrentUser} refetchFollowing={refetchFollowing} following={following} switchFollowing={switchFollowing} handleViewProfile={handleViewProfile} />
             <Followers followers={followers} switchFollowers={switchFollowers} handleViewProfile={handleViewProfile} />
           </React.Fragment>
         )}

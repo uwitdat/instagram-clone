@@ -7,11 +7,8 @@ import Router from 'next/router';
 import { eraseCookie } from '../utils/functions';
 import FileUpload from './file-upload/FileUpload';
 import Notifications from './notifications/Notifications';
-import { useQuery } from '@apollo/client';
-import { GET_NOTIFS_INT } from '../utils/queries';
 
-
-const NavHeader = ({ refetchAllPosts, userId }) => {
+const NavHeader = ({ notifications, currentUser, setCurrentUser, refetchPosts, refetchAllNotis }) => {
   const router = Router;
   const COOKIE_NAME = 'JWT';
 
@@ -19,6 +16,13 @@ const NavHeader = ({ refetchAllPosts, userId }) => {
     router.push('/login');
     eraseCookie(COOKIE_NAME);
   }
+
+  const [ids, setIds] = useState(null)
+  useEffect(() => {
+    if (notifications) {
+      setIds(notifications.getAllNotificationsForUser.filter((notif) => notif.isChecked === false).map((notif) => Number(notif.id)))
+    }
+  }, [notifications])
 
   const [newPostModal, setNewPostModal] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false)
@@ -37,11 +41,6 @@ const NavHeader = ({ refetchAllPosts, userId }) => {
   }
 
 
-  const { data: notificationsNotChecked, refetch } = useQuery(GET_NOTIFS_INT,
-    {
-      variables: { userId },
-    })
-
 
   return (
     <React.Fragment>
@@ -51,18 +50,30 @@ const NavHeader = ({ refetchAllPosts, userId }) => {
           <li><MdOutlineAddBox onClick={handleShowNewPostModal} /></li>
           <li className={navStyles.notif}>
             <RiHeartLine onClick={handleShowNotifications} />
-            {notificationsNotChecked && notificationsNotChecked.getAllUncheckedNotifs > 0 ? (
-              <p onClick={handleShowNotifications}>{notificationsNotChecked.getAllUncheckedNotifs}</p>
+            {ids && ids.length > 0 ? (
+              <p onClick={handleShowNotifications}>
+                {ids.length}
+              </p>
             ) : null}
           </li>
           <li><FiLogOut onClick={handleUserLogOut} /></li>
         </ul>
       </nav>
       {newPostModal ? (
-        <FileUpload refetchAllPosts={refetchAllPosts} open={newPostModal} handleClose={handleCloseNewPostModal} />
+        <FileUpload currentUser={currentUser} setCurrentUser={setCurrentUser} refetchPosts={refetchPosts} open={newPostModal} handleClose={handleCloseNewPostModal} />
       ) : null}
 
-      <Notifications refetchInt={refetch} userId={userId} scrollPosition={scrollPosition} handleHideNotifications={handleHideNotifications} showNotifications={showNotifications} />
+      <Notifications
+        ids={ids}
+        setIds={setIds}
+        currentUser={currentUser}
+        userId={currentUser.id}
+        scrollPosition={scrollPosition}
+        handleHideNotifications={handleHideNotifications}
+        showNotifications={showNotifications}
+        notifications={notifications?.getAllNotificationsForUser}
+        refetchAllNotis={refetchAllNotis}
+      />
     </React.Fragment>
   )
 

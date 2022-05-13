@@ -3,11 +3,9 @@ import followingStyles from '../../styles/following.module.scss';
 import { AiOutlineEllipsis } from 'react-icons/ai';
 import { useMutation } from '@apollo/client';
 import { UNFOLLOW_USER } from '../../utils/mutations';
-import { useAppContext } from '../../context';
-import { checkProfImage } from '../../utils/functions';
 
-const Following = ({ following, switchFollowing, handleViewProfile, refetchFollowing }) => {
-  const [state] = useAppContext();
+
+const Following = ({ currentUser, setCurrentUser, following, switchFollowing, handleViewProfile }) => {
 
   const [unfollowUser] = useMutation(UNFOLLOW_USER);
 
@@ -15,12 +13,15 @@ const Following = ({ following, switchFollowing, handleViewProfile, refetchFollo
     try {
       const { data } = await unfollowUser({
         variables: {
-          userId: state.currentUser.id,
+          userId: currentUser.id,
           userIdToUnfollow: followingId
         }
       })
       if (data) {
-        refetchFollowing()
+        setCurrentUser({
+          ...currentUser,
+          following: currentUser.following.filter((follow) => follow.id !== followingId)
+        })
       }
     } catch (err) {
       console.log(err)
@@ -43,10 +44,14 @@ const Following = ({ following, switchFollowing, handleViewProfile, refetchFollo
                 <p>{following.name}</p>
               </div>
             </div>
-            <div>
-              <button onClick={() => handleUnfollowUser(following.id)}>Following</button>
-              <AiOutlineEllipsis />
-            </div>
+
+            {following.id === currentUser.id ? (null) : (
+              <div>
+                <button onClick={() => handleUnfollowUser(following.id)}>Following</button>
+                <AiOutlineEllipsis />
+              </div>
+            )}
+
           </div>
         ))}
       </section>

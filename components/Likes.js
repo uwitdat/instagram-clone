@@ -2,21 +2,17 @@ import React, { useEffect, useState } from 'react';
 import likeStyles from '../styles/likes.module.scss';
 import { MdOutlineArrowBackIosNew } from 'react-icons/md';
 import Overlay from './Overlay';
-import { useAppContext } from '../context';
 import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
 import { FOLLOW_USER, UNFOLLOW_USER } from '../utils/mutations';
 
-const Likes = ({ showLikes, setShowLikes, currentTopPosition, likes }) => {
+const Likes = ({ currentUser, showLikes, setShowLikes, currentTopPosition, likes }) => {
   const handleCloseLikes = () => setShowLikes(false)
   const [isFollowing, setIsFollowing] = useState(null)
-
-
-  const [state, setState] = useAppContext();
   const router = useRouter();
 
   const handleGoToProfile = (like) => {
-    if (like.likedBy.id === state.currentUser.id) {
+    if (like.likedBy.id === currentUser.id) {
       router.push('/profile')
     } else {
       router.push({
@@ -34,7 +30,7 @@ const Likes = ({ showLikes, setShowLikes, currentTopPosition, likes }) => {
     try {
       await followUser({
         variables: {
-          followedByUserId: Number(state.currentUser.id),
+          followedByUserId: Number(currentUser.id),
           followingUserId: Number(likedByUserId)
         }
       })
@@ -48,7 +44,7 @@ const Likes = ({ showLikes, setShowLikes, currentTopPosition, likes }) => {
     try {
       await unfollowUser({
         variables: {
-          userId: Number(state.currentUser.id),
+          userId: Number(currentUser.id),
           userIdToUnfollow: Number(likedByUserId)
         }
       })
@@ -60,7 +56,7 @@ const Likes = ({ showLikes, setShowLikes, currentTopPosition, likes }) => {
 
   const checkIsFollowing = () => {
     const idsInPostLikes = likes.map((like) => like.likedByUserId)
-    const doesCurrentUserFollow = state.currentUser.following.some(following => idsInPostLikes.indexOf(Number(following.id)) >= 0)
+    const doesCurrentUserFollow = currentUser.following.some(following => idsInPostLikes.indexOf(Number(following.id)) >= 0)
     setIsFollowing(doesCurrentUserFollow)
   }
 
@@ -88,7 +84,7 @@ const Likes = ({ showLikes, setShowLikes, currentTopPosition, likes }) => {
               </div>
             </div>
             <div>
-              {like.likedBy.id === state?.currentUser?.id ? (null) : (
+              {like.likedBy.id === currentUser.id ? (null) : (
                 isFollowing ? (
                   <button onClick={() => handleUnfollowUser(like.likedByUserId)} id={likeStyles.unfollowBtn}>Unfollow</button>
                 ) : (

@@ -53,6 +53,39 @@ query GetAuthedUser{
         userId
         comments{
           commentContent
+          id
+          createdAt
+          commentedBy {
+            id
+            userName
+            name
+            avatar
+            bio
+          }
+          replies {
+            id
+            replyContent
+            replyToCommentId
+            createdAt
+            repliedBy {
+              id
+              avatar
+              userName
+              name
+              bio
+            }
+          }
+        }
+        likes {
+          id,
+          likedByUserId,
+          likedBy {
+            id
+            avatar
+            bio
+            userName
+            name
+          }
         }
       }
     }
@@ -87,6 +120,7 @@ export const GET_USER_BY_ID = gql`
           commentContent
         }
         likes {
+          likedByUserId
           likeOnPostId
         }
       }
@@ -176,7 +210,7 @@ export const GET_ALL_POSTS = gql`
       postDescription
       createdAt
       postedBy {
-        id
+          id
           userName
           name
           avatar
@@ -186,7 +220,42 @@ export const GET_ALL_POSTS = gql`
             postContent
             postDescription
             createdAt
-            userId
+            comments {
+              id
+              commentContent
+              createdAt
+              commentedBy {
+                id
+                userName
+                name
+                avatar
+                bio
+              }
+                replies {
+                id
+                replyContent
+                replyToCommentId
+                createdAt
+                repliedBy {
+                  id
+                  avatar
+                  userName
+                  name
+                  bio
+                }
+              }
+            }
+            likes {
+              id
+              likedByUserId
+              likedBy {
+                id
+                userName
+                name
+                avatar
+                bio
+              }
+            }
           }
       }
       comments {
@@ -216,6 +285,7 @@ export const GET_ALL_POSTS = gql`
       }
       likes {
         id
+        likedByUserId
         likedBy {
           id
           userName
@@ -255,6 +325,7 @@ export const GET_ALL_USER_FOLLOWERS = gql`
           }
         }
         likes {
+          likedByUserId
           id
           likedBy {
             id
@@ -296,6 +367,7 @@ export const GET_ALL_USER_FOLLOWING = gql`
           }
         }
         likes {
+          likedByUserId
           id
           likedBy {
             id
@@ -353,6 +425,7 @@ export const GET_NOTIFICATIONS_FOR_USER = gql`
             }
           }
           likes {
+            likedByUserId
             id
             likedBy {
               id
@@ -408,6 +481,7 @@ export const GET_POSTS_NO_OFFSET = gql`
       }
     }
     likes {
+      likedByUserId
       id
       likedBy {
         id

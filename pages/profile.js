@@ -9,24 +9,23 @@ import EditProfile from '../components/EditProfile';
 import { requireAuthentication } from '../auth'
 import Posts from '../components/Posts';
 import { Spinner } from '../components/Spinner';
-import { getCurrentUser } from '../hooks';
-import { GET_ALL_USER_FOLLOWERS, GET_ALL_USER_FOLLOWING } from '../utils/queries';
-import { useQuery } from '@apollo/client';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { GET_AUTHED_USER } from '../utils/queries';
+import { useLazyQuery } from '@apollo/client';
+
 
 const Profile = () => {
-  const [state, setState] = getCurrentUser();
-
-  const { data: followersData, refetch: refetchFollowers } = useQuery(GET_ALL_USER_FOLLOWERS, {
-    variables: { userId: state?.currentUser?.id }
-  });
-
-  const { data: followingData, refetch: refetchFollowing } = useQuery(GET_ALL_USER_FOLLOWING, {
-    variables: { userId: state?.currentUser?.id }
-  });
+  const [getAuthedUser, { data }] = useLazyQuery(GET_AUTHED_USER);
 
   const router = useRouter();
+  const [state, setState] = useState(JSON.parse(router.query.currentUser));
+
+  useEffect(() => {
+    if (data && data.getAuthedUser) {
+      setState(data.getAuthedUser)
+    }
+  }, [data])
 
   const [props] = useState(router.query.props && router.query.props !== '' ? JSON.parse(router.query.props) : null);
 
@@ -43,6 +42,7 @@ const Profile = () => {
 
   const handleClosePosts = () => {
     setShowPosts(false)
+    getAuthedUser();
     window.scrollTo({ top: 0 - 60 });
   }
 
@@ -67,59 +67,64 @@ const Profile = () => {
           <MdOutlineArrowBackIosNew />
         </div>
         <div>
-          <p>{state.currentUser.userName}</p>
+          <p>{state.userName}</p>
           <h3>Posts</h3>
         </div>
       </div>
     )
   }
 
+
   return (
     <React.Fragment>
-      {!showPosts ? (<ProfilePageNavHeader currentUser={state.currentUser} />) : null}
-      <EditProfile setShowEditProfile={setShowEditProfile} currentUser={state.currentUser} setCurrentUser={setState} showEditProfile={showEditProfile} />
+      {!showPosts ? (<ProfilePageNavHeader currentUser={state} setCurrentUser={setState} />) : null}
+      <EditProfile setShowEditProfile={setShowEditProfile} currentUser={state} setCurrentUser={setState} showEditProfile={showEditProfile} />
 
-      {state.currentUser ? (
+      {state ? (
         <div className={profilePageStyles.profileContainer}>
           <section className={profilePageStyles.profileDetails}>
-            <img src={state.currentUser.avatar ? state.currentUser.avatar : 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/271deea8-e28c-41a3-aaf5-2913f5f48be6/de7834s-6515bd40-8b2c-4dc6-a843-5ac1a95a8b55.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI3MWRlZWE4LWUyOGMtNDFhMy1hYWY1LTI5MTNmNWY0OGJlNlwvZGU3ODM0cy02NTE1YmQ0MC04YjJjLTRkYzYtYTg0My01YWMxYTk1YThiNTUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.BopkDn1ptIwbmcKHdAOlYHyAOOACXW0Zfgbs0-6BY-E'} alt={state.currentUser.avatar} />
+            <img src={state.avatar ? state.avatar : 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/271deea8-e28c-41a3-aaf5-2913f5f48be6/de7834s-6515bd40-8b2c-4dc6-a843-5ac1a95a8b55.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI3MWRlZWE4LWUyOGMtNDFhMy1hYWY1LTI5MTNmNWY0OGJlNlwvZGU3ODM0cy02NTE1YmQ0MC04YjJjLTRkYzYtYTg0My01YWMxYTk1YThiNTUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.BopkDn1ptIwbmcKHdAOlYHyAOOACXW0Zfgbs0-6BY-E'} alt={state.avatar} />
             <div>
               <div>
-                <h4>{state.currentUser.posts.length}</h4>
+                <h4>{state.posts.length}</h4>
                 <p>Posts</p>
               </div>
+
               <div onClick={() => handleShowFollowers(0)}>
-                <h4>{followersData && followersData.getAllUserFollowers.length}</h4>
+                <h4>{state.followers.length}</h4>
                 <p>Followers</p>
               </div>
+
               <div onClick={() => handleShowFollowers(1)}>
-                <h4>{followingData && followingData.getAllUserFollowing.length}</h4>
+                <h4>{state.following.length}</h4>
                 <p>Following</p>
               </div>
+
             </div>
           </section>
 
-          {followersData && followingData ? (
-            <FollowersAndFollowing
-              userName={state.currentUser.userName}
-              followers={followersData.getAllUserFollowers}
-              following={followingData.getAllUserFollowing}
-              showFollowers={showFollowers}
-              handleHideFollowers={handleHideFollowers}
-              entryPoint={followersEntryPoint}
-              setFollowersEntryPoint={setFollowersEntryPoint}
-              refetchFollowing={refetchFollowing}
-            />
-          ) : null}
+
+          <FollowersAndFollowing
+            currentUser={state}
+            setCurrentUser={setState}
+            userName={state.userName}
+            followers={state.followers}
+            following={state.following}
+            showFollowers={showFollowers}
+            handleHideFollowers={handleHideFollowers}
+            entryPoint={followersEntryPoint}
+            setFollowersEntryPoint={setFollowersEntryPoint}
+            refetchFollowing={''}
+          />
 
           <div className={profilePageStyles.profileAdditionalDetails}>
-            <p>{state.currentUser.bio}</p>
+            <p>{state.bio}</p>
             <button onClick={handleShowEditProfile}>Edit Profile</button>
           </div>
 
           <div className={profilePageStyles.imageGrid}>
-            {state && state.currentUser && state.currentUser.posts ? (
-              state.currentUser.posts.map((post, idx) => (
+            {state && state.posts ? (
+              state.posts.map((post, idx) => (
                 <div key={idx} style={{ position: 'relative' }}>
                   <Image
                     onClick={() => showPostDetails(idx)}
@@ -138,11 +143,11 @@ const Profile = () => {
 
       <div className={profilePageStyles.postsContainer}>
         {showPosts ? (
-          <Posts handleClosePosts={handleClosePosts} noLoop={false} user={state.currentUser ? state.currentUser : null} header={<PostsNav />} indexOfClickedPost={indexOfClickedPost} />
+          <Posts handleClosePosts={handleClosePosts} noLoop={false} user={state} setCurrentUser={setState} header={<PostsNav />} indexOfClickedPost={indexOfClickedPost} />
         ) : null}
 
       </div>
-      {!showPosts ? <NavFooter /> : null}
+      {!showPosts ? <NavFooter currentUser={state} setCurrentUser={setState} /> : null}
     </React.Fragment>
   )
 }

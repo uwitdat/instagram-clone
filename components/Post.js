@@ -6,38 +6,28 @@ import moment from 'moment';
 import { useRouter } from 'next/router'
 import postStyles from '../styles/home.module.scss';
 import { AiOutlineEllipsis } from 'react-icons/ai';
-import { useAppContext } from '../context';
 import PostOptionsMenu from './PostOptionsMenu';
-import { GET_COMMENTS_FOR_POST, GET_ALL_LIKES_FOR_POST } from '../utils/queries';
 import { REMOVE_LIKE_FROM_POST, CREATE_LIKE_FOR_POST } from '../utils/mutations';
-import { useQuery, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import Comments from '../components/comments/Comments';
 import Likes from './Likes';
 import Image from 'next/image';
 
 const redColor = 'rgb(255, 93, 93)';
 
-const Post = ({ post, postFromUser, handleClosePosts }) => {
+const Post = ({ post, postFromUser, handleClosePosts, currentUser, setCurrentUser, resetUser }) => {
   const [showComments, setShowComments] = useState(false)
   const [showLikes, setShowLikes] = useState(false)
   const [scrollPosition, setScrollPosition] = useState(null);
-  const router = useRouter()
-  const currentPath = router.pathname
+  const router = useRouter();
+  const currentPath = router.pathname;
 
-  const [liked, setLiked] = useState(false)
+  const [userPost, setUserPost] = useState(post);
 
-  const { data: commentsData, error, refetch } = useQuery(GET_COMMENTS_FOR_POST, {
-    variables: { postId: post.id },
-  })
+  const [liked, setLiked] = useState(null);
 
-
-  const { data: likesData, error: likesError, refetch: refetchLikes } = useQuery(GET_ALL_LIKES_FOR_POST, {
-    variables: { postId: post.id },
-  })
-
-
-  const [removeLike] = useMutation(REMOVE_LIKE_FROM_POST)
-  const [createLikeForPost] = useMutation(CREATE_LIKE_FOR_POST)
+  const [removeLike] = useMutation(REMOVE_LIKE_FROM_POST);
+  const [createLikeForPost] = useMutation(CREATE_LIKE_FOR_POST);
 
   const handleSetLike = () => {
     if (liked) {
@@ -51,15 +41,20 @@ const Post = ({ post, postFromUser, handleClosePosts }) => {
     try {
       const { data } = await removeLike({
         variables: {
-          likeOnPostId: Number(post.id),
-          likedByUserId: Number(state.currentUser.id)
+          likeOnPostId: Number(userPost.id),
+          likedByUserId: Number(currentUser.id)
         }
       });
       if (data) {
-        setLiked(false)
-        setAnimateRemoveLike(true)
-        setTimeout(() => { setAnimateRemoveLike(false) }, 800)
-        refetchLikes()
+        setUserPost({
+          ...userPost,
+          likes: userPost.likes.filter((like) => Number(like.likedBy.id) !== Number(currentUser.id))
+        })
+        if (resetUser !== undefined) {
+          resetUser();
+        }
+        setAnimateRemoveLike(true);
+        setTimeout(() => { setAnimateRemoveLike(false) }, 800);
       }
     } catch (err) {
       console.log(err)
@@ -70,16 +65,23 @@ const Post = ({ post, postFromUser, handleClosePosts }) => {
     try {
       const { data } = await createLikeForPost({
         variables: {
-          likeOnPostId: Number(post.id),
-          likedByUserId: Number(state.currentUser.id),
+          likeOnPostId: Number(userPost.id),
+          likedByUserId: Number(currentUser.id),
           likeForUserId: Number(postFromUser.id)
         }
       });
       if (data) {
-        setLiked(true)
-        setAnimateLike(true)
-        setTimeout(() => { setAnimateLike(false) }, 800)
-        refetchLikes()
+        console.log(data.createLikeForPost)
+        setUserPost({
+          ...userPost,
+          likes: [data.createLikeForPost, ...userPost.likes]
+        })
+        if (resetUser !== undefined) {
+          resetUser();
+        }
+
+        setAnimateLike(true);
+        setTimeout(() => { setAnimateLike(false) }, 800);
       }
     } catch (err) {
       console.log(err)
@@ -98,22 +100,24 @@ const Post = ({ post, postFromUser, handleClosePosts }) => {
   }
 
 
-  const [state] = useAppContext();
-
   const [animateLike, setAnimateLike] = useState(false)
   const [animateRemoveLike, setAnimateRemoveLike] = useState(false)
 
-
   const handleRedirectToProfile = () => {
-    if (postFromUser.id === state.currentUser.id) {
+    if (postFromUser.id === currentUser.id) {
       router.push({
-        pathname: '/profile'
-      })
+        pathname: '/profile',
+        query: { currentUser: JSON.stringify(currentUser) }
+      },
+        '/profile'
+      )
     } else {
       router.push({
         pathname: `/profile/${postFromUser.id}`,
         query: { postFromUser: JSON.stringify(postFromUser) }
-      })
+      },
+        `/profile/${postFromUser.id}`
+      )
     }
   }
 
@@ -128,13 +132,11 @@ const Post = ({ post, postFromUser, handleClosePosts }) => {
 
 
   useEffect(() => {
-    if (likesData && likesData.getLikesForPost) {
-      const ids = likesData.getLikesForPost.map((like) => like.likedByUserId)
-
-      setLiked(ids.includes(Number(state.currentUser.id)))
+    if (userPost) {
+      const ids = userPost.likes.map((like) => like.likedByUserId)
+      setLiked(ids.includes(Number(currentUser.id)))
     }
-  }, [likesData])
-
+  }, [userPost])
 
   return (
     <div className={postStyles.postContainer}>
@@ -145,12 +147,20 @@ const Post = ({ post, postFromUser, handleClosePosts }) => {
           onClick={handleRedirectToProfile}
         />
 
+
         <h4 onClick={handleRedirectToProfile}>{postFromUser.userName}</h4>
-        {postFromUser.id === state.currentUser.id && currentPath === '/profile' ? (
+        {postFromUser.id === currentUser.id && currentPath === '/profile' ? (
           <AiOutlineEllipsis onClick={(e) => openPostOptionsMenu(e)} />
         ) : null}
 
-        <PostOptionsMenu postId={post.id} open={open} anchorEl={anchorEl} handleClose={handleClose} handleClosePosts={handleClosePosts} />
+        <PostOptionsMenu
+          postId={post.id}
+          open={open}
+          anchorEl={anchorEl}
+          currentUser={currentUser}
+          setCurrentUser={setCurrentUser}
+          handleClose={handleClose}
+          handleClosePosts={handleClosePosts} />
 
       </div>
       <div className={postStyles.postContent}>
@@ -187,43 +197,46 @@ const Post = ({ post, postFromUser, handleClosePosts }) => {
       </div>
 
       <div className={postStyles.details}>
-        {likesData && likesData.getLikesForPost && likesData.getLikesForPost.length > 0 ? (
-          <p>Liked by <strong>{likesData.getLikesForPost[0].likedBy.userName}</strong> and <strong onClick={handleViewLikes} style={{ cursor: 'pointer' }}>others</strong></p>
+        {userPost && userPost.likes.length > 0 ? (
+          <p>Liked by <strong>{userPost.likes[0].likedBy.userName}</strong> and <strong onClick={handleViewLikes} style={{ cursor: 'pointer' }}>others</strong></p>
         ) : null}
 
-        <p><strong>{postFromUser.userName}</strong> {post.postDescription}</p>
+        <p><strong>{postFromUser.userName}</strong> {userPost.postDescription}</p>
 
-        {commentsData && commentsData.getCommentsForPost ? (
-          commentsData.getCommentsForPost.length === 0 ? <p style={{ marginTop: '-.1rem' }}></p> : (
-            commentsData.getCommentsForPost.length > 1 ? (
-              <p className={postStyles.viewComments} onClick={handleViewComments}>View all {commentsData.getCommentsForPost.length} comments</p>
+        {userPost ? (
+          userPost.comments.length === 0 ? <p style={{ marginTop: '-.1rem' }}></p> : (
+            userPost.comments.length > 1 ? (
+              <p className={postStyles.viewComments} onClick={handleViewComments}>View all {userPost.comments.length} comments</p>
             ) : (
-              <p className={postStyles.viewComments} onClick={handleViewComments}>View {commentsData.getCommentsForPost.length} comment</p>
+              <p className={postStyles.viewComments} onClick={handleViewComments}>View {userPost.comments.length} comment</p>
             )
           )
         ) : null}
-        <p>{moment(post.createdAt).fromNow()}</p>
+        <p style={{ fontSize: '.7rem' }}>{moment(userPost.createdAt).fromNow()}</p>
       </div>
 
 
-      {commentsData && commentsData.getCommentsForPost ? (
+      {userPost ? (
         <Comments
           showComments={showComments}
           setShowComments={setShowComments}
           currentTopPosition={scrollPosition}
-          comments={commentsData.getCommentsForPost}
-          post={post}
+          post={userPost}
+          setPost={setUserPost}
           postFromUser={postFromUser}
-          refetchComments={refetch}
+          currentUser={currentUser}
+          resetUser={resetUser}
         />
       ) : null}
 
-      {likesData && likesData.getLikesForPost ? (
+      {userPost ? (
         <Likes
           showLikes={showLikes}
           setShowLikes={setShowLikes}
           currentTopPosition={scrollPosition}
-          likes={likesData.getLikesForPost} />
+          likes={userPost.likes}
+          currentUser={currentUser}
+        />
       ) : null}
     </div>
   )

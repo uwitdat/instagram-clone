@@ -1,13 +1,13 @@
+import { ApolloProvider } from '@apollo/client'
+import client from '../apollo-client'
 import '../styles/reset.css'
-import { AppWrapper } from '../context'
 
 
 function MyApp({ Component, pageProps }) {
-
   return (
-    <AppWrapper>
+    <ApolloProvider client={client}>
       <Component {...pageProps} />
-    </AppWrapper>
+    </ApolloProvider>
   )
 }
 
