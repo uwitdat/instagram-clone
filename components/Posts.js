@@ -1,12 +1,11 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect } from 'react'
 import postStyles from '../styles/home.module.scss';
 import Post from '../components/Post';
 import NavFooter from '../components/NavFooter';
 
-const Posts = ({ user, currentUser, setCurrentUser, header, indexOfClickedPost, noLoop, handleClosePosts }) => {
+const Posts = ({ userPosts, setUserPosts, user, currentUser, setCurrentUser, header, indexOfClickedPost, noLoop, handleClosePosts }) => {
 
   const postsRef = useRef(null)
-  const [userPosts, setUserPosts] = useState(user.posts)
 
   const scrollToTopOfPost = (postsRef) => {
     const yOffset = -60;

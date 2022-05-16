@@ -85,14 +85,18 @@ const Comments = ({ currentUser, showComments, setShowComments, currentTopPositi
         //   ...post,
         //   comments: [data.createCommentForPost, ...post.comments]
         // })
-        const { data } = await postsByUser({
-          variables: {
-            userId: postFromUser.id
+
+        if (setPosts !== undefined) {
+          const { data } = await postsByUser({
+            variables: {
+              userId: postFromUser.id
+            }
+          })
+          if (data && data.postsByUser) {
+            setPosts(data.postsByUser);
           }
-        })
-        if (data && data.postsByUser) {
-          setPosts(data.postsByUser);
         }
+
 
         // refetchPosts();
         if (resetUser !== undefined) {
@@ -122,14 +126,18 @@ const Comments = ({ currentUser, showComments, setShowComments, currentTopPositi
       })
       if (data) {
 
-        const { data } = await postsByUser({
-          variables: {
-            userId: postFromUser.id
+        if (setPosts !== undefined) {
+          const { data } = await postsByUser({
+            variables: {
+              userId: postFromUser.id
+            }
+          })
+          if (data && data.postsByUser) {
+            setPosts(data.postsByUser);
           }
-        })
-        if (data && data.postsByUser) {
-          setPosts(data.postsByUser);
         }
+
+
 
         // const findIdx = (comment) => comment.id === reply.commentId;
 

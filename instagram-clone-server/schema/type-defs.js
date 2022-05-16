@@ -89,6 +89,7 @@ export const typeDefs = gql`
       getAllUserFollowing(id: ID!): [User!]!
       getAllNotificationsForUser(id: ID!): [Notification!]!
       getAllUncheckedNotifs(id: ID!): Int!
+      getPostById(id: ID!): Post!
   }
 
   input RegisterUserInput {

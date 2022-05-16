@@ -535,3 +535,100 @@ export const GET_POSTS_NO_OFFSET = gql`
   }
 }
 `
+
+
+export const GET_POST_BY_ID = gql`
+query GetPostById($id: ID!) {
+  getPostById(id: $id) {
+    id
+    postContent
+    postDescription
+    createdAt
+      postedBy {
+        id
+        userName
+        name
+        avatar
+        bio
+        posts  {
+          id
+          postContent
+          postDescription
+          createdAt
+          userId
+          comments {
+            id
+            commentContent
+            createdAt
+            commentedBy {
+              id
+              userName
+              name
+              avatar
+              bio
+            }
+            replies {
+        id
+        replyContent
+        replyToCommentId
+        createdAt
+        repliedBy {
+          id
+          avatar
+          userName
+          name
+          bio
+        }
+      }
+          }
+          likes {
+            likedByUserId
+            id
+            likedBy {
+              id
+              userName
+              name
+              avatar
+              bio
+            }
+          }
+        }
+      }
+      comments {
+      id
+      commentContent
+      createdAt
+      commentedBy {
+        id
+        userName
+        name
+        avatar
+        bio
+      }
+      replies {
+        id
+        replyContent
+        replyToCommentId
+        createdAt
+        repliedBy {
+          id
+          avatar
+          userName
+          name
+          bio
+        }
+      }
+    }
+        likes {
+      id
+      likedBy {
+        id
+        userName
+        name
+        avatar
+        bio
+      }
+    }
+  }
+}
+`

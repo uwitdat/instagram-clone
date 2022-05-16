@@ -16,47 +16,23 @@ export const getServerSideProps = requireAuthentication(context => {
   }
 })
 
-const HomePage = ({ refetchUser, user }) => {
+const HomePage = ({ refetchUser, user, posts, refetchPosts, fetchMorePosts }) => {
   const [currentUser, setCurrentUser] = useState(user);
+  const [userPosts, setUserPosts] = useState(posts);
   const router = useRouter();
   const [val] = useState(router.query.fromOtherRoute ? true : false)
 
-  const { data, fetchMore, loading, refetch: refetchPosts, networkStatus } = useQuery(GET_ALL_POSTS, {
-    variables: { first: 3 },
-    notifyOnNetworkStatusChange: true,
-  })
-
+  console.log(userPosts)
 
   const { data: notifications, refetch: refetchAllNotis } = useQuery(GET_NOTIFICATIONS_FOR_USER,
     {
       variables: { userId: currentUser.id },
     })
 
-  const fetchMorePosts = () => { // used for infinite scroll
-    fetchMore({
-      variables: {
-        count: data.getAllPosts.length,
-        first: 3
-      },
-      updateQuery: (previousValues, { fetchMoreResult }) => {
-        if (!fetchMoreResult) {
-          return previousValues;
-        }
-        return {
-          ...previousValues,
-          getAllPosts: [
-            ...previousValues.getAllPosts,
-            ...fetchMoreResult.getAllPosts
-          ]
-        }
-      }
-    })
-  }
-
 
   useEffect(() => {
     if (val) {
-      // refetchPosts();
+      refetchPosts();
       refetchUser();
       refetchAllNotis();
     }
@@ -64,19 +40,20 @@ const HomePage = ({ refetchUser, user }) => {
 
   const [getAuthedUser] = useLazyQuery(GET_AUTHED_USER);
 
-  const resetUser = async () => {
-    console.log('iran');
-    const { data } = await getAuthedUser();
-    if (data && data.getAuthedUser) {
-      setCurrentUser(data.getAuthedUser)
-    }
-  }
+  // const resetUser = async () => {
+  //   // console.log('iran');
+  //   const { data } = await getAuthedUser();
+  //   if (data && data.getAuthedUser) {
+  //     setCurrentUser(data.getAuthedUser)
+  //   }
+  // }
 
 
-  useEffect(() => {
-    refetchPosts();
-  }, [])
 
+
+  // useEffect(() => {
+  //   refetchPosts();
+  // }, [])
 
 
   return (
@@ -91,26 +68,25 @@ const HomePage = ({ refetchUser, user }) => {
 
       <div className={postStyles.homeContainer}>
         <section className={postStyles.posts}>
-          {!loading || networkStatus === 3 ? (
-            data.getAllPosts.map((post, i) => (
-              <React.Fragment key={post.id}>
-                <Post
-                  post={post}
-                  postFromUser={post.postedBy}
-                  currentUser={currentUser}
-                  setCurrentUser={setCurrentUser}
-                  resetUser={resetUser}
 
+          {userPosts && userPosts.map((post, i) => (
+            <React.Fragment key={post.id}>
+              <Post
+                post={post}
+                postFromUser={post.postedBy}
+                currentUser={currentUser}
+                setCurrentUser={setCurrentUser}
+                // resetUser={resetUser}
+                setPosts={setUserPosts}
+                posts={userPosts}
+                fromHome={true}
+              />
 
-                />
-
-                {i === data.getAllPosts.length - 1 &&
-                  <Waypoint onEnter={fetchMorePosts} />
-                }
-              </React.Fragment>
-            ))
-
-          ) : (<Spinner />)}
+              {i === userPosts.length - 1 &&
+                <Waypoint onEnter={fetchMorePosts} />
+              }
+            </React.Fragment>
+          ))}
 
         </section>
       </div>

@@ -20,6 +20,7 @@ const Profile = () => {
 
   const router = useRouter();
   const [state, setState] = useState(JSON.parse(router.query.currentUser));
+  const [userPosts, setUserPosts] = useState(state.posts)
 
   useEffect(() => {
     if (data && data.getAuthedUser) {
@@ -143,7 +144,7 @@ const Profile = () => {
 
       <div className={profilePageStyles.postsContainer}>
         {showPosts ? (
-          <Posts handleClosePosts={handleClosePosts} noLoop={false} currentUser={state} user={state} setCurrentUser={setState} header={<PostsNav />} indexOfClickedPost={indexOfClickedPost} />
+          <Posts fromHome={false} userPosts={userPosts} setUserPosts={setUserPosts} handleClosePosts={handleClosePosts} noLoop={false} currentUser={state} user={state} setCurrentUser={setState} header={<PostsNav />} indexOfClickedPost={indexOfClickedPost} />
         ) : null}
 
       </div>

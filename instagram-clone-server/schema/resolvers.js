@@ -47,6 +47,10 @@ export const resolvers = {
         ],
       })
     },
+    getPostById: (_, args) => {
+      const { id } = args;
+      return DB.models.post.findByPk(id);
+    },
     users: (parent, args, context) => {
       if (checkForUser(context)) {
         return DB.models.user.findAll()

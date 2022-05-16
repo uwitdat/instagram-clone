@@ -8,7 +8,7 @@ import postStyles from '../styles/home.module.scss';
 import { AiOutlineEllipsis } from 'react-icons/ai';
 import PostOptionsMenu from './PostOptionsMenu';
 import { REMOVE_LIKE_FROM_POST, CREATE_LIKE_FOR_POST } from '../utils/mutations';
-import { GET_POSTS_FROM_USER } from '../utils/queries';
+import { GET_POSTS_FROM_USER, GET_POST_BY_ID } from '../utils/queries';
 import { useMutation, useLazyQuery } from '@apollo/client';
 import Comments from '../components/comments/Comments';
 import Likes from './Likes';
@@ -17,19 +17,19 @@ import Image from 'next/image';
 
 const redColor = 'rgb(255, 93, 93)';
 
-const Post = ({ post, postFromUser, handleClosePosts, currentUser, setCurrentUser, resetUser, setPosts }) => {
+const Post = ({ posts, fromHome, post, postFromUser, handleClosePosts, currentUser, setCurrentUser, resetUser, setPosts }) => {
+
   const [showComments, setShowComments] = useState(false)
   const [showLikes, setShowLikes] = useState(false)
   const [scrollPosition, setScrollPosition] = useState(null);
   const router = useRouter();
   const currentPath = router.pathname;
 
-  const [userPost, setUserPost] = useState(post);
-
   const [liked, setLiked] = useState(null);
 
 
   const [postsByUser] = useLazyQuery(GET_POSTS_FROM_USER)
+  const [getPostById] = useLazyQuery(GET_POST_BY_ID)
 
   const [removeLike] = useMutation(REMOVE_LIKE_FROM_POST);
   const [createLikeForPost] = useMutation(CREATE_LIKE_FOR_POST);
@@ -46,18 +46,26 @@ const Post = ({ post, postFromUser, handleClosePosts, currentUser, setCurrentUse
     try {
       const { data } = await removeLike({
         variables: {
-          likeOnPostId: Number(userPost.id),
+          likeOnPostId: Number(post.id),
           likedByUserId: Number(currentUser.id)
         }
       });
       if (data) {
-        setUserPost({
-          ...userPost,
-          likes: userPost.likes.filter((like) => Number(like.likedBy.id) !== Number(currentUser.id))
-        })
-        if (resetUser !== undefined) {
-          resetUser();
+        if (fromHome) {
+
+          updatePostFromHome();
+          setLiked(false);
+
+        } else {
+          const { data: postData } = await postsByUser({
+            variables: {
+              userId: postFromUser.id
+            }
+          });
+          setPosts(postData.postsByUser);
+          setLiked(false);
         }
+
         setAnimateRemoveLike(true);
         setTimeout(() => { setAnimateRemoveLike(false) }, 800);
       }
@@ -70,19 +78,25 @@ const Post = ({ post, postFromUser, handleClosePosts, currentUser, setCurrentUse
     try {
       const { data } = await createLikeForPost({
         variables: {
-          likeOnPostId: Number(userPost.id),
+          likeOnPostId: Number(post.id),
           likedByUserId: Number(currentUser.id),
           likeForUserId: Number(postFromUser.id)
         }
       });
       if (data) {
-        console.log(data.createLikeForPost)
-        setUserPost({
-          ...userPost,
-          likes: [data.createLikeForPost, ...userPost.likes]
-        })
-        if (resetUser !== undefined) {
-          resetUser();
+        if (fromHome) {
+
+          updatePostFromHome();
+          setLiked(true);
+
+        } else {
+          const { data: postData } = await postsByUser({
+            variables: {
+              userId: postFromUser.id
+            }
+          });
+          setPosts(postData.postsByUser);
+          setLiked(true);
         }
 
         setAnimateLike(true);
@@ -102,6 +116,21 @@ const Post = ({ post, postFromUser, handleClosePosts, currentUser, setCurrentUse
   const handleViewLikes = () => {
     setScrollPosition(window.pageYOffset);
     setShowLikes(true)
+  }
+
+  const updatePostFromHome = async () => {
+    const idxById = (element) => element.id === post.id;
+    const idxOfpost = posts.findIndex(idxById);
+    let newArrOfPosts = [...posts];
+
+    const { data: postData } = await getPostById({
+      variables: {
+        id: post.id
+      }
+    });
+
+    newArrOfPosts[idxOfpost] = postData.getPostById;
+    setPosts(newArrOfPosts);
   }
 
 
@@ -135,13 +164,11 @@ const Post = ({ post, postFromUser, handleClosePosts, currentUser, setCurrentUse
     setAnchorEl(null);
   };
 
-
   useEffect(() => {
-    if (userPost) {
-      const ids = userPost.likes.map((like) => like.likedByUserId)
-      setLiked(ids.includes(Number(currentUser.id)))
-    }
-  }, [userPost])
+    const ids = post.likes.map((like) => like.likedByUserId)
+    setLiked(ids.includes(Number(currentUser.id)))
+  }, [])
+
 
   return (
     <div className={postStyles.postContainer}>
@@ -227,7 +254,6 @@ const Post = ({ post, postFromUser, handleClosePosts, currentUser, setCurrentUse
           setShowComments={setShowComments}
           currentTopPosition={scrollPosition}
           post={post}
-          setPost={setUserPost}
           postFromUser={postFromUser}
           currentUser={currentUser}
           resetUser={resetUser}
@@ -235,12 +261,12 @@ const Post = ({ post, postFromUser, handleClosePosts, currentUser, setCurrentUse
         />
       ) : null}
 
-      {userPost ? (
+      {post ? (
         <Likes
           showLikes={showLikes}
           setShowLikes={setShowLikes}
           currentTopPosition={scrollPosition}
-          likes={userPost.likes}
+          likes={post.likes}
           currentUser={currentUser}
         />
       ) : null}

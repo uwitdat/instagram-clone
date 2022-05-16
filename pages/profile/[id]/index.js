@@ -10,6 +10,7 @@ import NavFooter from '../../../components/NavFooter';
 import { GET_ALL_USER_FOLLOWERS, GET_ALL_USER_FOLLOWING, GET_AUTHED_USER } from '../../../utils/queries';
 import { useQuery, useMutation } from '@apollo/client';
 import { FOLLOW_USER, UNFOLLOW_USER } from '../../../utils/mutations';
+import { set } from 'lodash';
 
 const UserProfileById = () => {
   const router = useRouter();
@@ -17,6 +18,8 @@ const UserProfileById = () => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [user, setUser] = useState(null);
 
+
+  const [userPosts, setUserPosts] = useState(postFromUser.posts)
 
   const { data: currentUser, refetch: refetchCurrentUser } = useQuery(GET_AUTHED_USER);
 
@@ -237,6 +240,8 @@ const UserProfileById = () => {
             indexOfClickedPost={indexOfClickedPost}
             currentUser={user}
             setCurrentUser={setUser}
+            userPosts={userPosts}
+            setUserPosts={setUserPosts}
           />
         ) : null}
 
