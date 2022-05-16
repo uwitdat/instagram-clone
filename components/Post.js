@@ -8,7 +8,7 @@ import postStyles from '../styles/home.module.scss';
 import { AiOutlineEllipsis } from 'react-icons/ai';
 import PostOptionsMenu from './PostOptionsMenu';
 import { REMOVE_LIKE_FROM_POST, CREATE_LIKE_FOR_POST } from '../utils/mutations';
-import { GET_POSTS_FROM_USER, GET_POST_BY_ID } from '../utils/queries';
+import { GET_AUTHED_USER, GET_POSTS_FROM_USER, GET_POST_BY_ID } from '../utils/queries';
 import { useMutation, useLazyQuery } from '@apollo/client';
 import Comments from '../components/comments/Comments';
 import Likes from './Likes';
@@ -17,7 +17,7 @@ import Image from 'next/image';
 
 const redColor = 'rgb(255, 93, 93)';
 
-const Post = ({ posts, fromHome, post, postFromUser, handleClosePosts, currentUser, setCurrentUser, resetUser, setPosts }) => {
+const Post = ({ refetchPosts, posts, fromHome, post, postFromUser, handleClosePosts, currentUser, setCurrentUser, setPosts }) => {
 
   const [showComments, setShowComments] = useState(false)
   const [showLikes, setShowLikes] = useState(false)
@@ -118,6 +118,8 @@ const Post = ({ posts, fromHome, post, postFromUser, handleClosePosts, currentUs
     setShowLikes(true)
   }
 
+  const [getAuthedUser] = useLazyQuery(GET_AUTHED_USER);
+
   const updatePostFromHome = async () => {
     const idxById = (element) => element.id === post.id;
     const idxOfpost = posts.findIndex(idxById);
@@ -131,6 +133,12 @@ const Post = ({ posts, fromHome, post, postFromUser, handleClosePosts, currentUs
 
     newArrOfPosts[idxOfpost] = postData.getPostById;
     setPosts(newArrOfPosts);
+
+    const { data } = await getAuthedUser();
+    if (data && data.getAuthedUser) {
+
+      setCurrentUser(data.getAuthedUser);
+    }
   }
 
 
@@ -186,6 +194,7 @@ const Post = ({ posts, fromHome, post, postFromUser, handleClosePosts, currentUs
         ) : null}
 
         <PostOptionsMenu
+          refetchPosts={refetchPosts}
           postId={post.id}
           open={open}
           anchorEl={anchorEl}

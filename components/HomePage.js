@@ -5,10 +5,11 @@ import NavHeader from './NavHeader';
 import NavFooter from './NavFooter';
 import { Waypoint } from 'react-waypoint';
 import { useRouter } from 'next/router';
-import { GET_NOTIFICATIONS_FOR_USER, GET_ALL_POSTS, GET_AUTHED_USER } from '../utils/queries';
+import { GET_ALL_POSTS, GET_AUTHED_USER, GET_NOTIFICATIONS_FOR_USER } from '../utils/queries';
 import { useQuery, useLazyQuery } from '@apollo/client';
-import { Spinner } from './Spinner';
 import { requireAuthentication } from '../auth';
+import { Spinner } from '../components/Spinner';
+
 
 export const getServerSideProps = requireAuthentication(context => {
   return {
@@ -16,13 +17,11 @@ export const getServerSideProps = requireAuthentication(context => {
   }
 })
 
-const HomePage = ({ refetchUser, user, posts, refetchPosts, fetchMorePosts }) => {
+const HomePage = ({ refetchUser, user, posts, fetchMorePosts }) => {
   const [currentUser, setCurrentUser] = useState(user);
   const [userPosts, setUserPosts] = useState(posts);
   const router = useRouter();
   const [val] = useState(router.query.fromOtherRoute ? true : false)
-
-  console.log(userPosts)
 
   const { data: notifications, refetch: refetchAllNotis } = useQuery(GET_NOTIFICATIONS_FOR_USER,
     {
@@ -30,31 +29,36 @@ const HomePage = ({ refetchUser, user, posts, refetchPosts, fetchMorePosts }) =>
     })
 
 
+
+  const [refetch, setRefetch] = useState(false);
+  const [getAllPosts] = useLazyQuery(GET_ALL_POSTS);
+  const [getAuthedUser] = useLazyQuery(GET_AUTHED_USER);
+
+  const refetchPosts = async () => {
+    setRefetch(true);
+    const { data } = await getAllPosts({
+      variables: {
+        first: 3
+      }
+    });
+    if (data && data.getAllPosts) {
+      setUserPosts(data.getAllPosts)
+    }
+    setRefetch(false);
+
+    const { data: user } = await getAuthedUser();
+    if (user && user.getAuthedUser) {
+      setCurrentUser(user.getAuthedUser);
+    }
+  }
+
   useEffect(() => {
     if (val) {
-      refetchPosts();
-      refetchUser();
+      // refetchPosts();
+      // refetchUser();
       refetchAllNotis();
     }
   }, [val])
-
-  const [getAuthedUser] = useLazyQuery(GET_AUTHED_USER);
-
-  // const resetUser = async () => {
-  //   // console.log('iran');
-  //   const { data } = await getAuthedUser();
-  //   if (data && data.getAuthedUser) {
-  //     setCurrentUser(data.getAuthedUser)
-  //   }
-  // }
-
-
-
-
-  // useEffect(() => {
-  //   refetchPosts();
-  // }, [])
-
 
   return (
     <div>
@@ -69,25 +73,25 @@ const HomePage = ({ refetchUser, user, posts, refetchPosts, fetchMorePosts }) =>
       <div className={postStyles.homeContainer}>
         <section className={postStyles.posts}>
 
-          {userPosts && userPosts.map((post, i) => (
-            <React.Fragment key={post.id}>
-              <Post
-                post={post}
-                postFromUser={post.postedBy}
-                currentUser={currentUser}
-                setCurrentUser={setCurrentUser}
-                // resetUser={resetUser}
-                setPosts={setUserPosts}
-                posts={userPosts}
-                fromHome={true}
-              />
+          {refetch ? (<Spinner />) : (
+            userPosts.map((post, i) => (
+              <React.Fragment key={post.id}>
+                <Post
+                  post={post}
+                  postFromUser={post.postedBy}
+                  currentUser={currentUser}
+                  setCurrentUser={setCurrentUser}
+                  setPosts={setUserPosts}
+                  posts={userPosts}
+                  fromHome={true}
+                />
 
-              {i === userPosts.length - 1 &&
-                <Waypoint onEnter={fetchMorePosts} />
-              }
-            </React.Fragment>
-          ))}
-
+                {i === userPosts.length - 1 &&
+                  <Waypoint onEnter={fetchMorePosts} />
+                }
+              </React.Fragment>
+            ))
+          )}
         </section>
       </div>
       <NavFooter currentUser={currentUser} setCurrentUser={setCurrentUser} />

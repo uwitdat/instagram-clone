@@ -3,7 +3,7 @@ import postStyles from '../styles/home.module.scss';
 import Post from '../components/Post';
 import NavFooter from '../components/NavFooter';
 
-const Posts = ({ userPosts, setUserPosts, user, currentUser, setCurrentUser, header, indexOfClickedPost, noLoop, handleClosePosts }) => {
+const Posts = ({ refetchPosts, userPosts, setUserPosts, user, currentUser, setCurrentUser, header, indexOfClickedPost, noLoop, handleClosePosts }) => {
 
   const postsRef = useRef(null)
 
@@ -28,6 +28,7 @@ const Posts = ({ userPosts, setUserPosts, user, currentUser, setCurrentUser, hea
         <section ref={postsRef} className={postStyles.posts}>
           {userPosts && userPosts.map((post, idx) => (
             <Post
+              refetchPosts={refetchPosts}
               handleClosePosts={handleClosePosts}
               user={user}
               currentUser={currentUser}

@@ -28,7 +28,7 @@ export default function App() {
       },
       updateQuery: (previousValues, { fetchMoreResult }) => {
         if (!fetchMoreResult) {
-          return previousValues;
+          return previousValues
         }
         return {
           ...previousValues,
@@ -45,9 +45,13 @@ export default function App() {
     return <Spinner />
   }
 
+  // if (data) {
+  //   console.log(data)
+  // }
+
   return (
     <div>
-      {data && data.getAllPosts ? (
+      {data ? (
         <HomePage
           user={currentUser.getAuthedUser}
           refetchUser={refetchUser}

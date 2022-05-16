@@ -31,23 +31,28 @@ const FileUpload = ({ open, handleClose, currentUser, setCurrentUser, refetchPos
 
   const fileToUpload = acceptedFiles[0]
 
+
   const handleCreateNewPost = async (url) => {
     try {
       const { data } = await createPost({
         variables: { createPostInput: { postContent: url, userId: Number(currentUser.id), postDescription } }
       })
       if (data.createPost) {
-        setCurrentUser({
-          ...currentUser,
-          posts: [data.createPost, ...currentUser.posts]
-        })
-        if (refetchPosts !== undefined) {
-          refetchPosts();
+        console.log(data.createPost)
+        // setCurrentUser({
+        //   ...currentUser,
+        //   posts: [data.createPost, ...currentUser.posts]
+        refetchPosts();
+        // })
+
+        if (pathToRedirect !== '/profile') {
           router.push({
             pathname: pathToRedirect,
           })
         }
-        handleClose()
+
+        handleClose();
+
         setIsSubmitting(false);
       }
     } catch (err) {

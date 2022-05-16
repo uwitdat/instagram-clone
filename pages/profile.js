@@ -11,22 +11,16 @@ import Posts from '../components/Posts';
 import { Spinner } from '../components/Spinner';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { GET_AUTHED_USER } from '../utils/queries';
+import { GET_AUTHED_USER, GET_ALL_POSTS } from '../utils/queries';
 import { useLazyQuery } from '@apollo/client';
 
 
 const Profile = () => {
-  const [getAuthedUser, { data }] = useLazyQuery(GET_AUTHED_USER);
+
 
   const router = useRouter();
   const [state, setState] = useState(JSON.parse(router.query.currentUser));
   const [userPosts, setUserPosts] = useState(state.posts)
-
-  useEffect(() => {
-    if (data && data.getAuthedUser) {
-      setState(data.getAuthedUser)
-    }
-  }, [data])
 
   const [props] = useState(router.query.props && router.query.props !== '' ? JSON.parse(router.query.props) : null);
 
@@ -75,10 +69,34 @@ const Profile = () => {
     )
   }
 
+  const [refetch, setRefetch] = useState(false);
+  const [getAllPosts] = useLazyQuery(GET_ALL_POSTS);
+  const [getAuthedUser] = useLazyQuery(GET_AUTHED_USER);
+
+  const refetchPosts = async () => {
+    setRefetch(true);
+    const { data } = await getAllPosts({
+      variables: {
+        first: 3
+      }
+    });
+    if (data && data.getAllPosts) {
+      setUserPosts(data.getAllPosts)
+    }
+    setRefetch(false);
+
+    const { data: user } = await getAuthedUser();
+    if (user && user.getAuthedUser) {
+      setState(user.getAuthedUser);
+      console.log('IM HERE', user.getAuthedUser)
+      setUserPosts(user.getAuthedUser.posts);
+    }
+  }
+
 
   return (
     <React.Fragment>
-      {!showPosts ? (<ProfilePageNavHeader currentUser={state} setCurrentUser={setState} />) : null}
+      {!showPosts ? (<ProfilePageNavHeader currentUser={state} setCurrentUser={setState} refetchPosts={refetchPosts} />) : null}
       <EditProfile setShowEditProfile={setShowEditProfile} currentUser={state} setCurrentUser={setState} showEditProfile={showEditProfile} />
 
       {state ? (
@@ -124,7 +142,7 @@ const Profile = () => {
           </div>
 
           <div className={profilePageStyles.imageGrid}>
-            {state && state.posts ? (
+            {state && state.posts || !refetch ? (
               state.posts.map((post, idx) => (
                 <div key={idx} style={{ position: 'relative' }}>
                   <Image
@@ -144,7 +162,18 @@ const Profile = () => {
 
       <div className={profilePageStyles.postsContainer}>
         {showPosts ? (
-          <Posts fromHome={false} userPosts={userPosts} setUserPosts={setUserPosts} handleClosePosts={handleClosePosts} noLoop={false} currentUser={state} user={state} setCurrentUser={setState} header={<PostsNav />} indexOfClickedPost={indexOfClickedPost} />
+          <Posts
+            fromHome={false}
+            userPosts={userPosts}
+            setUserPosts={setUserPosts}
+            handleClosePosts={handleClosePosts}
+            noLoop={false}
+            currentUser={state}
+            user={state}
+            setCurrentUser={setState}
+            header={<PostsNav />}
+            indexOfClickedPost={indexOfClickedPost}
+            refetchPosts={refetchPosts} />
         ) : null}
 
       </div>

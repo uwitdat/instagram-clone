@@ -11,7 +11,7 @@ import Comment from './Comment';
 import Input from './Input';
 import CommentDetails from './CommentDetails';
 
-const Comments = ({ fromHome, updatePostFromHome, currentUser, showComments, setShowComments, currentTopPosition, post, setPosts, postFromUser, resetUser }) => {
+const Comments = ({ fromHome, updatePostFromHome, currentUser, showComments, setShowComments, currentTopPosition, post, setPosts, postFromUser }) => {
 
   const [newComment, setNewComment] = useState('');
   const [cursorIndex, setCursorIndex] = useState('');

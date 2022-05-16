@@ -3,7 +3,7 @@ import Menu from '@mui/material/Menu';
 import { useMutation } from '@apollo/client';
 import { DELETE_POST_MUTATION } from '../utils/mutations';
 
-const PostOptionsMenu = ({ currentUser, setCurrentUser, anchorEl, open, handleClose, postId, handleClosePosts }) => {
+const PostOptionsMenu = ({ refetchPosts, currentUser, setCurrentUser, anchorEl, open, handleClose, postId, handleClosePosts }) => {
 
   const [deletePost] = useMutation(DELETE_POST_MUTATION)
 
@@ -14,19 +14,19 @@ const PostOptionsMenu = ({ currentUser, setCurrentUser, anchorEl, open, handleCl
       })
       if (data.deletePost) {
         handleClose()
-        setTimeout(() => { handleClosePosts(), removePostFromState(postId) }, 1000)
+        setTimeout(() => { handleClosePosts(), refetchPosts(); }, 1000)
       }
     } catch (err) {
       console.log(err)
     }
   }
 
-  const removePostFromState = (id) => {
-    setCurrentUser({
-      ...currentUser,
-      posts: currentUser.posts.filter((post) => post.id !== id)
-    })
-  }
+  // const removePostFromState = (id) => {
+  //   setCurrentUser({
+  //     ...currentUser,
+  //     posts: currentUser.posts.filter((post) => post.id !== id)
+  //   })
+  // }
 
   return (
     <Menu

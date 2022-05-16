@@ -7,6 +7,7 @@ import { MdOutlineArrowBackIosNew } from 'react-icons/md';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { GET_AUTHED_USER } from '../../utils/queries';
 import { useLazyQuery } from '@apollo/client';
+import Image from 'next/image';
 
 
 
@@ -70,10 +71,7 @@ const Search = ({ currentUser, showSearch, setShowSearch, currentTopPosition, se
           }
         });
         if (data) {
-          // setCurrentUser({
-          //   ...currentUser,
-          //   following: [user, ...currentUser.following]
-          // })
+
           const { data } = await getAuthedUser();
           if (data && data.getAuthedUser) {
             setCurrentUser(data.getAuthedUser)
@@ -136,7 +134,15 @@ const Search = ({ currentUser, showSearch, setShowSearch, currentTopPosition, se
       <div className={searchStyles.results}>
         {results.map((user) => (
           <div key={user.id}>
-            <img src={user.avatar ? user.avatar : 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/271deea8-e28c-41a3-aaf5-2913f5f48be6/de7834s-6515bd40-8b2c-4dc6-a843-5ac1a95a8b55.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI3MWRlZWE4LWUyOGMtNDFhMy1hYWY1LTI5MTNmNWY0OGJlNlwvZGU3ODM0cy02NTE1YmQ0MC04YjJjLTRkYzYtYTg0My01YWMxYTk1YThiNTUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.BopkDn1ptIwbmcKHdAOlYHyAOOACXW0Zfgbs0-6BY-E'} />
+            <div className={searchStyles.image}>
+              <Image
+                src={user.avatar ? user.avatar : 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/271deea8-e28c-41a3-aaf5-2913f5f48be6/de7834s-6515bd40-8b2c-4dc6-a843-5ac1a95a8b55.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI3MWRlZWE4LWUyOGMtNDFhMy1hYWY1LTI5MTNmNWY0OGJlNlwvZGU3ODM0cy02NTE1YmQ0MC04YjJjLTRkYzYtYTg0My01YWMxYTk1YThiNTUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.BopkDn1ptIwbmcKHdAOlYHyAOOACXW0Zfgbs0-6BY-E'}
+                height={'100%'}
+                width={'100%'}
+                priority
+              />
+            </div>
+
             <div className={searchStyles.details}>
               <h3>{user.userName}</h3>
               <p>{user.name}</p>
