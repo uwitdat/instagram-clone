@@ -45,10 +45,6 @@ export default function App() {
     return <Spinner />
   }
 
-  // if (data) {
-  //   console.log(data)
-  // }
-
   return (
     <div>
       {data ? (

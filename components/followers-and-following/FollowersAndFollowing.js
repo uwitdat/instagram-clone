@@ -21,6 +21,7 @@ const FollowersAndFollowing = ({
 }) => {
 
 
+  console.log('CuREEEnt', currentUser)
   const [switchFollowing, setSwitchFollowing] = useState(false)
   const [switchFollowers, setSwitchFollowers] = useState(false)
 
@@ -46,7 +47,7 @@ const FollowersAndFollowing = ({
 
   const handleViewProfile = (id, user) => {
     handleClosePanel()
-    if (id === currentUser.id) {
+    if (id === currentUser?.id) {
       router.push('/profile')
     } else {
       router.push({
