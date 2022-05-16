@@ -45,7 +45,7 @@ const Following = ({ currentUser, setCurrentUser, following, switchFollowing, ha
               </div>
             </div>
 
-            {following.id === currentUser.id ? (null) : (
+            {following.id === currentUser?.id ? (null) : (
               <div>
                 <button onClick={() => handleUnfollowUser(following.id)}>Following</button>
                 <AiOutlineEllipsis />

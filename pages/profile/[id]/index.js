@@ -122,6 +122,8 @@ const UserProfileById = () => {
     setFollowersEntryPoint(null)
   }
 
+  console.log('FROM ID', user)
+
   const PostsNav = () => {
     return (
       <div className={profilePageStyles.PostsNav}>

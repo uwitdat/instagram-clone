@@ -17,9 +17,10 @@ export const getServerSideProps = requireAuthentication(context => {
   }
 })
 
-const HomePage = ({ refetchUser, user, posts, fetchMorePosts }) => {
+const HomePage = ({ user, posts, fetchMorePosts, refetchUser }) => {
+
   const [currentUser, setCurrentUser] = useState(user);
-  const [userPosts, setUserPosts] = useState(posts);
+  const [userPosts, setUserPosts] = useState(null);
   const router = useRouter();
   const [val] = useState(router.query.fromOtherRoute ? true : false)
 
@@ -28,7 +29,12 @@ const HomePage = ({ refetchUser, user, posts, fetchMorePosts }) => {
       variables: { userId: currentUser.id },
     })
 
+  useEffect(() => {
+    if (posts) {
+      setUserPosts(posts)
+    }
 
+  }, [posts])
 
   const [refetch, setRefetch] = useState(false);
   const [getAllPosts] = useLazyQuery(GET_ALL_POSTS);
@@ -54,11 +60,11 @@ const HomePage = ({ refetchUser, user, posts, fetchMorePosts }) => {
 
   useEffect(() => {
     if (val) {
-      // refetchPosts();
-      // refetchUser();
       refetchAllNotis();
     }
   }, [val])
+
+  console.log(currentUser)
 
   return (
     <div>
@@ -74,7 +80,7 @@ const HomePage = ({ refetchUser, user, posts, fetchMorePosts }) => {
         <section className={postStyles.posts}>
 
           {refetch ? (<Spinner />) : (
-            userPosts.map((post, i) => (
+            userPosts && userPosts.map((post, i) => (
               <React.Fragment key={post.id}>
                 <Post
                   post={post}
