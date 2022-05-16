@@ -7,7 +7,7 @@
 <p align="center">technologies used:</p> 
 
 
-Next.js | GraphQL | Express | Postgres | Node.js | Firebase | MUI 
+Next.js | GraphQL | Express | Postgres | Node.js | Firebase | MUI | SCSS 
 
 
 
