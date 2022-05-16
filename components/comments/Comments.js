@@ -11,7 +11,7 @@ import Comment from './Comment';
 import Input from './Input';
 import CommentDetails from './CommentDetails';
 
-const Comments = ({ currentUser, showComments, setShowComments, currentTopPosition, post, setPosts, postFromUser, resetUser }) => {
+const Comments = ({ fromHome, updatePostFromHome, currentUser, showComments, setShowComments, currentTopPosition, post, setPosts, postFromUser, resetUser }) => {
 
   const [newComment, setNewComment] = useState('');
   const [cursorIndex, setCursorIndex] = useState('');
@@ -85,8 +85,9 @@ const Comments = ({ currentUser, showComments, setShowComments, currentTopPositi
         //   ...post,
         //   comments: [data.createCommentForPost, ...post.comments]
         // })
-
-        if (setPosts !== undefined) {
+        if (fromHome) {
+          updatePostFromHome();
+        } else {
           const { data } = await postsByUser({
             variables: {
               userId: postFromUser.id
@@ -98,10 +99,13 @@ const Comments = ({ currentUser, showComments, setShowComments, currentTopPositi
         }
 
 
+
+
+
         // refetchPosts();
-        if (resetUser !== undefined) {
-          resetUser();
-        }
+        // if (resetUser !== undefined) {
+        //   resetUser();
+        // }
 
         resetValues();
       }
@@ -126,7 +130,9 @@ const Comments = ({ currentUser, showComments, setShowComments, currentTopPositi
       })
       if (data) {
 
-        if (setPosts !== undefined) {
+        if (fromHome) {
+          updatePostFromHome();
+        } else {
           const { data } = await postsByUser({
             variables: {
               userId: postFromUser.id
@@ -139,22 +145,10 @@ const Comments = ({ currentUser, showComments, setShowComments, currentTopPositi
 
 
 
-        // const findIdx = (comment) => comment.id === reply.commentId;
 
-        // const idx = post.comments.findIndex(findIdx);
-
-        // setPost({
-        //   ...post,
-        //   comments: Object.assign([...post.comments], {
-        //     [idx]: {
-        //       ...post.comments[idx],
-        //       replies: [data.replyToComment, ...post.comments[idx].replies]
-        //     }
-        //   })
-        // });
-        if (resetUser !== undefined) {
-          resetUser();
-        }
+        // if (resetUser !== undefined) {
+        //   resetUser();
+        // }
 
         resetValues();
       }

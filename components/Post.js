@@ -256,8 +256,10 @@ const Post = ({ posts, fromHome, post, postFromUser, handleClosePosts, currentUs
           post={post}
           postFromUser={postFromUser}
           currentUser={currentUser}
-          resetUser={resetUser}
+          // resetUser={resetUser}
+          updatePostFromHome={updatePostFromHome}
           setPosts={setPosts}
+          fromHome={fromHome}
         />
       ) : null}
 
