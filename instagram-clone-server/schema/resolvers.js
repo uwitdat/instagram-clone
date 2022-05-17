@@ -277,10 +277,13 @@ export const resolvers = {
       const { searchVal } = args;
 
       return DB.models.user.findAll({
+        // where: {
+        //   userName: {
+        //     [Op.like]: '%' + searchVal + '%'
+        //   }
+        // }
         where: {
-          userName: {
-            [Op.like]: '%' + searchVal + '%'
-          }
+          userName: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('userName')), 'LIKE', '%' + searchVal.toLowerCase() + '%')
         }
       })
     },

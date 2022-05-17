@@ -17,11 +17,11 @@ const FollowersAndFollowing = ({
   setFollowersEntryPoint,
   refetchFollowing,
   currentUser,
-  setCurrentUser
+  setCurrentUser,
+  fromProf
 }) => {
 
 
-  console.log('CuREEEnt', currentUser)
   const [switchFollowing, setSwitchFollowing] = useState(false)
   const [switchFollowers, setSwitchFollowers] = useState(false)
 
@@ -85,11 +85,11 @@ const FollowersAndFollowing = ({
         {entryPoint === 0 ? (
           <React.Fragment>
             <Followers followers={followers} switchFollowers={switchFollowers} handleViewProfile={handleViewProfile} />
-            <Following currentUser={currentUser} setCurrentUser={setCurrentUser} refetchFollowing={refetchFollowing} following={following} switchFollowing={switchFollowing} handleViewProfile={handleViewProfile} />
+            <Following fromProf={fromProf} currentUser={currentUser} setCurrentUser={setCurrentUser} refetchFollowing={refetchFollowing} following={following} switchFollowing={switchFollowing} handleViewProfile={handleViewProfile} />
           </React.Fragment>
         ) : (
           <React.Fragment>
-            <Following currentUser={currentUser} setCurrentUser={setCurrentUser} refetchFollowing={refetchFollowing} following={following} switchFollowing={switchFollowing} handleViewProfile={handleViewProfile} />
+            <Following fromProf={fromProf} currentUser={currentUser} setCurrentUser={setCurrentUser} refetchFollowing={refetchFollowing} following={following} switchFollowing={switchFollowing} handleViewProfile={handleViewProfile} />
             <Followers followers={followers} switchFollowers={switchFollowers} handleViewProfile={handleViewProfile} />
           </React.Fragment>
         )}

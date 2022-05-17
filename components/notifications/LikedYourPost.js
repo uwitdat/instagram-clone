@@ -3,7 +3,7 @@ import notificationStyles from '../../styles/notifications.module.scss';
 import moment from 'moment';
 import { useRouter } from 'next/router';
 import { handleRouteToProfile } from './utils';
-
+import Image from 'next/image';
 const LikedYourPost = ({ notif, currentUser }) => {
 
   const router = useRouter();
@@ -37,6 +37,7 @@ const LikedYourPost = ({ notif, currentUser }) => {
       }
     })
   }
+
 
   return (
     <div key={notif.id} className={notificationStyles.notification}>

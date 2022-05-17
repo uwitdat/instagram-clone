@@ -191,6 +191,7 @@ const UserProfileById = () => {
 
           {followersData && followingData ? (
             <FollowersAndFollowing
+              fromProf={true}
               currentUser={user}
               userName={postFromUser.userName}
               followers={followersData.getAllUserFollowers}

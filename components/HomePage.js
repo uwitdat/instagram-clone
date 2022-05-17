@@ -64,7 +64,6 @@ const HomePage = ({ user, posts, fetchMorePosts, refetchUser }) => {
     }
   }, [val])
 
-  console.log(currentUser)
 
   return (
     <div>

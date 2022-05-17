@@ -54,16 +54,24 @@ const Likes = ({ currentUser, showLikes, setShowLikes, currentTopPosition, likes
     setIsFollowing(!isFollowing)
   }
 
-  const checkIsFollowing = () => {
-    const idsInPostLikes = likes.map((like) => like.likedByUserId)
-    const doesCurrentUserFollow = currentUser.following.some(following => idsInPostLikes.indexOf(Number(following.id)) >= 0)
-    setIsFollowing(doesCurrentUserFollow)
+  const CheckIsFollowing = ({ id, currentUser }) => {
+    const [isUserFollowing, setIsUserFollowing] = useState(null);
+
+    useEffect(() => {
+      const idsOfUsersCurrentUserFollows = currentUser.following.map((user) => Number(user.id));
+      setIsUserFollowing(idsOfUsersCurrentUserFollows.includes(id))
+    }, [])
+
+    return (
+      <React.Fragment>
+        {isUserFollowing ? (
+          <button id={likeStyles.unfollowBtn}>Unfollow</button>
+        ) : (
+          <button>Follow</button>
+        )}
+      </React.Fragment>
+    )
   }
-
-  useEffect(() => {
-    checkIsFollowing()
-  }, [])
-
 
 
   return (
@@ -85,11 +93,7 @@ const Likes = ({ currentUser, showLikes, setShowLikes, currentTopPosition, likes
             </div>
             <div>
               {like.likedBy.id === currentUser.id ? (null) : (
-                isFollowing ? (
-                  <button onClick={() => handleUnfollowUser(like.likedByUserId)} id={likeStyles.unfollowBtn}>Unfollow</button>
-                ) : (
-                  <button onClick={() => handleFollowUser(like.likedByUserId)}>Follow</button>
-                )
+                <CheckIsFollowing id={Number(like.likedBy.id)} currentUser={currentUser} />
               )}
             </div>
           </div>

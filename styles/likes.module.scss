@@ -80,10 +80,11 @@
       color: $color-white;
       border-color: transparent;
       border-radius: 3px;
-      padding: 0.3rem 1.7rem;
+      padding: 0.3rem 0;
       font-weight: 600;
       font-family: $font-primary;
       cursor: pointer;
+      width: 7rem;
     }
   }
 

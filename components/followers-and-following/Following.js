@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/client';
 import { UNFOLLOW_USER } from '../../utils/mutations';
 
 
-const Following = ({ currentUser, setCurrentUser, following, switchFollowing, handleViewProfile }) => {
+const Following = ({ fromProf, currentUser, setCurrentUser, following, switchFollowing, handleViewProfile }) => {
 
   const [unfollowUser] = useMutation(UNFOLLOW_USER);
 
@@ -44,14 +44,16 @@ const Following = ({ currentUser, setCurrentUser, following, switchFollowing, ha
                 <p>{following.name}</p>
               </div>
             </div>
-
-            {following.id === currentUser?.id ? (null) : (
+            {fromProf ? (
+              following.id === currentUser?.id ? (null) : (
+                null
+              )
+            ) : (
               <div>
                 <button onClick={() => handleUnfollowUser(following.id)}>Following</button>
                 <AiOutlineEllipsis />
               </div>
             )}
-
           </div>
         ))}
       </section>
